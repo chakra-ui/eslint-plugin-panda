@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-invalid-token-paths'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-invalid-token-paths'
 
 const imports = `import { css } from './panda/css'
 import { Circle } from './panda/jsx'

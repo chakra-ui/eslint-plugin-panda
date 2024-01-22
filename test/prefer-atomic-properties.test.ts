@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './prefer-atomic-properties'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/prefer-atomic-properties'
 
 const imports = `import { css } from './panda/css'
 import { Circle } from './panda/jsx'

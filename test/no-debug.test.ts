@@ -1,5 +1,5 @@
-import rule, { RULE_NAME } from './no-debug'
-import { tester } from '../../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-debug'
+import { tester } from '../test-utils'
 
 const imports = `import { css } from './panda/css';
 import { styled, Circle } from './panda/jsx';`

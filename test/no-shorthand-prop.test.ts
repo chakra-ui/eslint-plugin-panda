@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-shorthand-prop'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-shorthand-prop'
 
 const imports = `import { css } from './panda/css'
 import { Circle } from './panda/jsx'

@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-hardcoded-color'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-hardcoded-color'
 
 const imports = `import { css } from './panda/css'
 import { Circle } from './panda/jsx'

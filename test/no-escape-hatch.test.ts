@@ -1,6 +1,6 @@
 import { getArbitraryValue } from '@pandacss/shared'
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-escape-hatch'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-escape-hatch'
 
 const imports = `import { css } from './panda/css'
 import { Circle } from './panda/jsx'

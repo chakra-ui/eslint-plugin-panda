@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-config-function-in-source'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-config-function-in-source'
 
 const imports = `import { defineKeyframes } from '@pandacss/dev';`
 const code = `const keyframes = defineKeyframes({

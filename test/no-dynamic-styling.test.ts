@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-dynamic-styling'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-dynamic-styling'
 
 const imports = `import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'

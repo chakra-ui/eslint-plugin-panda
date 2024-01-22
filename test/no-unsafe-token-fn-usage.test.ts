@@ -1,5 +1,5 @@
-import { tester } from '../../test-utils'
-import rule, { RULE_NAME } from './no-unsafe-token-fn-usage'
+import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-unsafe-token-fn-usage'
 
 const imports = `import { css } from './panda/css';
 import { Circle } from './panda/jsx';
