@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "incremental": true,
+    "tsBuildInfoFile": "node_modules/.cache/.tsbuildinfo",
+  },
+  "include": [
+    "src",
+    "test-utils.ts"
+  ],
+  "types": [],
+  "exclude": [
+    "node_modules",
+  ]
+}
