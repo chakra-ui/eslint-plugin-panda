@@ -61,7 +61,6 @@
     "@typescript-eslint/parser": "^6.19.1",
     "@typescript-eslint/rule-tester": "^6.19.1",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.4",
-    "vitest": "^1.2.1"
+    "prettier": "^3.2.4"
   }
 }

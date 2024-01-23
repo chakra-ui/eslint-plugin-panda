@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
-    "test": "pnpm -r --parallel test",
+    "test": "vitest run",
     "lint": "pnpm -r --parallel lint",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
@@ -29,6 +29,7 @@
     "@typescript-eslint/parser": "^6.19.1",
     "@typescript-eslint/rule-tester": "^6.19.1",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.4"
+    "prettier": "^3.2.4",
+    "vitest": "^1.2.1"
   }
 }

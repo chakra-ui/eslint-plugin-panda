@@ -45,6 +45,9 @@ importers:
       prettier:
         specifier: ^3.2.4
         version: 3.2.4
+      vitest:
+        specifier: ^1.2.1
+        version: 1.2.1(@types/node@20.11.5)
 
   fixture:
     dependencies:
@@ -149,9 +152,6 @@ importers:
       prettier:
         specifier: ^3.2.4
         version: 3.2.4
-      vitest:
-        specifier: ^1.2.1
-        version: 1.2.1(@types/node@20.11.5)
 
   sandbox:
     dependencies:
