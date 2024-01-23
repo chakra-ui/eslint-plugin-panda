@@ -28,7 +28,7 @@ export const getAncestor = <N extends Node>(ofType: (node: Node) => node is N, f
 
 const getSyncOpts = (context: RuleContext<any, any>) => {
   return {
-    currentFile: context.getFilename(),
+    currentFile: context.filename,
     configPath: context.settings['@pandacss/configPath'] as string | undefined,
   }
 }
@@ -36,7 +36,7 @@ const getSyncOpts = (context: RuleContext<any, any>) => {
 const _getImports = (context: RuleContext<any, any>) => {
   const imports: ImportResult[] = []
 
-  context.getSourceCode().ast.body.forEach((node) => {
+  context.sourceCode.ast.body.forEach((node) => {
     if (!isImportDeclaration(node)) return
 
     const mod = node.source.value
@@ -75,7 +75,7 @@ const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
 
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   let decl: TSESTree.VariableDeclarator | undefined
-  context.getSourceCode().ast.body.forEach((node) => {
+  context.sourceCode.ast.body.forEach((node) => {
     if (!isVariableDeclaration(node)) return
     decl = node.declarations.find((decl) => isIdentifier(decl.id) && decl.id.name === name)
   })
