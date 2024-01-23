@@ -7,7 +7,7 @@
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
-    "lint": "pnpm -r --parallel lint",
+    "lint": "eslint . --ext .ts",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
     "typecheck": "pnpm -r --parallel typecheck"
