@@ -98,8 +98,8 @@ importers:
         specifier: ^0.27.3
         version: 0.27.3(typescript@5.3.3)
       '@pandacss/shared':
-        specifier: ^0.27.3
-        version: 0.27.3
+        specifier: 0.0.0-dev-20240123144105
+        version: 0.0.0-dev-20240123144105
       '@typescript-eslint/utils':
         specifier: ^6.19.1
         version: 6.19.1(eslint@8.56.0)(typescript@5.3.3)
@@ -1291,6 +1291,10 @@ packages:
     resolution: {integrity: sha512-QlicJONmTvKnCwvB8yuk7G3J1ndY1vCj+qBJvJi9Sy+tAR6IW3MShL0gqZTfSSZymnCLplRcsIcvWQqQX2Pg7g==}
     dependencies:
       '@pandacss/types': 0.27.3
+
+  /@pandacss/shared@0.0.0-dev-20240123144105:
+    resolution: {integrity: sha512-RVzJTe5nzgxze9xg99/vCJU2zlaAoJ/hQAn39+7MXFbccvBGPVX+t2RcV7vfSQWKlc/ejPx3jKuhor2D02W1Ew==}
+    dev: false
 
   /@pandacss/shared@0.27.3:
     resolution: {integrity: sha512-l+sxb7QdzSBCZ0xI9WMouhXbBB31LL6zrgQ4dCBDIVGzAf24TXDqGbmtWa9+mS1KTm5K2mbWYAnkCkz6ik8UaA==}
