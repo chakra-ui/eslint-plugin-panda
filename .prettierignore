@@ -1,2 +1,8 @@
 dist
 node_modules
+coverage
+build
+*.hbs
+*.d.ts
+styled-system
+pnpm-lock.yaml

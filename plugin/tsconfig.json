@@ -1,16 +1,10 @@
 {
   "extends": "../tsconfig.build.json",
-  "include": [
-    "src/**/*",
-    "index.ts",
-    "test-utils.ts"
-  ],
+  "include": ["src/**/*", "index.ts", "test-utils.ts"],
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "fixture": [
-        "../fixture/src/index.ts"
-      ]
-    }
-  }
+      "fixture": ["../fixture/src/index.ts"],
+    },
+  },
 }
