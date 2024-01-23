@@ -16,7 +16,7 @@ import {
   type Node,
 } from './nodes'
 
-export const getAncestor = <N extends Node>(ofType: (node: Node) => node is N, for_: Node): N => {
+export const getAncestor = <N extends Node>(ofType: (node: Node) => node is N, for_: Node): N | undefined => {
   let current: Node | undefined = for_.parent
   while (current) {
     if (ofType(current)) return current
