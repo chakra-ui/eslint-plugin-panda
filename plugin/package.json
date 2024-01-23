@@ -26,7 +26,7 @@
     "prepare": "pnpm build",
     "build": "tsup",
     "dev": "tsup --watch",
-    "test": "vitest",
+    "test": "vitest run",
     "lint": "eslint . --ext .ts",
     "prettier": "prettier --check packages",
     "prettier-fix": "prettier --write packages",
