@@ -24,7 +24,7 @@
 
 ## Documentation
 
-Visit [panda-css.com](https://panda-css.com/docs/references/eslint) to view the full documentation
+Visit the Panda CSS [eslint docs](https://panda-css.com/docs/references/eslint) to view the full documentation for this plugin.
 
 ## Getting Started
 
