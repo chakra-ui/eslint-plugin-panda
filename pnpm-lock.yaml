@@ -45,6 +45,9 @@ importers:
       eslint-doc-generator:
         specifier: ^1.6.2
         version: 1.6.2(eslint@8.56.0)(typescript@5.3.3)
+      eslint-plugin-eslint-plugin:
+        specifier: ^5.2.1
+        version: 5.2.1(eslint@8.56.0)
       prettier:
         specifier: ^3.2.4
         version: 3.2.4
@@ -2586,6 +2589,17 @@ packages:
       - typescript
     dev: true
 
+  /eslint-plugin-eslint-plugin@5.2.1(eslint@8.56.0):
+    resolution: {integrity: sha512-W+WergGahmRTz5yhw/+6TVqlXZkxucK0rM6KWRjona3MYx8+QJ+9KpXn3sYi1lgLduitfmT8YiAmO4RPC/mxEQ==}
+    engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
+    peerDependencies:
+      eslint: '>=7.0.0'
+    dependencies:
+      eslint: 8.56.0
+      eslint-utils: 3.0.0(eslint@8.56.0)
+      estraverse: 5.3.0
+    dev: true
+
   /eslint-plugin-react-hooks@4.6.0(eslint@8.56.0):
     resolution: {integrity: sha512-oFc7Itz9Qxh2x4gNHStv3BqJq54ExXmfC+a1NjAta66IAN87Wu0R/QArgIS9qKzX3dXKPI9H5crl9QchNMY9+g==}
     engines: {node: '>=10'}
@@ -2617,6 +2631,21 @@ packages:
     dependencies:
       esrecurse: 4.3.0
       estraverse: 5.3.0
+
+  /eslint-utils@3.0.0(eslint@8.56.0):
+    resolution: {integrity: sha512-uuQC43IGctw68pJA1RgbQS8/NP7rch6Cwd4j3ZBtgo4/8Flj4eGE7ZYSZRN3iq5pVUv6GPdW5Z1RFleo84uLDA==}
+    engines: {node: ^10.0.0 || ^12.0.0 || >= 14.0.0}
+    peerDependencies:
+      eslint: '>=5'
+    dependencies:
+      eslint: 8.56.0
+      eslint-visitor-keys: 2.1.0
+    dev: true
+
+  /eslint-visitor-keys@2.1.0:
+    resolution: {integrity: sha512-0rSmRBzXgDzIsD6mGdJgevzgezI534Cer5L/vyMX0kHzT/jiB43jRhd9YUlMGYLQy2zprNmoT8qasCGtY+QaKw==}
+    engines: {node: '>=10'}
+    dev: true
 
   /eslint-visitor-keys@3.4.3:
     resolution: {integrity: sha512-wpc+LXeiyiisxPlEkUzU6svyS1frIO3Mgxj1fdy7Pm8Ygzguax2N3Fa/D/ag1WqbOprdI+uY6wMUl8/a2G+iag==}

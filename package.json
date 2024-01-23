@@ -33,6 +33,7 @@
     "@typescript-eslint/rule-tester": "^6.19.1",
     "eslint": "^8.56.0",
     "eslint-doc-generator": "^1.6.2",
+    "eslint-plugin-eslint-plugin": "^5.2.1",
     "prettier": "^3.2.4",
     "vitest": "^1.2.1"
   }
