@@ -25,7 +25,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "lint": "eslint packages --ext .ts",
+    "lint": "eslint . --ext .ts",
     "prettier": "prettier --check packages",
     "prettier-fix": "prettier --write packages",
     "typecheck": "tsc --noEmit"
