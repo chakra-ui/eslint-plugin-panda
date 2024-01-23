@@ -7,11 +7,7 @@
     "esModuleInterop": true,
     "jsx": "preserve",
     "noEmit": true,
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "target": "esnext",
     "noImplicitReturns": false,
     "resolveJsonModule": true,
@@ -20,8 +16,6 @@
     "verbatimModuleSyntax": true,
     "moduleResolution": "Bundler",
     "module": "ESNext",
-    "customConditions": [
-      "source"
-    ],
+    "customConditions": ["source"]
   }
 }
