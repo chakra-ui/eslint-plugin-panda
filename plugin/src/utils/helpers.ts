@@ -1,6 +1,6 @@
 import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 import type { TSESTree } from '@typescript-eslint/utils'
-import { type ImportResult, syncAction } from './'
+import { type ImportResult, syncAction } from '.'
 import {
   isCallExpression,
   isIdentifier,

@@ -1,0 +1,64 @@
+{
+  "name": "@pandacss/eslint-plugin",
+  "version": "0.0.1",
+  "description": "Eslint plugin for Panda CSS",
+  "author": "Abraham Aremu <anubra266@gmail.com>",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "lint": "eslint packages --ext .ts",
+    "prettier": "prettier --check packages",
+    "prettier-fix": "prettier --write packages",
+    "typecheck": "tsc --noEmit"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.1",
+    "@pandacss/config": "^0.27.3",
+    "@pandacss/generator": "^0.27.3",
+    "@pandacss/node": "^0.27.3",
+    "@pandacss/preset-base": "^0.27.3",
+    "@pandacss/preset-panda": "^0.27.3",
+    "@pandacss/shared": "^0.27.3",
+    "@pandacss/types": "^0.27.3",
+    "@typescript-eslint/utils": "^6.19.1",
+    "hookable": "^5.5.3",
+    "synckit": "^0.9.0",
+    "tsup": "^8.0.1",
+    "typescript": "^5.3.3"
+  },
+  "peerDependencies": {
+    "eslint": "*"
+  },
+  "devDependencies": {
+    "@types/eslint": "^8.56.2",
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.1",
+    "@typescript-eslint/parser": "^6.19.1",
+    "@typescript-eslint/rule-tester": "^6.19.1",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.4"
+  }
+}

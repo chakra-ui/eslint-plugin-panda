@@ -1,10 +1,10 @@
 import { PandaContext, loadConfigAndCreateContext } from '@pandacss/node'
 import { runAsWorker } from 'synckit'
-import { createContext } from '../fixture'
+import { createContext } from 'fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
 import { findConfig } from '@pandacss/config'
 import path from 'path'
-import type { ImportResult } from '../utils'
+import type { ImportResult } from '.'
 
 let promise: Promise<PandaContext> | undefined
 let configPath: string | undefined
