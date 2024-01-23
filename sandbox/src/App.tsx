@@ -1,3 +1,5 @@
+// * Too much errors in this file? It's intentional. Thanks for your concern. 🙏
+
 import { defineKeyframes } from '@pandacss/dev'
 import { css } from '../styled-system/css'
 import { HStack, panda } from '../styled-system/jsx'
