@@ -24,7 +24,8 @@
 
 ## Documentation
 
-Visit the Panda CSS [eslint docs](https://panda-css.com/docs/references/eslint) to view the full documentation for this plugin.
+Visit the Panda CSS [eslint docs](https://panda-css.com/docs/references/eslint) to view the full documentation for this
+plugin.
 
 ## Getting Started
 
@@ -85,14 +86,12 @@ You can tell `eslint` to use a custom panda config file by setting the `configPa
 By default we find the nearest panda config to the linted file.
 
 ```js filename=".eslintrc.(c)js"
-const path = require("path");
+const path = require('path')
 
 module.exports = {
-  plugins: [
-    "@pandacss"
-  ],
+  plugins: ['@pandacss'],
   settings: {
-    "@pandacss/configPath": path.join("PATH-TO/panda.config.js")
-  }
-};
+    '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
+  },
+}
 ```
