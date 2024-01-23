@@ -7,6 +7,7 @@ export default {
     '@pandacss/no-config-function-in-source': 'error',
     '@pandacss/no-debug': 'warn',
     '@pandacss/no-dynamic-styling': 'warn',
+    '@pandacss/no-property-renaming': 'warn',
     '@pandacss/no-invalid-token-paths': 'error',
   },
 }

@@ -2,7 +2,7 @@
 
 import { defineKeyframes } from '@pandacss/dev'
 import { css } from '../styled-system/css'
-import { HStack, panda } from '../styled-system/jsx'
+import { Circle, HStack, panda } from '../styled-system/jsx'
 import { stack } from '../styled-system/patterns'
 import { token } from '../styled-system/tokens'
 
@@ -28,6 +28,7 @@ function App() {
   })
 
   const color = 'red'
+  const circleSize = '4'
 
   return (
     <div
@@ -41,6 +42,7 @@ function App() {
         content: "['escape hatch']",
       })}
     >
+      <Circle size={circleSize} />
       <HStack gap="40px" debug>
         <div className={className}>Element 1</div>
         <panda.div color={color} fontWeight="bold" fontSize="50px" bg="red.200" borderTopColor={'#111'}>
