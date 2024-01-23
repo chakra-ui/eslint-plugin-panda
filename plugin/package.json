@@ -23,6 +23,7 @@
     "./package.json": "./package.json"
   },
   "scripts": {
+    "prepare": "pnpm build",
     "build": "tsup",
     "dev": "tsup --watch",
     "lint": "eslint . --ext .ts",
