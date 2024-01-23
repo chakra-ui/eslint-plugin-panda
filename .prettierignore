@@ -6,3 +6,5 @@ build
 *.d.ts
 styled-system
 pnpm-lock.yaml
+.github
+renovate.json
