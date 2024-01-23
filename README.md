@@ -73,7 +73,7 @@ Or enable all rules in extends:
 }
 ```
 
-> [!NOTE]  
+> [!WARNING]  
 > This is not recommended. You should only enable the rules you need.
 
 ## Settings
