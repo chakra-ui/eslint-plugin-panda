@@ -13,6 +13,8 @@ export const isTemplateLiteral = isNodeOfType(AST_NODE_TYPES.TemplateLiteral)
 
 export const isMemberExpression = isNodeOfType(AST_NODE_TYPES.MemberExpression)
 
+export const isVariableDeclarator = isNodeOfType(AST_NODE_TYPES.VariableDeclarator)
+
 export const isVariableDeclaration = isNodeOfType(AST_NODE_TYPES.VariableDeclaration)
 
 export const isJSXMemberExpression = isNodeOfType(AST_NODE_TYPES.JSXMemberExpression)

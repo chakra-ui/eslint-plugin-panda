@@ -1,5 +1,6 @@
 import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 import type { TSESTree } from '@typescript-eslint/utils'
+import { analyze } from '@typescript-eslint/scope-manager'
 import { type ImportResult, syncAction } from '.'
 import {
   isCallExpression,
@@ -12,7 +13,7 @@ import {
   isJSXMemberExpression,
   isJSXOpeningElement,
   isMemberExpression,
-  isVariableDeclaration,
+  isVariableDeclarator,
   type Node,
 } from './nodes'
 
@@ -74,12 +75,13 @@ const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
 }
 
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
-  let decl: TSESTree.VariableDeclarator | undefined
-  context.sourceCode.ast.body.forEach((node) => {
-    if (!isVariableDeclaration(node)) return
-    decl = node.declarations.find((decl) => isIdentifier(decl.id) && decl.id.name === name)
+  const scope = analyze(context.sourceCode.ast, {
+    sourceType: 'module',
   })
-  return decl
+  const decl = scope.variables
+    .find((v) => v.name === name)
+    ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
+  if (isVariableDeclarator(decl)) return decl
 }
 
 const isLocalStyledFactory = (node: TSESTree.JSXOpeningElement, context: RuleContext<any, any>) => {
