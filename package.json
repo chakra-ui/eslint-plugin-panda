@@ -7,9 +7,12 @@
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
-    "lint": "eslint . --ext .ts",
+    "lint": "pnpm run '/^lint:.*/'",
+    "lint:js": "eslint . --ext .ts",
+    "lint:eslint-docs": "npm run update:eslint-docs -- --check",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
+    "update:eslint-docs": "eslint-doc-generator plugin && pnpm run prettier-fix",
     "typecheck": "pnpm -r --parallel typecheck"
   },
   "files": [
@@ -29,6 +32,7 @@
     "@typescript-eslint/parser": "^6.19.1",
     "@typescript-eslint/rule-tester": "^6.19.1",
     "eslint": "^8.56.0",
+    "eslint-doc-generator": "^1.6.2",
     "prettier": "^3.2.4",
     "vitest": "^1.2.1"
   }
