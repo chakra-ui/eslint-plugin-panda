@@ -1,6 +1,6 @@
 import { PandaContext, loadConfigAndCreateContext } from '@pandacss/node'
 import { runAsWorker } from 'synckit'
-// import { createContext } from '@pandacss/fixture'
+import { createContext } from '../fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
 import { findConfig } from '@pandacss/config'
 import path from 'path'
@@ -19,18 +19,15 @@ async function _getContext(configPath: string | undefined) {
 }
 
 export async function getContext(opts: Opts) {
-  configPath = configPath || findConfig({ cwd: opts.configPath ?? opts.currentFile })
-  promise = promise || _getContext(configPath)
-  return await promise
-  // if (process.env.NODE_ENV === 'test') {
-  //   const ctx = createContext({ importMap: './panda' })
-  //   ctx.getFiles = () => ['./src/valid.tsx']
-  //   return ctx
-  // } else {
-  //   configPath = configPath || findConfig({ cwd: opts.configPath ?? opts.currentFile })
-  //   promise = promise || _getContext(configPath)
-  //   return await promise
-  // }
+  if (process.env.NODE_ENV === 'test') {
+    const ctx = createContext({ importMap: './panda' })
+    ctx.getFiles = () => ['./src/valid.tsx']
+    return ctx
+  } else {
+    configPath = configPath || findConfig({ cwd: opts.configPath ?? opts.currentFile })
+    promise = promise || _getContext(configPath)
+    return await promise
+  }
 }
 
 async function filterInvalidTokenz(ctx: PandaContext, paths: string[]): Promise<string[]> {

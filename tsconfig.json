@@ -1,15 +1,26 @@
 {
-  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "incremental": true,
-    "tsBuildInfoFile": "node_modules/.cache/.tsbuildinfo",
+    "rootDir": "src",
+    "strict": false,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "moduleResolution": "Bundler",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "allowJs": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "declaration": true,
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "lib": [
+      "es2021",
+      "dom"
+    ]
   },
   "include": [
-    "src",
-    "test-utils.ts"
-  ],
-  "types": [],
-  "exclude": [
-    "node_modules",
+    "src/**/*"
   ]
 }

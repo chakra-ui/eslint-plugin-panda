@@ -1,6 +1,5 @@
 import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 import type { TSESTree } from '@typescript-eslint/utils'
-import { AST_NODE_TYPES } from '@typescript-eslint/utils'
 import { type ImportResult, syncAction } from './'
 import {
   isCallExpression,
@@ -17,13 +16,10 @@ import {
   type Node,
 } from './nodes'
 
-export const getAncestor = <A extends AST_NODE_TYPES, N = Extract<Node, { type: A }>>(
-  ofType: (node: N) => node is N,
-  for_: Node,
-): N | undefined => {
+export const getAncestor = <N extends Node>(ofType: (node: Node) => node is N, for_: Node): N => {
   let current: Node | undefined = for_.parent
   while (current) {
-    if (ofType(current as N)) return current as N
+    if (ofType(current)) return current
     current = current.parent
   }
 

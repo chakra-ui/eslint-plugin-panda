@@ -14,15 +14,30 @@ dependencies:
   '@pandacss/config':
     specifier: ^0.27.3
     version: 0.27.3
+  '@pandacss/generator':
+    specifier: ^0.27.3
+    version: 0.27.3
   '@pandacss/node':
     specifier: ^0.27.3
     version: 0.27.3(typescript@5.3.3)
+  '@pandacss/preset-base':
+    specifier: ^0.27.3
+    version: 0.27.3
+  '@pandacss/preset-panda':
+    specifier: ^0.27.3
+    version: 0.27.3
   '@pandacss/shared':
+    specifier: ^0.27.3
+    version: 0.27.3
+  '@pandacss/types':
     specifier: ^0.27.3
     version: 0.27.3
   '@typescript-eslint/utils':
     specifier: ^6.19.1
     version: 6.19.1(eslint@8.56.0)(typescript@5.3.3)
+  hookable:
+    specifier: ^5.5.3
+    version: 5.5.3
   synckit:
     specifier: ^0.9.0
     version: 0.9.0
