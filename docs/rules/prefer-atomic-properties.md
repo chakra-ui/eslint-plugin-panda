@@ -47,4 +47,4 @@ import { Circle } from './panda/jsx'
 ## Resources
 
 * [Rule source](/plugin/src/rules/prefer-atomic-properties.ts)
-* [Test source](/test/prefer-atomic-properties.test.ts)
+* [Test source](/tests/prefer-atomic-properties.test.ts)

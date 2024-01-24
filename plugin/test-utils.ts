@@ -1,3 +1,4 @@
+//@ts-expect-error
 import { RuleTester } from 'eslint-docgen'
 
 const baseTesterConfig = {

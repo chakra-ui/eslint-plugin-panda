@@ -70,4 +70,4 @@ import { tokens as tk } from './panda/tokens'        /* → */ import { tokens a
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-unsafe-token-fn-usage.ts)
-* [Test source](/test/no-unsafe-token-fn-usage.test.ts)
+* [Test source](/tests/no-unsafe-token-fn-usage.test.ts)

@@ -67,4 +67,4 @@ import { Circle } from './panda/jsx'
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-hardcoded-color.ts)
-* [Test source](/test/no-hardcoded-color.test.ts)
+* [Test source](/tests/no-hardcoded-color.test.ts)

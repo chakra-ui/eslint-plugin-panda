@@ -67,4 +67,4 @@ import { Circle } from './panda/jsx'        /* → */ import { Circle } from './
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-shorthand-prop.ts)
-* [Test source](/test/no-shorthand-prop.test.ts)
+* [Test source](/tests/no-shorthand-prop.test.ts)

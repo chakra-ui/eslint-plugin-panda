@@ -51,4 +51,4 @@ const keyframes = defineKeyframes({              /* → */
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-config-function-in-source.ts)
-* [Test source](/test/no-config-function-in-source.test.ts)
+* [Test source](/tests/no-config-function-in-source.test.ts)

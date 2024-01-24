@@ -185,4 +185,4 @@ import { Circle } from './panda/jsx'               /* → */ import { Circle } f
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-escape-hatch.ts)
-* [Test source](/test/no-escape-hatch.test.ts)
+* [Test source](/tests/no-escape-hatch.test.ts)

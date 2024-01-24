@@ -55,4 +55,4 @@ function App() {                                /* → */ function App() {
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-debug.ts)
-* [Test source](/test/no-debug.test.ts)
+* [Test source](/tests/no-debug.test.ts)

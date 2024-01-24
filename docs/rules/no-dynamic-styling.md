@@ -69,4 +69,4 @@ import { styled, Circle } from './panda/jsx'
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-dynamic-styling.ts)
-* [Test source](/test/no-dynamic-styling.test.ts)
+* [Test source](/tests/no-dynamic-styling.test.ts)
