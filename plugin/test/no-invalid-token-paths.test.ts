@@ -2,8 +2,7 @@ import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-invalid-token-paths'
 
 const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-`
+import { Circle } from './panda/jsx'\n\n`
 
 const valids = [
   `const styles = css({ bg: 'token(colors.red.300) 50%' })`,
@@ -25,10 +24,12 @@ tester.run(RULE_NAME, rule as any, {
   valid: valids.map((code) => ({
     code: imports + code,
     filename: './src/valid.tsx',
+    docgen: true,
   })),
   invalid: invalids.map(({ code, errors }) => ({
     code: imports + code,
     filename: './src/invalid.tsx',
     errors: Array.from({ length: errors }).map(() => ({ messageId: 'noInvalidTokenPaths' })),
+    docgen: true,
   })),
 })

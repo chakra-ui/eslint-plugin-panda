@@ -2,20 +2,26 @@ import rule, { RULE_NAME } from '../src/rules/no-debug'
 import { tester } from '../test-utils'
 
 const imports = `import { css } from './panda/css';
-import { styled, Circle } from './panda/jsx';`
+import { styled, Circle } from './panda/jsx';\n\n`
 
 const valids = [
-  'const styles = { debug: true }',
-  'const styles = css({ bg: "red" })',
-  'const styles = css.raw({ bg: "red" })',
-  'const randomFunc = f({ debug: true })',
-  '<NonPandaComponent debug={true} />',
-  '<NonPandaComponent debug={true}>content</NonPandaComponent>',
-  `const PandaComp = styled(div); function App(){ const a = 1;  return (<PandaComp someProp={{ debug: true }} />)}`,
+  { code: 'const styles = { debug: true }' },
+  { code: 'const styles = css({ bg: "red" })' },
+  { code: 'const styles = css.raw({ bg: "red" })' },
+  { code: 'const randomFunc = f({ debug: true })', docgen: true },
+  { code: '<NonPandaComponent debug={true} />' },
+  { code: '<NonPandaComponent debug={true}>content</NonPandaComponent>' },
+  {
+    code: `const PandaComp = styled(div); function App(){ const a = 1;  return (<PandaComp someProp={{ debug: true }} />)}`,
+  },
 ]
 
 const invalids = [
-  { code: 'const styles = css({ bg: "red", debug: true })', output: 'const styles = css({ bg: "red", })' },
+  {
+    code: 'const styles = css({ bg: "red", debug: true })',
+    output: 'const styles = css({ bg: "red", })',
+    docgen: true,
+  },
   {
     code: 'const styles = css.raw({ bg: "red", debug: true })',
     output: 'const styles = css.raw({ bg: "red", })',
@@ -38,17 +44,25 @@ const invalids = [
     output: 'const PandaComp = styled(div); <PandaComp css={{ }} />',
   },
   {
-    code: `function App(){ const PandaComp = styled(div); return (<PandaComp css={{ debug: true }} />)}`,
-    output: `function App(){ const PandaComp = styled(div); return (<PandaComp css={{ }} />)}`,
+    code: `function App() {
+  const PandaComp = styled(div);
+  return <PandaComp css={{ debug: true }} />;
+}`,
+    output: `function App() {
+  const PandaComp = styled(div);
+  return <PandaComp css={{}} />;
+}`,
+    docgen: true,
   },
 ]
 
 tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
+  valid: valids.map(({ code, docgen }) => ({
     code: imports + code,
     filename: './src/valid.tsx',
+    docgen,
   })),
-  invalid: invalids.map(({ code, output }) => ({
+  invalid: invalids.map(({ code, output, docgen }) => ({
     code: imports + code,
     filename: './src/invalid.tsx',
     errors: [
@@ -58,5 +72,6 @@ tester.run(RULE_NAME, rule as any, {
       },
     ],
     output: imports + output,
+    docgen,
   })),
 })

@@ -2,8 +2,7 @@ import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-shorthand-prop'
 
 const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-`
+import { Circle } from './panda/jsx'\n\n`
 
 const valids = [
   'const styles = css({ marginLeft: "4" })',
@@ -21,6 +20,7 @@ tester.run(RULE_NAME, rule as any, {
   valid: valids.map((code) => ({
     code: imports + code,
     filename: './src/valid.tsx',
+    docgen: true,
   })),
   invalid: invalids.map(({ code, output }) => ({
     code: imports + code,
@@ -32,5 +32,6 @@ tester.run(RULE_NAME, rule as any, {
       },
     ],
     output: imports + output,
+    docgen: true,
   })),
 })

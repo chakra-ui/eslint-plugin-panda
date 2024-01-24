@@ -1,7 +1,7 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-config-function-in-source'
 
-const imports = `import { defineKeyframes } from '@pandacss/dev';`
+const imports = `import { defineKeyframes } from '@pandacss/dev';\n\n`
 const code = `const keyframes = defineKeyframes({
   fadeIn: {
     '0%': { opacity: '0' },
@@ -15,6 +15,7 @@ tester.run(RULE_NAME, rule as any, {
     {
       code: imports + code.trim(),
       filename: './panda.config.ts',
+      docgen: true,
     },
   ],
   invalid: [
@@ -28,6 +29,7 @@ tester.run(RULE_NAME, rule as any, {
         },
       ],
       output: imports,
+      docgen: true,
     },
   ],
 })

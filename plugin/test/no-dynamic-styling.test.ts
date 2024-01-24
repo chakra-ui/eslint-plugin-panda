@@ -2,8 +2,7 @@ import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-dynamic-styling'
 
 const imports = `import { css } from './panda/css'
-import { styled, Circle } from './panda/jsx'
-`
+import { styled, Circle } from './panda/jsx'\n\n`
 
 const valids = [
   'const styles = css({ bg: "red" })',
@@ -21,10 +20,12 @@ tester.run(RULE_NAME, rule as any, {
   valid: valids.map((code) => ({
     code: imports + code,
     filename: './src/valid.tsx',
+    docgen: true,
   })),
   invalid: invalids.map((code) => ({
     code: imports + code,
     filename: './src/invalid.tsx',
+    docgen: true,
     errors: [
       {
         messageId: 'dynamic',

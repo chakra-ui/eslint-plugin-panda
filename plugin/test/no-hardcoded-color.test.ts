@@ -2,8 +2,7 @@ import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-hardcoded-color'
 
 const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-`
+import { Circle } from './panda/jsx'\n\n`
 
 // Watch out for color opacity in the future
 const valids = [
@@ -26,6 +25,7 @@ tester.run(RULE_NAME, rule as any, {
   valid: valids.map((code) => ({
     code: imports + code,
     filename: './src/valid.tsx',
+    docgen: true,
   })),
   invalid: invalids.map((code) => ({
     code: imports + code,
@@ -36,5 +36,6 @@ tester.run(RULE_NAME, rule as any, {
         suggestions: null,
       },
     ],
+    docgen: true,
   })),
 })

@@ -7,6 +7,7 @@
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
+    "docs": "DOCGEN=1 vitest run",
     "lint": "eslint . --ext .ts",
     "lint:eslint-docs": "npm run update:eslint-docs -- --check",
     "update:eslint-docs": "eslint-doc-generator plugin && pnpm run prettier-fix",
@@ -14,6 +15,7 @@
     "prettier-fix": "prettier --write .",
     "typecheck": "pnpm -r --parallel typecheck"
   },
+  "main": "plugin/dist/index.js",
   "files": [
     "dist"
   ],
@@ -29,9 +31,8 @@
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
-    "@typescript-eslint/rule-tester": "^6.19.1",
     "eslint": "^8.56.0",
-    "eslint-doc-generator": "^1.6.2",
+    "eslint-docgen": "^0.7.1",
     "eslint-plugin-eslint-plugin": "^5.2.1",
     "prettier": "^3.2.4",
     "vitest": "^1.2.1"

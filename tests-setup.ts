@@ -1,4 +1,4 @@
 import { afterAll } from 'vitest'
-import { RuleTester } from '@typescript-eslint/rule-tester'
+import { RuleTester } from 'eslint-docgen'
 
 RuleTester.afterAll = afterAll

@@ -3,8 +3,7 @@ import rule, { RULE_NAME } from '../src/rules/no-unsafe-token-fn-usage'
 
 const imports = `import { css } from './panda/css';
 import { Circle } from './panda/jsx';
-import { tokens as tk } from './panda/tokens';
-`
+import { tokens as tk } from './panda/tokens'\n\n`
 
 const valids = [
   'const styles = css({ bg: "token(colors.red.300) 50%" })',
@@ -12,11 +11,26 @@ const valids = [
 ]
 
 const invalids = [
-  { code: 'const styles = css({ bg: tk("colors.red.300") })', output: 'const styles = css({ bg: "red.300" })' },
-  { code: 'const styles = css({ bg: tk(`colors.red.300`) })', output: 'const styles = css({ bg: "red.300" })' },
-  { code: 'const styles = css({ bg: "token(colors.red.300)" })', output: 'const styles = css({ bg: "red.300" })' },
+  {
+    code: 'const styles = css({ bg: tk("colors.red.300") })',
+    output: 'const styles = css({ bg: "red.300" })',
+    docgen: true,
+  },
+  {
+    code: 'const styles = css({ bg: tk(`colors.red.300`) })',
+    output: 'const styles = css({ bg: "red.300" })',
+  },
+  {
+    code: 'const styles = css({ bg: "token(colors.red.300)" })',
+    output: 'const styles = css({ bg: "red.300" })',
+    docgen: true,
+  },
   { code: '<div className={css({ border: "{borders.1}" })} />', output: '<div className={css({ border: "1" })} />' },
-  { code: '<Circle _hover={{ color: "{colors.blue.300}" }} />', output: '<Circle _hover={{ color: "blue.300" }} />' },
+  {
+    code: '<Circle _hover={{ color: "{colors.blue.300}" }} />',
+    output: '<Circle _hover={{ color: "blue.300" }} />',
+    docgen: true,
+  },
   { code: '<Circle bg={tk("colors.red.300")} />', output: '<Circle bg={"red.300"} />' },
   { code: '<Circle bg={"token(colors.red.300)"} />', output: '<Circle bg={"red.300"} />' },
   { code: '<Circle bg="token(colors.red.300)" />', output: '<Circle bg="red.300" />' },
@@ -27,8 +41,9 @@ tester.run(RULE_NAME, rule as any, {
   valid: valids.map((code) => ({
     code: imports + code,
     filename: './src/valid.tsx',
+    docgen: true,
   })),
-  invalid: invalids.map(({ code, output }) => ({
+  invalid: invalids.map(({ code, output, docgen }) => ({
     code: imports + code,
     filename: './src/invalid.tsx',
     errors: [
@@ -38,5 +53,6 @@ tester.run(RULE_NAME, rule as any, {
       },
     ],
     output: imports + output,
+    docgen,
   })),
 })
