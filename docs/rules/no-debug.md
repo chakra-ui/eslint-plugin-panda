@@ -48,7 +48,7 @@ import { styled, Circle } from './panda/jsx';   /* → */ import { styled, Circl
                                                 /* → */
 function App() {                                /* → */ function App() {
   const PandaComp = styled(div);                /* → */   const PandaComp = styled(div);
-  return <PandaComp css={{ debug: true }} />;   /* → */   return <PandaComp css={{}} />;
+  return <PandaComp css={{ debug: true }} />;   /* → */   return <PandaComp css={{ }} />;
 }                                               /* → */ }
 ```
 

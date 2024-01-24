@@ -9,8 +9,6 @@
     "test": "vitest run",
     "docs": "rm -rf docs/rules && DOCGEN=1 vitest run && node tools/build-readme.js",
     "lint": "eslint . --ext .ts",
-    "lint:eslint-docs": "npm run update:eslint-docs -- --check",
-    "update:eslint-docs": "eslint-doc-generator plugin && pnpm run prettier-fix",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
     "typecheck": "pnpm -r --parallel typecheck"

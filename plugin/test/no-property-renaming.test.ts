@@ -1,7 +1,7 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-property-renaming'
 
-const imports = `import { Circle } from './panda/jsx'\n\n'`
+const imports = `import { Circle } from './panda/jsx'\n\n`
 
 const valids = [
   `

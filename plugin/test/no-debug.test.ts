@@ -50,7 +50,7 @@ const invalids = [
 }`,
     output: `function App() {
   const PandaComp = styled(div);
-  return <PandaComp css={{}} />;
+  return <PandaComp css={{ }} />;
 }`,
     docgen: true,
   },
