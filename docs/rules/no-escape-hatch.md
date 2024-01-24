@@ -42,17 +42,14 @@ const layout = css({
 })
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<div className={css({ background: '[#111]' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ position: '[absolute]' }} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle
   gridTemplateColumns={`
 [
@@ -99,17 +96,14 @@ const layout = css({
 })
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<div className={css({ background: 'red.100' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ position: 'absolute' }} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle
   gridTemplateColumns={`[full-start]
     minmax(16px, 1fr)

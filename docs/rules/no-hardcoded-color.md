@@ -18,22 +18,18 @@ const styles = css({ color: 'skyblue' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<div className={css({ background: '#111' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ borderColor: 'rgb(1, 1, 1)' }} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ bg: 'hsl(0deg, 0%, 7%)' }} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ bgColor: 'rgba(17, 17, 17, 1)' }} />
 ```
 
@@ -47,22 +43,18 @@ const styles = css({ color: 'red.100' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<div className={css({ background: 'green.300' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ borderColor: 'gray.100' }} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ bg: 'gray.100' }} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ bgColor: 'gray.100' }} />
 ```
 

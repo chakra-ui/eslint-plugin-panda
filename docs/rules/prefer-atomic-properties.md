@@ -18,12 +18,10 @@ const styles = css({ gap: '4' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<div className={css({ background: 'red' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ borderTop: 'solid 1px blue' }} />
 ```
 
@@ -37,12 +35,10 @@ const styles = css({ rowGap: '4', columnGap: '4' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<div className={css({ backgroundColor: 'red' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
-
 ;<Circle _hover={{ borderTopStyle: 'solid', borderTopWidth: '1px', borderTopColor: 'blue' }} />
 ```
 
