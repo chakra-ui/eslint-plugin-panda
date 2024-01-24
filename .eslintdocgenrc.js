@@ -7,4 +7,3 @@ module.exports = {
   showFilenames: true,
   minExamples: null,
 }
-
