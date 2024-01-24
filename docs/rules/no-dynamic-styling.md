@@ -21,10 +21,12 @@ const styles = css({ bg: color })
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle debug={bool} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<styled.div color={color} />
 ```
 
@@ -53,14 +55,17 @@ const styles = css({ debug: true })
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle debug={true} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle color={'red'} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle color={`red`} />
 ```
 

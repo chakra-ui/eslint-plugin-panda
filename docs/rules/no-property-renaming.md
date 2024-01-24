@@ -13,6 +13,21 @@ Ensure user does not rename a property for a pattern or style prop. It doesn't g
 ❌ Examples of **incorrect** code for a file named `invalid.tsx`:
 
 ```js
+import { css } from './panda/css'
+import { Circle } from './panda/jsx'
+
+const Text = ({ variant }) => {
+  return <p className={css({ textStyle: variant })} />
+};
+
+import { css } from './panda/css'
+import { Circle } from './panda/jsx'
+
+const Text = (props) => {
+  return <p className={css({ textStyle: props.variant })} />
+};
+
+import { css } from './panda/css'
 import { Circle } from './panda/jsx'
 
 const CustomCircle = (props: Props) => {
@@ -25,6 +40,7 @@ const CustomCircle = (props: Props) => {
 }
 ;
 
+import { css } from './panda/css'
 import { Circle } from './panda/jsx'
 
 const CustomCircle = (props: Props) => {
@@ -39,6 +55,21 @@ const CustomCircle = (props: Props) => {
 ✔️ Examples of **correct** code for a file named `valid.tsx`:
 
 ```js
+import { css } from './panda/css'
+import { Circle } from './panda/jsx'
+
+const Text = ({ textStyle }) => {
+  return <p className={css({ textStyle })} />
+};
+
+import { css } from './panda/css'
+import { Circle } from './panda/jsx'
+
+const Text = (props) => {
+  return <p className={css({ textStyle: props.textStyle })} />
+};
+
+import { css } from './panda/css'
 import { Circle } from './panda/jsx'
 
 const CustomCircle = (props: Props) => {
@@ -51,6 +82,7 @@ const CustomCircle = (props: Props) => {
 }
 ;
 
+import { css } from './panda/css'
 import { Circle } from './panda/jsx'
 
 const CustomCircle = (props: Props) => {

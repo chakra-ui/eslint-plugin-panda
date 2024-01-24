@@ -30,10 +30,12 @@ const styles = css({ bg: 'token(colors.red.3004, red) 50%' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<div className={css({ marginX: '{sizess.2} {sizes.200}' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<Circle bg="token(colorss.green.400) 40%" />
 ```
 
@@ -52,14 +54,17 @@ const styles = css({ bg: 'token(colors.red.300, red) 50%' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<div className={css({ marginX: '{sizes.4} {sizes.2}' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<Circle bg="token(colors.green.400) 40%" />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<Circle bg={`token(colors.green.400) 40%`} />
 ```
 

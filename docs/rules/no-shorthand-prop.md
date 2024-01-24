@@ -21,10 +21,12 @@ const styles = css({ ml: '4' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<div className={css({ bg: 'red.100' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<Circle _hover={{ pos: 'absolute' }} />
 ```
 
@@ -38,10 +40,12 @@ const styles = css({ marginLeft: '4' })
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<div className={css({ background: 'red.100' })} />
 
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
+
 ;<Circle _hover={{ position: 'absolute' }} />
 ```
 

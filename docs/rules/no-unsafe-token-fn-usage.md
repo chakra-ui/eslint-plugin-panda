@@ -29,6 +29,7 @@ const styles = css({ bg: 'token(colors.red.300)' })
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
 import { tokens as tk } from './panda/tokens'
+
 ;<Circle _hover={{ color: '{colors.blue.300}' }} />
 ```
 
@@ -44,6 +45,7 @@ const styles = css({ bg: 'token(colors.red.300) 50%' })
 import { css } from './panda/css'
 import { Circle } from './panda/jsx'
 import { tokens as tk } from './panda/tokens'
+
 ;<div className={css({ border: 'solid {borderWidths.1} blue' })} />
 ```
 

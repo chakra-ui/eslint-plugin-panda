@@ -51,12 +51,10 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isIdentifier(node.value) && !isMemberExpression(node.value)) return
-        // console.log('node', node)
         if (!isPandaAttribute(node, context)) return
 
         const attr = node.key.name.toString()
         const value = node.value
-
 
         if (isIdentifier(value) && attr !== value.name) {
           return sendReport(node, attr, value.name)
