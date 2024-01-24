@@ -1,5 +1,5 @@
 import { type Rule, createRule } from '../utils'
-import { isPandaProp } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp } from '../utils/helpers'
 import { isIdentifier, isJSXExpressionContainer, isMemberExpression } from '../utils/nodes'
 
 export const RULE_NAME = 'no-property-renaming'
@@ -45,6 +45,25 @@ const rule: Rule = createRule({
 
         if (isMemberExpression(expression) && isIdentifier(expression.property) && attr !== expression.property.name) {
           return sendReport(node, attr, expression.property.name)
+        }
+      },
+
+      Property(node) {
+        if (!isIdentifier(node.key)) return
+        if (!isIdentifier(node.value) && !isMemberExpression(node.value)) return
+        // console.log('node', node)
+        if (!isPandaAttribute(node, context)) return
+
+        const attr = node.key.name.toString()
+        const value = node.value
+
+
+        if (isIdentifier(value) && attr !== value.name) {
+          return sendReport(node, attr, value.name)
+        }
+
+        if (isMemberExpression(value) && isIdentifier(value.property) && attr !== value.property.name) {
+          return sendReport(node, attr, value.property.name)
         }
       },
     }

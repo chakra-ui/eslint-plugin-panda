@@ -29,6 +29,7 @@ function App() {
 
   const color = 'red'
   const circleSize = '4'
+  const text = '4px'
 
   return (
     <div
@@ -40,6 +41,7 @@ function App() {
         color: '#111',
         backgroundColor: color,
         content: "['escape hatch']",
+        textStyle: text,
       })}
     >
       <Circle size={circleSize} />

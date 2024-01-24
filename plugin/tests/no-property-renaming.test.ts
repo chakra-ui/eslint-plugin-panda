@@ -1,9 +1,18 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-property-renaming'
 
-const imports = `import { Circle } from './panda/jsx'\n\n`
+const imports = `import { css } from './panda/css'
+import { Circle } from './panda/jsx'\n\n`
 
 const valids = [
+  `
+const Text = ({ textStyle }) => {
+  return <p className={css({ textStyle })} />
+}`,
+  `
+const Text = (props) => {
+  return <p className={css({ textStyle: props.textStyle })} />
+}`,
   `
 const CustomCircle = (props: Props) => {
   const { size = '3' } = props
@@ -26,6 +35,14 @@ const CustomCircle = (props: Props) => {
 ]
 
 const invalids = [
+  `
+const Text = ({ variant }) => {
+  return <p className={css({ textStyle: variant })} />
+}`,
+  `
+const Text = (props) => {
+  return <p className={css({ textStyle: props.variant })} />
+}`,
   `
 const CustomCircle = (props: Props) => {
   const { circleSize = '3' } = props
