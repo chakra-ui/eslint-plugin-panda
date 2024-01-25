@@ -15,14 +15,12 @@ Discourage the use of shorthand properties and promote the preference for longha
 import { css } from './panda/css';
 
 const styles = css({ ml: '4' });
-;
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ bg: 'red.100' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -36,14 +34,12 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ marginLeft: '4' });
-;
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'red.100' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -57,14 +53,12 @@ function App(){
 import { css } from './panda/css';                    /* → */ import { css } from './panda/css';
                                                       /* → */
 const styles = css({ ml: '4' });                      /* → */ const styles = css({ marginLeft: '4' });
-;                                                     /* → */ ;
 
 import { css } from './panda/css';                    /* → */ import { css } from './panda/css';
                                                       /* → */
 function App(){                                       /* → */ function App(){
   return  <div className={css({ bg: 'red.100' })} />; /* → */   return  <div className={css({ background: 'red.100' })} />;
-}                                                     /* → */ }
-;                                                     /* → */ ;
+};                                                    /* → */ };
 
 import { Circle } from './panda/jsx';                 /* → */ import { Circle } from './panda/jsx';
                                                       /* → */

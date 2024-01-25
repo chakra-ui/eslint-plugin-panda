@@ -8,8 +8,7 @@ const valids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ rowGap: '4', columnGap: '4' });
-`,
+const styles = css({ rowGap: '4', columnGap: '4' })`,
   },
 
   {
@@ -18,8 +17,7 @@ import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ backgroundColor: 'red.100' })} />;
-}
-`,
+}`,
   },
 
   {
@@ -28,8 +26,7 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return  <Circle _hover={{  borderTopStyle: 'solid', borderTopWidth: '1px', borderTopColor: 'blue' }} />;
-}
-`,
+}`,
   },
 ]
 
@@ -38,8 +35,7 @@ const invalids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ gap: '4' });
-`,
+const styles = css({ gap: '4' })`,
   },
 
   {
@@ -48,8 +44,7 @@ import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'red.100' })} />;
-}
-`,
+}`,
   },
 
   {
@@ -58,8 +53,7 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return  <Circle _hover={{  borderTop: 'solid 1px blue' }} />;
-}
-`,
+}`,
   },
 ]
 

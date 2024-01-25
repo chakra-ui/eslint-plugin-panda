@@ -16,15 +16,13 @@ import { css } from './panda/css';
 
 // colorszz is not a valid token type
 const styles = css({ bg: 'token(colorszz.red.300) 50%' });
-;
 
 import { css } from './panda/css';
 
 function App(){
   // \`4000\` is not a valid size token. Assuming we're using the default panda presets
   return  <div className={css({ marginX: '{sizes.4000} 20px' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -39,14 +37,12 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ bg: 'token(colors.red.300) 50%' });
-;
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ marginX: '{sizes.4} 20px' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 

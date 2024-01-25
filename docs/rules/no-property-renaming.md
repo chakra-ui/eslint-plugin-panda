@@ -16,15 +16,13 @@ import { css } from './panda/css';
 
 function Text({ variant }){
   return <p className={css({ textStyle: variant })} />;
-}
-;
+};
 
 import { css } from './panda/css';
 
 function Text(props){
   return <p className={css({ textStyle: props.variant })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -35,8 +33,7 @@ function CustomCircle(props){
       size={circleSize}
     />
   )
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -55,15 +52,13 @@ import { css } from './panda/css';
 
 function Text({ textStyle }){
   return <p className={css({ textStyle })} />;
-}
-;
+};
 
 import { css } from './panda/css';
 
 function Text(props){
   return <p className={css({ textStyle: props.textStyle })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -74,8 +69,7 @@ function CustomCircle(props){
       size={size}
     />
   )
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 

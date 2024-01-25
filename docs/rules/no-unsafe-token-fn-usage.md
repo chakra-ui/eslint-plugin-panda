@@ -16,15 +16,13 @@ import { token } from './panda/tokens';
 import { css } from './panda/css';
 
 const styles = css({ bg: token('colors.red.300') });
-;
 
 import { token } from './panda/tokens';
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ bg: 'token(colors.red.300)' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -38,15 +36,13 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ bg: 'token(colors.red.300) 50%' });
-;
 
 import { css } from './panda/css';
 import { token } from './panda/tokens';
 
 function App(){
   return  <div style={{ color: token('colors.red.50') }} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -61,15 +57,13 @@ import { token } from './panda/tokens';                             /* → */ im
 import { css } from './panda/css';                                  /* → */ import { css } from './panda/css';
                                                                     /* → */
 const styles = css({ bg: token('colors.red.300') });                /* → */ const styles = css({ bg: 'red.300' });
-;                                                                   /* → */ ;
 
 import { token } from './panda/tokens';                             /* → */ import { token } from './panda/tokens';
 import { css } from './panda/css';                                  /* → */ import { css } from './panda/css';
                                                                     /* → */
 function App(){                                                     /* → */ function App(){
   return  <div className={css({ bg: 'token(colors.red.300)' })} />; /* → */   return  <div className={css({ bg: 'red.300' })} />;
-}                                                                   /* → */ }
-;                                                                   /* → */ ;
+};                                                                  /* → */ };
 
 import { Circle } from './panda/jsx';                               /* → */ import { Circle } from './panda/jsx';
                                                                     /* → */

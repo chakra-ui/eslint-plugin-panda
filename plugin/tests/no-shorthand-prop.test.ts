@@ -8,8 +8,7 @@ const valids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ marginLeft: '4' });
-`,
+const styles = css({ marginLeft: '4' })`,
   },
 
   {
@@ -18,8 +17,7 @@ import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'red.100' })} />;
-}
-`,
+}`,
   },
 
   {
@@ -28,8 +26,7 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return  <Circle _hover={{  position: 'absolute' }} />;
-}
-`,
+}`,
   },
 ]
 
@@ -38,13 +35,11 @@ const invalids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ ml: '4' });
-`,
+const styles = css({ ml: '4' })`,
     output: javascript`
 import { css } from './panda/css';
 
-const styles = css({ marginLeft: '4' });
-`,
+const styles = css({ marginLeft: '4' })`,
   },
 
   {
@@ -53,15 +48,13 @@ import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ bg: 'red.100' })} />;
-}
-`,
+}`,
     output: javascript`
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'red.100' })} />;
-}
-`,
+}`,
   },
 
   {
@@ -70,15 +63,13 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return  <Circle _hover={{  pos: 'absolute' }} />;
-}
-`,
+}`,
     output: javascript`
 import { Circle } from './panda/jsx';
 
 function App(){
   return  <Circle _hover={{  position: 'absolute' }} />;
-}
-`,
+}`,
   },
 ]
 

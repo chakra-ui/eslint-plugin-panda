@@ -8,8 +8,7 @@ const valids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ bg: 'gray.900' });
-`,
+const styles = css({ bg: 'gray.900' })`,
   },
 
   {
@@ -18,8 +17,7 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle debug={true} />;
-}
-`,
+}`,
   },
 
   {
@@ -28,8 +26,7 @@ import { styled } from './panda/jsx';
 
 function App(){
   return <styled.div color='red.100' />;
-}
-`,
+}`,
   },
 ]
 
@@ -38,8 +35,7 @@ const invalids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ bg: color });
-`,
+const styles = css({ bg: color })`,
   },
 
   {
@@ -49,8 +45,7 @@ import { Circle } from './panda/jsx';
 function App(){
   const bool = true;
   return  <Circle debug={bool} />;
-}
-`,
+}`,
   },
 
   {
@@ -60,8 +55,7 @@ import { styled } from './panda/jsx';
 function App(){
   const color = 'red.100';
   return  <styled.div color={color} />;
-}
-`,
+}`,
   },
 ]
 

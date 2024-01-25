@@ -13,14 +13,12 @@ Encourage the use of atomic properties instead of composite shorthand properties
 import { css } from './panda/css';
 
 const styles = css({ gap: '4' });
-;
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'red.100' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 
@@ -34,14 +32,12 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ rowGap: '4', columnGap: '4' });
-;
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ backgroundColor: 'red.100' })} />;
-}
-;
+};
 
 import { Circle } from './panda/jsx';
 

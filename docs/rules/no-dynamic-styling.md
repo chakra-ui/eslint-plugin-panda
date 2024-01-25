@@ -15,15 +15,13 @@ Ensure user doesn't use dynamic styling at any point. Prefer to use static style
 import { css } from './panda/css';
 
 const styles = css({ bg: color });
-;
 
 import { Circle } from './panda/jsx';
 
 function App(){
   const bool = true;
   return  <Circle debug={bool} />;
-}
-;
+};
 
 import { styled } from './panda/jsx';
 
@@ -38,14 +36,12 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900' });
-;
 
 import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle debug={true} />;
-}
-;
+};
 
 import { styled } from './panda/jsx';
 

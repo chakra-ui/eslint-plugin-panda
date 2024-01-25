@@ -17,11 +17,10 @@ Disallow the inclusion of the debug attribute when shipping code to the producti
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900', debug: true });
-;
 
 import { css } from './panda/css';
 
-const styles = css.raw({ color: 'gray.50', debug: true });
+const styles = css.raw({ color: 'gray.50', debug: true })
 ```
 
 ✔️ Examples of **correct** code:
@@ -29,23 +28,21 @@ const styles = css.raw({ color: 'gray.50', debug: true });
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900' });
-;
 
 import { css } from './panda/css';
 
-const styles = css.raw({ color: 'gray.50' });
+const styles = css.raw({ color: 'gray.50' })
 ```
 
 🔧 Examples of code **fixed** by this rule:
 ```js
-import { css } from './panda/css';                         /* → */ import { css } from './panda/css';
-                                                           /* → */
-const styles = css({ bg: 'gray.900', debug: true });       /* → */ const styles = css({ bg: 'gray.900', });
-;                                                          /* → */ ;
+import { css } from './panda/css';                        /* → */ import { css } from './panda/css';
+                                                          /* → */
+const styles = css({ bg: 'gray.900', debug: true });      /* → */ const styles = css({ bg: 'gray.900', });
 
-import { css } from './panda/css';                         /* → */ import { css } from './panda/css';
-                                                           /* → */
-const styles = css.raw({ color: 'gray.50', debug: true }); /* → */ const styles = css.raw({ color: 'gray.50', });
+import { css } from './panda/css';                        /* → */ import { css } from './panda/css';
+                                                          /* → */
+const styles = css.raw({ color: 'gray.50', debug: true }) /* → */ const styles = css.raw({ color: 'gray.50', })
 ```
 
 ## Resources

@@ -10,8 +10,7 @@ import { css } from './panda/css';
 
 function Text({ textStyle }){
   return <p className={css({ textStyle })} />;
-}
-`,
+}`,
   },
 
   {
@@ -20,8 +19,7 @@ import { css } from './panda/css';
 
 function Text(props){
   return <p className={css({ textStyle: props.textStyle })} />;
-}
-`,
+}`,
   },
 
   {
@@ -35,8 +33,7 @@ function CustomCircle(props){
       size={size}
     />
   )
-}
-`,
+}`,
   },
 
   {
@@ -49,8 +46,7 @@ function CustomCircle(props){
       size={props.size}
     />
   )
-}
-`,
+}`,
   },
 ]
 
@@ -61,8 +57,7 @@ import { css } from './panda/css';
 
 function Text({ variant }){
   return <p className={css({ textStyle: variant })} />;
-}
-`,
+}`,
   },
 
   {
@@ -71,8 +66,7 @@ import { css } from './panda/css';
 
 function Text(props){
   return <p className={css({ textStyle: props.variant })} />;
-}
-`,
+}`,
   },
 
   {
@@ -86,8 +80,7 @@ function CustomCircle(props){
       size={circleSize}
     />
   )
-}
-`,
+}`,
   },
 
   {
@@ -100,8 +93,7 @@ function CustomCircle(props){
       size={props.circleSize}
     />
   )
-}
-`,
+}`,
   },
 ]
 
