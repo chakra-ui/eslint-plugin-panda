@@ -52,7 +52,6 @@ const rule: Rule = createRule({
     const isCompositeValue = (input?: string) => {
       if (!input) return
       // Regular expression to match token only values. i.e. token('space.2') or {space.2}
-      // TODO We'll need to update this when we implement the format tokens feature cause then format will be dynamic
       const tokenRegex = /^(?:token\([^)]*\)|\{[^}]*\})$/
       return !tokenRegex.test(input)
     }
