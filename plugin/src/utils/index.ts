@@ -10,7 +10,8 @@ export const createRule: ReturnType<(typeof ESLintUtils)['RuleCreator']> = ESLin
 
 export type Rule<A extends readonly unknown[] = any, B extends string = any> = ReturnType<typeof createRule<A, B>>
 
-export const distDir = fileURLToPath(new URL(process.env.MODE === 'test' ? '../../dist' : './', import.meta.url))
+const isBase = process.env.NODE_ENV !== 'test' || import.meta.url.endsWith('dist/index.js')
+export const distDir = fileURLToPath(new URL(isBase ? './' : '../../dist', import.meta.url))
 
 export const syncAction = createSyncFn(join(distDir, 'utils/worker.mjs')) as typeof run
 
