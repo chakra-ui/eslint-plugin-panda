@@ -6,19 +6,19 @@
   "main": "src/index.ts",
   "types": "src/index.ts",
   "author": "Segun Adebayo <joseshegs@gmail.com>",
-  "devDependencies": {
-    "hookable": "5.5.3",
-    "postcss": "^8.4.33"
+  "scripts": {
+    "deps": "pnpm up '@pandacss/*' --latest"
   },
-  "dependencies": {
-    "@pandacss/config": "^0.27.3",
-    "@pandacss/core": "^0.27.3",
-    "@pandacss/generator": "^0.27.3",
-    "@pandacss/node": "^0.27.3",
-    "@pandacss/preset-base": "^0.27.3",
-    "@pandacss/preset-panda": "^0.27.3",
-    "@pandacss/shared": "^0.27.3",
-    "@pandacss/token-dictionary": "^0.27.3",
-    "@pandacss/types": "^0.27.3"
+  "devDependencies": {
+    "@pandacss/config": "^0.28.0",
+    "@pandacss/core": "^0.28.0",
+    "@pandacss/generator": "^0.28.0",
+    "@pandacss/node": "^0.28.0",
+    "@pandacss/preset-base": "^0.28.0",
+    "@pandacss/preset-panda": "^0.28.0",
+    "@pandacss/shared": "^0.28.0",
+    "@pandacss/token-dictionary": "^0.28.0",
+    "@pandacss/types": "^0.28.0",
+    "postcss": "^8.4.33"
   }
 }
