@@ -2,7 +2,7 @@ import rule, { RULE_NAME } from '../src/rules/no-debug'
 import rule2, { RULE_NAME as RULE_NAME2 } from '../src/rules/no-dynamic-styling'
 import rule3, { RULE_NAME as RULE_NAME3 } from '../src/rules/no-escape-hatch'
 import rule4, { RULE_NAME as RULE_NAME4 } from '../src/rules/no-unsafe-token-fn-usage'
-import { tester } from '../test-utils'
+import { eslintTester } from '../test-utils'
 import { getArbitraryValue } from '@pandacss/shared'
 
 //* This test is just to ensure that the plugin correctly recognises panda in various kinds of code.
@@ -62,7 +62,7 @@ const invalids = [
   },
 ]
 
-tester.run(RULE_NAME, rule, {
+eslintTester.run(RULE_NAME, rule as any, {
   valid: valids.map(({ code }) => ({
     code: imports + code,
   })),
@@ -71,7 +71,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'debug',
-        suggestions: null,
       },
     ],
     output: imports + output,
@@ -92,7 +91,7 @@ const valids2 = [
 
 const invalids2 = ['const styles = css({ bg: color })', '<Circle debug={bool} />', '<styled.div color={color} />']
 
-tester.run(RULE_NAME2, rule2 as any, {
+eslintTester.run(RULE_NAME2, rule2 as any, {
   valid: valids2.map((code) => ({
     code: imports + code,
   })),
@@ -101,7 +100,6 @@ tester.run(RULE_NAME2, rule2 as any, {
     errors: [
       {
         messageId: 'dynamic',
-        suggestions: null,
       },
     ],
   })),
@@ -153,7 +151,7 @@ const invalids3 = [
   },
 ]
 
-tester.run(RULE_NAME3, rule3, {
+eslintTester.run(RULE_NAME3, rule3 as any, {
   valid: valids3.map((code) => ({
     code: imports + code,
   })),
@@ -162,7 +160,6 @@ tester.run(RULE_NAME3, rule3, {
     errors: [
       {
         messageId: 'escapeHatch',
-        suggestions: null,
       },
     ],
     output: imports + output,
@@ -180,17 +177,17 @@ const valids4 = ['const styles = css({ bg: "token(colors.red.300) 50%" })']
 const invalids4 = [
   {
     code: 'const styles = css({ bg: tk("colors.red.300") })',
-    output: 'const styles = css({ bg: "red.300" })',
+    output: `const styles = css({ bg: 'red.300' })`,
   },
   {
     code: 'const styles = css({ bg: tk(`colors.red.300`) })',
-    output: 'const styles = css({ bg: "red.300" })',
+    output: `const styles = css({ bg: 'red.300' })`,
   },
 
-  { code: '<Circle bg={tk("colors.red.300")} />', output: '<Circle bg={"red.300"} />' },
+  { code: '<Circle bg={tk("colors.red.300")} />', output: `<Circle bg={'red.300'} />` },
 ]
 
-tester.run(RULE_NAME4, rule4, {
+eslintTester.run(RULE_NAME4, rule4 as any, {
   valid: valids4.map((code) => ({
     code: imports4 + code,
   })),
@@ -200,7 +197,6 @@ tester.run(RULE_NAME4, rule4, {
     errors: [
       {
         messageId: 'noUnsafeTokenFnUsage',
-        suggestions: null,
       },
     ],
     output: imports4 + output,

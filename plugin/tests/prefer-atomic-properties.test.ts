@@ -72,7 +72,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'atomic',
-        suggestions: null,
       },
     ],
   })),

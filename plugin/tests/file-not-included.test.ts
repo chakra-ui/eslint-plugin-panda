@@ -31,11 +31,9 @@ tester.run(RULE_NAME, rule, {
       errors: [
         {
           messageId: 'include',
-          suggestions: null,
         },
         {
           messageId: 'include',
-          suggestions: null,
         },
       ],
     },

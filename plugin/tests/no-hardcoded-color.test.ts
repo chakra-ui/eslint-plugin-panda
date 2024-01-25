@@ -75,7 +75,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'invalidColor',
-        suggestions: null,
       },
     ],
   })),

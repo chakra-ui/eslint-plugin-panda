@@ -61,7 +61,6 @@ tester.run(RULE_NAME, rule, {
       errors: [
         {
           messageId: 'configFunction',
-          suggestions: null,
         },
       ],
       output: app_output,

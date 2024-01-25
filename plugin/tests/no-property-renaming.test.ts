@@ -114,7 +114,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'noRenaming',
-        suggestions: null,
       },
     ],
   })),

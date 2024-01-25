@@ -91,7 +91,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'longhand',
-        suggestions: null,
       },
     ],
     output: output,

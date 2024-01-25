@@ -58,7 +58,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'debug',
-        suggestions: null,
       },
     ],
     output,

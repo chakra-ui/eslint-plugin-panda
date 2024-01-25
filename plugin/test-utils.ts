@@ -1,5 +1,6 @@
 //@ts-expect-error
 import { RuleTester } from 'eslint-docgen'
+import { RuleTester as ERuleTester } from 'eslint'
 
 const baseTesterConfig = {
   parser: require.resolve('@typescript-eslint/parser'),
@@ -11,3 +12,4 @@ const baseTesterConfig = {
 }
 
 export const tester = new RuleTester(baseTesterConfig)
+export const eslintTester = new ERuleTester(baseTesterConfig)

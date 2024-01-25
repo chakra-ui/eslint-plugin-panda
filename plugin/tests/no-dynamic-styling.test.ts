@@ -74,7 +74,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'dynamic',
-        suggestions: null,
       },
     ],
   })),

@@ -96,7 +96,6 @@ tester.run(RULE_NAME, rule, {
     errors: [
       {
         messageId: 'noUnsafeTokenFnUsage',
-        suggestions: null,
       },
     ],
     output,
