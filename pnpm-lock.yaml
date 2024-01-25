@@ -53,7 +53,7 @@ importers:
         version: 1.2.1(@types/node@20.11.5)
 
   fixture:
-    dependencies:
+    devDependencies:
       '@pandacss/config':
         specifier: ^0.28.0
         version: 0.28.0
@@ -81,10 +81,6 @@ importers:
       '@pandacss/types':
         specifier: ^0.28.0
         version: 0.28.0
-    devDependencies:
-      hookable:
-        specifier: 5.5.3
-        version: 5.5.3
       postcss:
         specifier: ^8.4.33
         version: 8.4.33
