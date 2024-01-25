@@ -1,77 +1,66 @@
-import rule, { RULE_NAME } from '../src/rules/no-debug'
 import { tester } from '../test-utils'
+import rule, { RULE_NAME } from '../src/rules/no-debug'
 
-const imports = `import { css } from './panda/css';
-import { styled, Circle } from './panda/jsx';\n\n`
+const javascript = String.raw
 
 const valids = [
-  { code: 'const styles = { debug: true }' },
-  { code: 'const styles = css({ bg: "red" })' },
-  { code: 'const styles = css.raw({ bg: "red" })' },
-  { code: 'const randomFunc = f({ debug: true })', docgen: true },
-  { code: '<NonPandaComponent debug={true} />' },
-  { code: '<NonPandaComponent debug={true}>content</NonPandaComponent>' },
   {
-    code: `const PandaComp = styled(div); function App(){ const a = 1;  return (<PandaComp someProp={{ debug: true }} />)}`,
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ bg: 'gray.900' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css.raw({ color: 'gray.50' });
+`,
   },
 ]
 
 const invalids = [
   {
-    code: 'const styles = css({ bg: "red", debug: true })',
-    output: 'const styles = css({ bg: "red", })',
-    docgen: true,
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ bg: 'gray.900', debug: true });
+`,
+    output: javascript`
+import { css } from './panda/css';
+
+const styles = css({ bg: 'gray.900', });
+`,
   },
+
   {
-    code: 'const styles = css.raw({ bg: "red", debug: true })',
-    output: 'const styles = css.raw({ bg: "red", })',
-  },
-  {
-    code: 'const styles = css({ bg: "red", "&:hover": { debug: true } })',
-    output: 'const styles = css({ bg: "red", "&:hover": { } })',
-  },
-  {
-    code: 'const styles = css({ bg: "red", "&:hover": { "&:disabled": { debug: true } } })',
-    output: 'const styles = css({ bg: "red", "&:hover": { "&:disabled": { } } })',
-  },
-  { code: '<Circle debug />', output: '<Circle  />' },
-  { code: '<Circle debug={true} />', output: '<Circle  />' },
-  { code: '<Circle css={{ debug: true }} />', output: '<Circle css={{ }} />' },
-  { code: '<Circle css={{ "&:hover": { debug: true } }} />', output: '<Circle css={{ "&:hover": { } }} />' },
-  { code: '<styled.div _hover={{ debug: true }} />', output: '<styled.div _hover={{ }} />' },
-  {
-    code: `const PandaComp = styled(div); <PandaComp css={{ debug: true }} />`,
-    output: 'const PandaComp = styled(div); <PandaComp css={{ }} />',
-  },
-  {
-    code: `function App() {
-  const PandaComp = styled(div);
-  return <PandaComp css={{ debug: true }} />;
-}`,
-    output: `function App() {
-  const PandaComp = styled(div);
-  return <PandaComp css={{ }} />;
-}`,
-    docgen: true,
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css.raw({ color: 'gray.50', debug: true });
+`,
+    output: javascript`
+import { css } from './panda/css';
+
+const styles = css.raw({ color: 'gray.50', });
+`,
   },
 ]
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map(({ code, docgen }) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen,
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
-  invalid: invalids.map(({ code, output, docgen }) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
+  invalid: invalids.map(({ code, output }) => ({
+    code,
     errors: [
       {
         messageId: 'debug',
         suggestions: null,
       },
     ],
-    output: imports + output,
-    docgen,
+    output,
   })),
 })

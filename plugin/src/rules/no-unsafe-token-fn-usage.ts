@@ -80,7 +80,7 @@ const rule: Rule = createRule({
         node,
         messageId: 'noUnsafeTokenFnUsage',
         fix: (fixer) => {
-          return fixer.replaceTextRange(node.range, `"${token}"`)
+          return fixer.replaceTextRange(node.range, `'${token}'`)
         },
       })
     }

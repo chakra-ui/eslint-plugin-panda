@@ -1,31 +1,76 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-dynamic-styling'
 
-const imports = `import { css } from './panda/css'
-import { styled, Circle } from './panda/jsx'\n\n`
+const javascript = String.raw
 
 const valids = [
-  'const styles = css({ bg: "red" })',
-  'const styles = css({ bg: `red` })',
-  'const styles = css({ bg: 1 })',
-  'const styles = css({ debug: true })',
-  '<Circle debug={true} />',
-  '<Circle color={"red"} />',
-  '<Circle color={`red`} />',
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ bg: 'gray.900' });
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle debug={true} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { styled } from './panda/jsx';
+
+function App(){
+  return <styled.div color='red.100' />;
+}
+`,
+  },
 ]
 
-const invalids = ['const styles = css({ bg: color })', '<Circle debug={bool} />', '<styled.div color={color} />']
+const invalids = [
+  {
+    code: javascript`
+import { css } from './panda/css';
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen: true,
+const styles = css({ bg: color });
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  const bool = true;
+  return  <Circle debug={bool} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { styled } from './panda/jsx';
+
+function App(){
+  const color = 'red.100';
+  return  <styled.div color={color} />;
+}
+`,
+  },
+]
+
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
-  invalid: invalids.map((code) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
-    docgen: true,
+  invalid: invalids.map(({ code }) => ({
+    code,
     errors: [
       {
         messageId: 'dynamic',

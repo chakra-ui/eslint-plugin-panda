@@ -1,35 +1,70 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-config-function-in-source'
 
-const imports = `import { defineKeyframes } from '@pandacss/dev';\n\n`
-const code = `const keyframes = defineKeyframes({
+const javascript = String.raw
+
+const panda_config = javascript`
+import { defineConfig, defineKeyframes } from '@pandacss/dev';
+
+const keyframes = defineKeyframes({
   fadeIn: {
     '0%': { opacity: '0' },
     '100%': { opacity: '1' },
   },
-})
+});
+
+export default defineConfig({
+  theme: {
+    keyframes
+  }
+});
 `
 
-tester.run(RULE_NAME, rule as any, {
+const app = javascript`
+import {  defineKeyframes } from '@pandacss/dev';
+import { css } from './panda/css';
+
+const keyframes = defineKeyframes({
+  fadeIn: {
+    '0%': { opacity: '0' },
+    '100%': { opacity: '1' },
+  },
+});
+
+const styles = css({
+  animation: 'fadeIn 1s ease-in-out',
+});
+`
+
+const app_output = javascript`
+import {   } from '@pandacss/dev';
+import { css } from './panda/css';
+
+
+
+const styles = css({
+  animation: 'fadeIn 1s ease-in-out',
+});
+`
+
+tester.run(RULE_NAME, rule, {
   valid: [
     {
-      code: imports + code.trim(),
-      filename: './panda.config.ts',
-      docgen: true,
+      code: panda_config,
+      filename: 'panda.config.ts',
     },
   ],
   invalid: [
     {
-      code: imports + code.trim(),
-      filename: './src/valid.tsx',
+      code: app,
+      filename: 'App.tsx',
       errors: [
         {
           messageId: 'configFunction',
           suggestions: null,
         },
       ],
-      output: imports,
-      docgen: true,
+      output: app_output,
     },
   ],
 })

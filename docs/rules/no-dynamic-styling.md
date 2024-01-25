@@ -11,7 +11,7 @@ known dynamic styles.
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
@@ -21,14 +21,16 @@ const styles = css({ bg: color })
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle debug={bool} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<styled.div color={color} />
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
@@ -53,14 +55,17 @@ const styles = css({ debug: true })
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle debug={true} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle color={'red'} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
+
 ;<Circle color={`red`} />
 ```
 

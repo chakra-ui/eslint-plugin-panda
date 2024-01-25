@@ -8,38 +8,40 @@ Encourage the use of atomic properties instead of composite shorthand properties
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
 const styles = css({ gap: '4' })
-
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ background: 'red' })} />
 
-import { css } from './panda/css'
+function App() {
+  return <div className={css({ background: 'red.100' })} />
+}
 import { Circle } from './panda/jsx'
-;<Circle _hover={{ borderTop: 'solid 1px blue' }} />
+
+function App() {
+  return <Circle _hover={{ borderTop: 'solid 1px blue' }} />
+}
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
 const styles = css({ rowGap: '4', columnGap: '4' })
-
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ backgroundColor: 'red' })} />
 
-import { css } from './panda/css'
+function App() {
+  return <div className={css({ backgroundColor: 'red.100' })} />
+}
 import { Circle } from './panda/jsx'
-;<Circle _hover={{ borderTopStyle: 'solid', borderTopWidth: '1px', borderTopColor: 'blue' }} />
+
+function App() {
+  return <Circle _hover={{ borderTopStyle: 'solid', borderTopWidth: '1px', borderTopColor: 'blue' }} />
+}
 ```
 
 ## Resources

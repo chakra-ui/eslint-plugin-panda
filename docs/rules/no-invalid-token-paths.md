@@ -10,57 +10,43 @@ Disallow the use of invalid token paths within token function syntax.
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
-const styles = css({ bg: 'token(colors.red0.300) 50%' })
-
+// colorszz is not a valid token type
+const styles = css({ bg: 'token(colorszz.red.300) 50%' })
 import { css } from './panda/css'
+
+function App() {
+  // \`4000\` is not a valid size token. Assuming we're using the default panda presets
+  return <div className={css({ marginX: '{sizes.4000} 20px' })} />
+}
 import { Circle } from './panda/jsx'
 
-const styles = css({ bg: `token(colors.red0.300) 50%` })
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const styles = css({ bg: 'token(colors.red.3004, red) 50%' })
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ marginX: '{sizess.2} {sizes.200}' })} />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle bg="token(colorss.green.400) 40%" />
+function App() {
+  // \`1\` does not exist in borderWidths, and \`grays\` is not a valid color token. Assuming we're using the default panda presets
+  return <Circle _hover={{ border: 'solid {borderWidths.1} token(colors.grays.100, #F3F4F6)' }} />
+}
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
 const styles = css({ bg: 'token(colors.red.300) 50%' })
-
 import { css } from './panda/css'
+
+function App() {
+  return <div className={css({ marginX: '{sizes.4} 20px' })} />
+}
 import { Circle } from './panda/jsx'
 
-const styles = css({ bg: 'token(colors.red.300, red) 50%' })
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ marginX: '{sizes.4} {sizes.2}' })} />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle bg="token(colors.green.400) 40%" />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle bg={`token(colors.green.400) 40%`} />
+function App() {
+  return <Circle _hover={{ border: 'solid 1px token(colors.gray.100, #F3F4F6)' }} />
+}
 ```
 
 ## Resources

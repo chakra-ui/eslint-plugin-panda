@@ -11,16 +11,11 @@ can automatically fix some of the problems reported by this rule.
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const styles = css({ marginLeft: '[4px]' })
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
+import { styled, Circle } from './panda/jsx'
 
 const layout = css({
   display: 'grid',
@@ -41,15 +36,8 @@ const layout = css({
 `,
 })
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ background: '[#111]' })} />
+import { styled, Circle } from './panda/jsx'
 
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle _hover={{ position: '[absolute]' }} />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 ;<Circle
   gridTemplateColumns={`
 [
@@ -69,16 +57,11 @@ import { Circle } from './panda/jsx'
 />
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const styles = css({ marginLeft: '4' })
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
+import { styled, Circle } from './panda/jsx'
 
 const layout = css({
   display: 'grid',
@@ -95,15 +78,8 @@ const layout = css({
   [full-end]`,
 })
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ background: 'red.100' })} />
+import { styled, Circle } from './panda/jsx'
 
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle _hover={{ position: 'absolute' }} />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 ;<Circle
   gridTemplateColumns={`[full-start]
     minmax(16px, 1fr)
@@ -119,65 +95,50 @@ import { Circle } from './panda/jsx'
 />
 ```
 
-🔧 Examples of code **fixed** by this rule for a file named `invalid.tsx`:
+🔧 Examples of code **fixed** by this rule:
 
 ```js
-import { css } from './panda/css'                  /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'               /* → */ import { Circle } from './panda/jsx'
-                                                   /* → */
-const styles = css({ marginLeft: "[4px]" });       /* → */ const styles = css({ marginLeft: "4px" });
+import { css } from './panda/css';            /* → */ import { css } from './panda/css';
+import { styled, Circle } from './panda/jsx'; /* → */ import { styled, Circle } from './panda/jsx';
+                                              /* → */
+const layout = css({                          /* → */ const layout = css({
+    display: "grid",                          /* → */     display: "grid",
+    gridTemplateColumns: `                    /* → */     gridTemplateColumns: `[full-start]
+[                                             /* → */     minmax(16px, 1fr)
+  [full-start]                                /* → */       [breakout-start]
+    minmax(16px, 1fr)                         /* → */         minmax(0, 16px)
+      [breakout-start]                        /* → */           [content-start]
+        minmax(0, 16px)                       /* → */             minmax(min-content, 1024px)
+          [content-start]                     /* → */           [content-end]
+            minmax(min-content, 1024px)       /* → */         minmax(0, 16px)
+          [content-end]                       /* → */       [breakout-end]
+        minmax(0, 16px)                       /* → */     minmax(16px, 1fr)
+      [breakout-end]                          /* → */   [full-end]`,
+    minmax(16px, 1fr)                         /* → */   });
+  [full-end]                                  /* → */   ;
+]                                             /* → */
+`,                                            /* → */
+  });                                         /* → */
+  ;                                           /* → */
 
-import { css } from './panda/css'                  /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'               /* → */ import { Circle } from './panda/jsx'
-                                                   /* → */
-const layout = css({                               /* → */ const layout = css({
-    display: "grid",                               /* → */     display: "grid",
-    gridTemplateColumns: `                         /* → */     gridTemplateColumns: `[full-start]
-[                                                  /* → */     minmax(16px, 1fr)
-  [full-start]                                     /* → */       [breakout-start]
-    minmax(16px, 1fr)                              /* → */         minmax(0, 16px)
-      [breakout-start]                             /* → */           [content-start]
-        minmax(0, 16px)                            /* → */             minmax(min-content, 1024px)
-          [content-start]                          /* → */           [content-end]
-            minmax(min-content, 1024px)            /* → */         minmax(0, 16px)
-          [content-end]                            /* → */       [breakout-end]
-        minmax(0, 16px)                            /* → */     minmax(16px, 1fr)
-      [breakout-end]                               /* → */   [full-end]`,
-    minmax(16px, 1fr)                              /* → */   });
-  [full-end]                                       /* → */   ;
-]                                                  /* → */
-`,                                                 /* → */
-  });                                              /* → */
-  ;                                                /* → */
-
-import { css } from './panda/css'                  /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'               /* → */ import { Circle } from './panda/jsx'
-                                                   /* → */
-<div className={css({ background: "[#111]" })} />; /* → */ <div className={css({ background: "#111" })} />;
-
-import { css } from './panda/css'                  /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'               /* → */ import { Circle } from './panda/jsx'
-                                                   /* → */
-<Circle _hover={{ position: "[absolute]" }} />;    /* → */ <Circle _hover={{ position: "absolute" }} />;
-
-import { css } from './panda/css'                  /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'               /* → */ import { Circle } from './panda/jsx'
-                                                   /* → */
-<Circle gridTemplateColumns={`                     /* → */ <Circle gridTemplateColumns={`[full-start]
-[                                                  /* → */     minmax(16px, 1fr)
-  [full-start]                                     /* → */       [breakout-start]
-    minmax(16px, 1fr)                              /* → */         minmax(0, 16px)
-      [breakout-start]                             /* → */           [content-start]
-        minmax(0, 16px)                            /* → */             minmax(min-content, 1024px)
-          [content-start]                          /* → */           [content-end]
-            minmax(min-content, 1024px)            /* → */         minmax(0, 16px)
-          [content-end]                            /* → */       [breakout-end]
-        minmax(0, 16px)                            /* → */     minmax(16px, 1fr)
-      [breakout-end]                               /* → */   [full-end]`} />
-    minmax(16px, 1fr)                              /* → */
-  [full-end]                                       /* → */
-]                                                  /* → */
-`} />                                              /* → */
+import { css } from './panda/css';            /* → */ import { css } from './panda/css';
+import { styled, Circle } from './panda/jsx'; /* → */ import { styled, Circle } from './panda/jsx';
+                                              /* → */
+<Circle gridTemplateColumns={`                /* → */ <Circle gridTemplateColumns={`[full-start]
+[                                             /* → */     minmax(16px, 1fr)
+  [full-start]                                /* → */       [breakout-start]
+    minmax(16px, 1fr)                         /* → */         minmax(0, 16px)
+      [breakout-start]                        /* → */           [content-start]
+        minmax(0, 16px)                       /* → */             minmax(min-content, 1024px)
+          [content-start]                     /* → */           [content-end]
+            minmax(min-content, 1024px)       /* → */         minmax(0, 16px)
+          [content-end]                       /* → */       [breakout-end]
+        minmax(0, 16px)                       /* → */     minmax(16px, 1fr)
+      [breakout-end]                          /* → */   [full-end]`} />
+    minmax(16px, 1fr)                         /* → */
+  [full-end]                                  /* → */
+]                                             /* → */
+`} />                                         /* → */
 ```
 
 ## Resources

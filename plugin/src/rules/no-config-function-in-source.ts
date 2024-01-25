@@ -1,6 +1,6 @@
 import { isIdentifier, isVariableDeclaration } from '../utils/nodes'
 import { type Rule, createRule } from '../utils'
-import { getAncestor, isValidFile } from '../utils/helpers'
+import { getAncestor, getImportSpecifiers, isValidFile } from '../utils/helpers'
 
 export const RULE_NAME = 'no-config-function-in-source'
 
@@ -34,7 +34,13 @@ const rule: Rule = createRule({
           },
           fix(fixer) {
             const declaration = getAncestor(isVariableDeclaration, node)
-            return fixer.remove(declaration ?? node)
+            const importSpec = getImportSpecifiers(context).find(
+              (s) => isIdentifier(node.callee) && s.specifier.local.name === node.callee.name,
+            )
+            return [
+              fixer.remove(declaration ?? node),
+              importSpec?.specifier ? fixer.remove(importSpec?.specifier) : ({} as any),
+            ]
           },
         })
       },

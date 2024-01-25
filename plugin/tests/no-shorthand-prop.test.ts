@@ -1,37 +1,99 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-shorthand-prop'
 
-const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'\n\n`
+const javascript = String.raw
 
 const valids = [
-  'const styles = css({ marginLeft: "4" })',
-  '<div className={css({ background: "red.100" })} />',
-  '<Circle _hover={{ position: "absolute" }} />',
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ marginLeft: '4' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: 'red.100' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{  position: 'absolute' }} />;
+}
+`,
+  },
 ]
 
 const invalids = [
-  { code: 'const styles = css({ ml: "4" })', output: 'const styles = css({ marginLeft: "4" })' },
-  { code: '<div className={css({ bg: "red.100" })} />', output: '<div className={css({ background: "red.100" })} />' },
-  { code: '<Circle _hover={{ pos: "absolute" }} />', output: '<Circle _hover={{ position: "absolute" }} />' },
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ ml: '4' });
+`,
+    output: javascript`
+import { css } from './panda/css';
+
+const styles = css({ marginLeft: '4' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ bg: 'red.100' })} />;
+}
+`,
+    output: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: 'red.100' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{  pos: 'absolute' }} />;
+}
+`,
+    output: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{  position: 'absolute' }} />;
+}
+`,
+  },
 ]
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen: true,
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
   invalid: invalids.map(({ code, output }) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
+    code,
     errors: [
       {
         messageId: 'longhand',
         suggestions: null,
       },
     ],
-    output: imports + output,
-    docgen: true,
+    output: output,
   })),
 })

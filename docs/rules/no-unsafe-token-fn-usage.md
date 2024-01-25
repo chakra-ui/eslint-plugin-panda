@@ -11,62 +11,58 @@ can automatically fix some of the problems reported by this rule.
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
+import { token as tk } from './panda/tokens'
 import { Circle } from './panda/jsx'
-import { tokens as tk } from './panda/tokens'
 
 const styles = css({ bg: tk('colors.red.300') })
 
 import { css } from './panda/css'
+import { token as tk } from './panda/tokens'
 import { Circle } from './panda/jsx'
-import { tokens as tk } from './panda/tokens'
 
-const styles = css({ bg: 'token(colors.red.300)' })
+const styles = css({ bg: tk(`colors.red.300`) })
 
 import { css } from './panda/css'
+import { token as tk } from './panda/tokens'
 import { Circle } from './panda/jsx'
-import { tokens as tk } from './panda/tokens'
-;<Circle _hover={{ color: '{colors.blue.300}' }} />
+
+;<Circle bg={tk('colors.red.300')} />
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
+import { token as tk } from './panda/tokens'
 import { Circle } from './panda/jsx'
-import { tokens as tk } from './panda/tokens'
 
 const styles = css({ bg: 'token(colors.red.300) 50%' })
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-import { tokens as tk } from './panda/tokens'
-;<div className={css({ border: 'solid {borderWidths.1} blue' })} />
 ```
 
-🔧 Examples of code **fixed** by this rule for a file named `invalid.tsx`:
+🔧 Examples of code **fixed** by this rule:
 
 ```js
-import { css } from './panda/css';                   /* → */ import { css } from './panda/css';
-import { Circle } from './panda/jsx';                /* → */ import { Circle } from './panda/jsx';
-import { tokens as tk } from './panda/tokens'        /* → */ import { tokens as tk } from './panda/tokens'
-                                                     /* → */
-const styles = css({ bg: tk("colors.red.300") });    /* → */ const styles = css({ bg: "red.300" });
+import { css } from './panda/css';                /* → */ import { css } from './panda/css';
+import { token as tk } from './panda/tokens'      /* → */ import { token as tk } from './panda/tokens'
+import { Circle } from './panda/jsx';             /* → */ import { Circle } from './panda/jsx';
+                                                  /* → */
+const styles = css({ bg: tk("colors.red.300") }); /* → */ const styles = css({ bg: "red.300" });
 
-import { css } from './panda/css';                   /* → */ import { css } from './panda/css';
-import { Circle } from './panda/jsx';                /* → */ import { Circle } from './panda/jsx';
-import { tokens as tk } from './panda/tokens'        /* → */ import { tokens as tk } from './panda/tokens'
-                                                     /* → */
-const styles = css({ bg: "token(colors.red.300)" }); /* → */ const styles = css({ bg: "red.300" });
+import { css } from './panda/css';                /* → */ import { css } from './panda/css';
+import { token as tk } from './panda/tokens'      /* → */ import { token as tk } from './panda/tokens'
+import { Circle } from './panda/jsx';             /* → */ import { Circle } from './panda/jsx';
+                                                  /* → */
+const styles = css({ bg: tk(`colors.red.300`) }); /* → */ const styles = css({ bg: "red.300" });
 
-import { css } from './panda/css';                   /* → */ import { css } from './panda/css';
-import { Circle } from './panda/jsx';                /* → */ import { Circle } from './panda/jsx';
-import { tokens as tk } from './panda/tokens'        /* → */ import { tokens as tk } from './panda/tokens'
-                                                     /* → */
-<Circle _hover={{ color: "{colors.blue.300}" }} />   /* → */ <Circle _hover={{ color: "blue.300" }} />
+import { css } from './panda/css';                /* → */ import { css } from './panda/css';
+import { token as tk } from './panda/tokens'      /* → */ import { token as tk } from './panda/tokens'
+import { Circle } from './panda/jsx';             /* → */ import { Circle } from './panda/jsx';
+                                                  /* → */
+<Circle bg={tk("colors.red.300")} />              /* → */ <Circle bg={"red.300"} />
 ```
 
 ## Resources

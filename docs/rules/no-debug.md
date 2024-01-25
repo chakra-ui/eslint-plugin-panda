@@ -13,13 +13,59 @@ can automatically fix some of the problems reported by this rule.
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
 
 const styles = css({ bg: 'red', debug: true })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const styles = css.raw({ bg: 'red', debug: true })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const styles = css({ bg: 'red', '&:hover': { debug: true } })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const styles = css({ bg: 'red', '&:hover': { '&:disabled': { debug: true } } })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<Circle debug />
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<Circle debug={true} />
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<Circle css={{ debug: true }} />
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<Circle css={{ '&:hover': { debug: true } }} />
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<styled.div _hover={{ debug: true }} />
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const PandaComp = styled(div)
+;<PandaComp css={{ debug: true }} />
 
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
@@ -30,16 +76,50 @@ function App() {
 }
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
 import { styled, Circle } from './panda/jsx'
 
+const styles = { debug: true }
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const styles = css({ bg: 'red' })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const styles = css.raw({ bg: 'red' })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
 const randomFunc = f({ debug: true })
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<NonPandaComponent debug={true} />
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+;<NonPandaComponent debug={true}>content</NonPandaComponent>
+
+import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+
+const PandaComp = styled(div)
+function App() {
+  const a = 1
+  return <PandaComp someProp={{ debug: true }} />
+}
 ```
 
-🔧 Examples of code **fixed** by this rule for a file named `invalid.tsx`:
+🔧 Examples of code **fixed** by this rule:
 
 ```js
 import { css } from './panda/css'
@@ -49,6 +129,80 @@ import { styled, Circle } from './panda/jsx'
 /* → */
 const styles = css({ bg: 'red', debug: true })
 /* → */ const styles = css({ bg: 'red' })
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+const styles = css.raw({ bg: 'red', debug: true })
+/* → */ const styles = css.raw({ bg: 'red' })
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+const styles = css({ bg: 'red', '&:hover': { debug: true } })
+/* → */ const styles = css({ bg: 'red', '&:hover': {} })
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+const styles = css({ bg: 'red', '&:hover': { '&:disabled': { debug: true } } })
+/* → */ const styles = css({ bg: 'red', '&:hover': { '&:disabled': {} } })
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+;<Circle debug />
+/* → */ ;<Circle />
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+;<Circle debug={true} />
+/* → */ ;<Circle />
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+;<Circle css={{ debug: true }} />
+/* → */ ;<Circle css={{}} />
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+;<Circle css={{ '&:hover': { debug: true } }} />
+/* → */ ;<Circle css={{ '&:hover': {} }} />
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+;<styled.div _hover={{ debug: true }} />
+/* → */ ;<styled.div _hover={{}} />
+
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+import { styled, Circle } from './panda/jsx'
+/* → */ import { styled, Circle } from './panda/jsx'
+/* → */
+const PandaComp = styled(div)
+;<PandaComp css={{ debug: true }} />
+/* → */ const PandaComp = styled(div)
+;<PandaComp css={{}} />
 
 import { css } from './panda/css'
 /* → */ import { css } from './panda/css'

@@ -1,20 +1,34 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-property-renaming'
 
-const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'\n\n`
+const javascript = String.raw
 
 const valids = [
-  `
-const Text = ({ textStyle }) => {
-  return <p className={css({ textStyle })} />
-}`,
-  `
-const Text = (props) => {
-  return <p className={css({ textStyle: props.textStyle })} />
-}`,
-  `
-const CustomCircle = (props: Props) => {
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function Text({ textStyle }){
+  return <p className={css({ textStyle })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function Text(props){
+  return <p className={css({ textStyle: props.textStyle })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function CustomCircle(props){
   const { size = '3' } = props
   return (
     <Circle
@@ -23,8 +37,13 @@ const CustomCircle = (props: Props) => {
   )
 }
 `,
-  `
-const CustomCircle = (props: Props) => {
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function CustomCircle(props){
   return (
     <Circle
       size={props.size}
@@ -32,19 +51,35 @@ const CustomCircle = (props: Props) => {
   )
 }
 `,
+  },
 ]
 
 const invalids = [
-  `
-const Text = ({ variant }) => {
-  return <p className={css({ textStyle: variant })} />
-}`,
-  `
-const Text = (props) => {
-  return <p className={css({ textStyle: props.variant })} />
-}`,
-  `
-const CustomCircle = (props: Props) => {
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function Text({ variant }){
+  return <p className={css({ textStyle: variant })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function Text(props){
+  return <p className={css({ textStyle: props.variant })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function CustomCircle(props){
   const { circleSize = '3' } = props
   return (
     <Circle
@@ -53,8 +88,13 @@ const CustomCircle = (props: Props) => {
   )
 }
 `,
-  `
-const CustomCircle = (props: Props) => {
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function CustomCircle(props){
   return (
     <Circle
       size={props.circleSize}
@@ -62,23 +102,20 @@ const CustomCircle = (props: Props) => {
   )
 }
 `,
+  },
 ]
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen: true,
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
-  invalid: invalids.map((code) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
+  invalid: invalids.map(({ code }) => ({
+    code,
     errors: [
       {
         messageId: 'noRenaming',
         suggestions: null,
       },
     ],
-    docgen: true,
   })),
 })

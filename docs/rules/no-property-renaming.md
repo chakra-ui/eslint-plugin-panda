@@ -10,87 +10,55 @@ Ensure user does not rename a property for a pattern or style prop. It doesn't g
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
-const Text = ({ variant }) => {
+function Text({ variant }) {
   return <p className={css({ textStyle: variant })} />
-};
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const Text = (props) => {
-  return <p className={css({ textStyle: props.variant })} />
-};
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const CustomCircle = (props: Props) => {
-  const { circleSize = '3' } = props
-  return (
-    <Circle
-      size={circleSize}
-    />
-  )
 }
-;
-
 import { css } from './panda/css'
+
+function Text(props) {
+  return <p className={css({ textStyle: props.variant })} />
+}
 import { Circle } from './panda/jsx'
 
-const CustomCircle = (props: Props) => {
-  return (
-    <Circle
-      size={props.circleSize}
-    />
-  )
+function CustomCircle(props) {
+  const { circleSize = '3' } = props
+  return <Circle size={circleSize} />
+}
+import { Circle } from './panda/jsx'
+
+function CustomCircle(props) {
+  return <Circle size={props.circleSize} />
 }
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
-const Text = ({ textStyle }) => {
+function Text({ textStyle }) {
   return <p className={css({ textStyle })} />
-};
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const Text = (props) => {
-  return <p className={css({ textStyle: props.textStyle })} />
-};
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-
-const CustomCircle = (props: Props) => {
-  const { size = '3' } = props
-  return (
-    <Circle
-      size={size}
-    />
-  )
 }
-;
-
 import { css } from './panda/css'
+
+function Text(props) {
+  return <p className={css({ textStyle: props.textStyle })} />
+}
 import { Circle } from './panda/jsx'
 
-const CustomCircle = (props: Props) => {
-  return (
-    <Circle
-      size={props.size}
-    />
-  )
+function CustomCircle(props) {
+  const { size = '3' } = props
+  return <Circle size={size} />
+}
+import { Circle } from './panda/jsx'
+
+function CustomCircle(props) {
+  return <Circle size={props.size} />
 }
 ```
 

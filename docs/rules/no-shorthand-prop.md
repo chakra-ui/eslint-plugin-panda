@@ -11,57 +11,68 @@ can automatically fix some of the problems reported by this rule.
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
 const styles = css({ ml: '4' })
-
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ bg: 'red.100' })} />
 
-import { css } from './panda/css'
+function App() {
+  return <div className={css({ bg: 'red.100' })} />
+}
 import { Circle } from './panda/jsx'
-;<Circle _hover={{ pos: 'absolute' }} />
+
+function App() {
+  return <Circle _hover={{ pos: 'absolute' }} />
+}
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
 const styles = css({ marginLeft: '4' })
-
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ background: 'red.100' })} />
 
-import { css } from './panda/css'
+function App() {
+  return <div className={css({ background: 'red.100' })} />
+}
 import { Circle } from './panda/jsx'
-;<Circle _hover={{ position: 'absolute' }} />
+
+function App() {
+  return <Circle _hover={{ position: 'absolute' }} />
+}
 ```
 
-🔧 Examples of code **fixed** by this rule for a file named `invalid.tsx`:
+🔧 Examples of code **fixed** by this rule:
 
 ```js
-import { css } from './panda/css'           /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'        /* → */ import { Circle } from './panda/jsx'
-                                            /* → */
-const styles = css({ ml: "4" });            /* → */ const styles = css({ marginLeft: "4" });
-
-import { css } from './panda/css'           /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'        /* → */ import { Circle } from './panda/jsx'
-                                            /* → */
-<div className={css({ bg: "red.100" })} />; /* → */ <div className={css({ background: "red.100" })} />;
-
-import { css } from './panda/css'           /* → */ import { css } from './panda/css'
-import { Circle } from './panda/jsx'        /* → */ import { Circle } from './panda/jsx'
-                                            /* → */
-<Circle _hover={{ pos: "absolute" }} />     /* → */ <Circle _hover={{ position: "absolute" }} />
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+/* → */
+const styles = css({ ml: '4' })
+/* → */ const styles = css({ marginLeft: '4' }) /* → */
+import { css } from './panda/css'
+/* → */ import { css } from './panda/css'
+/* → */
+function App() {
+  /* → */ function App() {
+    return <div className={css({ bg: 'red.100' })} />
+    /* → */ return <div className={css({ background: 'red.100' })} />
+  } /* → */
+} /* → */
+import { Circle } from './panda/jsx'
+/* → */ import { Circle } from './panda/jsx'
+/* → */
+function App() {
+  /* → */ function App() {
+    return <Circle _hover={{ pos: 'absolute' }} />
+    /* → */ return <Circle _hover={{ position: 'absolute' }} />
+  } /* → */
+}
 ```
 
 ## Resources

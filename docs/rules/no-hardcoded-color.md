@@ -8,54 +8,40 @@ Enforce the exclusive use of design tokens as values for colors within the codeb
 
 ## Rule details
 
-❌ Examples of **incorrect** code for a file named `invalid.tsx`:
+❌ Examples of **incorrect** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
-const styles = css({ color: 'skyblue' })
-
+const styles = css({ color: '#FEE2E2' })
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ background: '#111' })} />
 
-import { css } from './panda/css'
+function App() {
+  return <div className={css({ background: 'rgb(134, 239, 172)' })} />
+}
 import { Circle } from './panda/jsx'
-;<Circle _hover={{ borderColor: 'rgb(1, 1, 1)' }} />
 
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle _hover={{ bg: 'hsl(0deg, 0%, 7%)' }} />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle _hover={{ bgColor: 'rgba(17, 17, 17, 1)' }} />
+function App() {
+  return <Circle _hover={{ borderColor: 'hsl(220deg, 14%, 96%)' }} />
+}
 ```
 
-✔️ Examples of **correct** code for a file named `valid.tsx`:
+✔️ Examples of **correct** code:
 
 ```js
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
 
 const styles = css({ color: 'red.100' })
-
 import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<div className={css({ background: 'green.300' })} />
 
-import { css } from './panda/css'
+function App() {
+  return <div className={css({ background: 'green.300' })} />
+}
 import { Circle } from './panda/jsx'
-;<Circle _hover={{ borderColor: 'gray.100' }} />
 
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle _hover={{ bg: 'gray.100' }} />
-
-import { css } from './panda/css'
-import { Circle } from './panda/jsx'
-;<Circle _hover={{ bgColor: 'gray.100' }} />
+function App() {
+  return <Circle _hover={{ borderColor: 'gray.100' }} />
+}
 ```
 
 ## Resources

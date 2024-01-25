@@ -1,35 +1,78 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-invalid-token-paths'
 
-const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'\n\n`
+const javascript = String.raw
 
 const valids = [
-  `const styles = css({ bg: 'token(colors.red.300) 50%' })`,
-  `const styles = css({ bg: 'token(colors.red.300, red) 50%' })`,
-  '<div className={css({ marginX: "{sizes.4} {sizes.2}" })} />',
-  `<Circle bg='token(colors.green.400) 40%' />`,
-  `<Circle bg={\`token(colors.green.400) 40%\`} />`,
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ bg: 'token(colors.red.300) 50%' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ marginX: '{sizes.4} 20px' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{  border: 'solid 1px token(colors.gray.100, #F3F4F6)' }} />;
+}
+`,
+  },
 ]
 
 const invalids = [
-  { code: `const styles = css({ bg: 'token(colors.red0.300) 50%' })`, errors: 1 },
-  { code: `const styles = css({ bg: \`token(colors.red0.300) 50%\` })`, errors: 1 },
-  { code: `const styles = css({ bg: 'token(colors.red.3004, red) 50%' })`, errors: 1 },
-  { code: '<div className={css({ marginX: "{sizess.2} {sizes.200}" })} />', errors: 2 },
-  { code: `<Circle bg='token(colorss.green.400) 40%' />`, errors: 1 },
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+// colorszz is not a valid token type
+const styles = css({ bg: 'token(colorszz.red.300) 50%' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  // \`4000\` is not a valid size token. Assuming we're using the default panda presets
+  return  <div className={css({ marginX: '{sizes.4000} 20px' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  // \`1\` does not exist in borderWidths, and \`grays\` is not a valid color token. Assuming we're using the default panda presets
+  return  <Circle _hover={{  border: 'solid {borderWidths.1} token(colors.grays.100, #F3F4F6)' }} />;
+}
+`,
+    errors: 2,
+  },
 ]
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen: true,
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
-  invalid: invalids.map(({ code, errors }) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
+  invalid: invalids.map(({ code, errors = 1 }) => ({
+    code,
     errors: Array.from({ length: errors }).map(() => ({ messageId: 'noInvalidTokenPaths' })),
-    docgen: true,
   })),
 })

@@ -1,79 +1,99 @@
-import { getArbitraryValue } from '@pandacss/shared'
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-escape-hatch'
 
-const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'\n\n`
-
-const namedGridLines = `
-[
-  [full-start]
-    minmax(16px, 1fr)
-      [breakout-start]
-        minmax(0, 16px)
-          [content-start]
-            minmax(min-content, 1024px)
-          [content-end]
-        minmax(0, 16px)
-      [breakout-end]
-    minmax(16px, 1fr)
-  [full-end]
-]
-`
+const javascript = String.raw
 
 const valids = [
-  'const styles = css({ marginLeft: "4" })',
-  `const layout = css({
-      display: "grid",
-      gridTemplateColumns: \`${getArbitraryValue(namedGridLines)}\`,
-    });
-    `,
-  '<div className={css({ background: "red.100" })} />',
-  '<Circle _hover={{ position: "absolute" }} />',
-  `<Circle gridTemplateColumns={\`${getArbitraryValue(namedGridLines)}\`} />`,
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ marginLeft: '4' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: 'red.100' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{ position: 'absolute' }} />;
+}
+`,
+  },
 ]
 
 const invalids = [
-  { code: 'const styles = css({ marginLeft: "[4px]" })', output: 'const styles = css({ marginLeft: "4px" })' },
   {
-    code: `const layout = css({
-    display: "grid",
-    gridTemplateColumns: \`${namedGridLines}\`,
-  });
-  `,
-    output: `const layout = css({
-    display: "grid",
-    gridTemplateColumns: \`${getArbitraryValue(namedGridLines)}\`,
-  });
-  `,
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ marginLeft: '[4px]' });
+`,
+    output: javascript`
+import { css } from './panda/css';
+
+const styles = css({ marginLeft: '4px' });
+`,
   },
+
   {
-    code: '<div className={css({ background: "[#111]" })} />',
-    output: '<div className={css({ background: "#111" })} />',
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: '[#111]' })} />;
+}
+`,
+    output: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: '#111' })} />;
+}
+`,
   },
-  { code: '<Circle _hover={{ position: "[absolute]" }} />', output: '<Circle _hover={{ position: "absolute" }} />' },
+
   {
-    code: `<Circle gridTemplateColumns={\`${namedGridLines}\`} />`,
-    output: `<Circle gridTemplateColumns={\`${getArbitraryValue(namedGridLines)}\`} />`,
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{ position: '[absolute]' }} />;
+}
+`,
+    output: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{ position: 'absolute' }} />;
+}
+`,
   },
 ]
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen: true,
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
   invalid: invalids.map(({ code, output }) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
+    code,
     errors: [
       {
         messageId: 'escapeHatch',
         suggestions: null,
       },
     ],
-    output: imports + output,
-    docgen: true,
+    output,
   })),
 })

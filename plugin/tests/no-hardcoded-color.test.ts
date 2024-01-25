@@ -1,41 +1,82 @@
 import { tester } from '../test-utils'
 import rule, { RULE_NAME } from '../src/rules/no-hardcoded-color'
 
-const imports = `import { css } from './panda/css'
-import { Circle } from './panda/jsx'\n\n`
+const javascript = String.raw
 
-// Watch out for color opacity in the future
+// TODO Watch out for color opacity in the future
+
 const valids = [
-  'const styles = css({ color: "red.100" })',
-  '<div className={css({ background: "green.300" })} />',
-  '<Circle _hover={{ borderColor: "gray.100" }} />',
-  '<Circle _hover={{ bg: "gray.100" }} />',
-  '<Circle _hover={{ bgColor: "gray.100" }} />',
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ color: 'red.100' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: 'green.300' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{  borderColor: 'gray.100' }} />;
+}
+`,
+  },
 ]
 
 const invalids = [
-  'const styles = css({ color: "skyblue" })',
-  '<div className={css({ background: "#111" })} />',
-  '<Circle _hover={{ borderColor: "rgb(1, 1, 1)" }} />',
-  '<Circle _hover={{ bg: "hsl(0deg, 0%, 7%)" }} />',
-  '<Circle _hover={{ bgColor: "rgba(17, 17, 17, 1)" }} />',
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ color: '#FEE2E2' });
+`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return  <div className={css({ background: 'rgb(134, 239, 172)' })} />;
+}
+`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return  <Circle _hover={{  borderColor: 'hsl(220deg, 14%, 96%)' }} />;
+}
+`,
+  },
 ]
 
-tester.run(RULE_NAME, rule as any, {
-  valid: valids.map((code) => ({
-    code: imports + code,
-    filename: './src/valid.tsx',
-    docgen: true,
+tester.run(RULE_NAME, rule, {
+  valid: valids.map(({ code }) => ({
+    code,
   })),
-  invalid: invalids.map((code) => ({
-    code: imports + code,
-    filename: './src/invalid.tsx',
+  invalid: invalids.map(({ code }) => ({
+    code,
+
     errors: [
       {
         messageId: 'invalidColor',
         suggestions: null,
       },
     ],
-    docgen: true,
   })),
 })

@@ -34,7 +34,32 @@ const getSyncOpts = (context: RuleContext<any, any>) => {
   }
 }
 
+export const getImportSpecifiers = (context: RuleContext<any, any>) => {
+  const specifiers: { specifier: TSESTree.ImportSpecifier; mod: string }[] = []
+
+  context.sourceCode.ast.body.forEach((node) => {
+    if (!isImportDeclaration(node)) return
+
+    const mod = node.source.value
+    if (!mod) return
+
+    node.specifiers.forEach((specifier) => {
+      if (!isImportSpecifier(specifier)) return
+      specifiers.push({ specifier, mod })
+    })
+  })
+
+  return specifiers
+}
+
 const _getImports = (context: RuleContext<any, any>) => {
+  const specifiers = getImportSpecifiers(context)
+  specifiers.map(({ specifier, mod }) => ({
+    name: specifier.imported.name,
+    alias: specifier.local.name,
+    mod,
+  }))
+
   const imports: ImportResult[] = []
 
   context.sourceCode.ast.body.forEach((node) => {
@@ -201,5 +226,5 @@ export const getInvalidTokens = (value: string, context: RuleContext<any, any>) 
 
 export const getTokenImport = (context: RuleContext<any, any>) => {
   const imports = _getImports(context)
-  return imports.find((imp) => imp.name === 'tokens')
+  return imports.find((imp) => imp.name === 'token')
 }
