@@ -26,16 +26,17 @@
     "prepare": "pnpm build",
     "build": "tsup",
     "dev": "tsup --watch",
+    "deps": "pnpm up '@pandacss/*' --latest",
     "typecheck": "tsc --noEmit"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "@pandacss/config": "^0.27.3",
-    "@pandacss/generator": "^0.27.3",
-    "@pandacss/node": "^0.27.3",
-    "@pandacss/shared": "0.0.0-dev-20240123144105",
+    "@pandacss/config": "^0.28.0",
+    "@pandacss/generator": "^0.28.0",
+    "@pandacss/node": "^0.28.0",
+    "@pandacss/shared": "^0.28.0",
     "@typescript-eslint/utils": "^6.19.1",
     "hookable": "^5.5.3",
     "synckit": "^0.9.0"
