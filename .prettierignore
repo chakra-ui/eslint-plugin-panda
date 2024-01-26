@@ -9,3 +9,4 @@ pnpm-lock.yaml
 .github
 renovate.json
 docs/rules
+.changeset
