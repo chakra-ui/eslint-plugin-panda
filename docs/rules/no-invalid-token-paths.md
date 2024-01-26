@@ -29,7 +29,13 @@ import { Circle } from './panda/jsx';
 function App(){
   // \`1\` does not exist in borderWidths, and \`grays\` is not a valid color token. Assuming we're using the default panda presets
   return  <Circle _hover={{  border: 'solid {borderWidths.1} token(colors.grays.100, #F3F4F6)' }} />;
-}
+};
+
+import { css } from './panda/css';
+
+const className = css`
+  font-size: {fontSizes.emd};
+`
 ```
 
 ✔️ Examples of **correct** code:
@@ -48,7 +54,13 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return  <Circle _hover={{  border: 'solid 1px token(colors.gray.100, #F3F4F6)' }} />;
-}
+};
+
+import { css } from './panda/css';
+
+const className = css`
+  font-size: {fontSizes.md};
+`
 ```
 
 ## Resources

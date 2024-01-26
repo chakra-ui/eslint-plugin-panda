@@ -3,8 +3,8 @@ import rule, { RULE_NAME } from '../src/rules/no-invalid-token-paths'
 
 const javascript = String.raw
 
-const validLiteral = 'const className = css`\n  font-size: {fontSizes.md};`'
-const invalidLiteral = 'const className = css`\n  font-size: {fontSizes.emd};`'
+const validLiteral = 'const className = css`\n  font-size: {fontSizes.md};\n`'
+const invalidLiteral = 'const className = css`\n  font-size: {fontSizes.emd};\n`'
 
 const valids = [
   {
