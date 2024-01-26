@@ -2,6 +2,7 @@ import rule, { RULE_NAME } from '../src/rules/no-debug'
 import rule2, { RULE_NAME as RULE_NAME2 } from '../src/rules/no-dynamic-styling'
 import rule3, { RULE_NAME as RULE_NAME3 } from '../src/rules/no-escape-hatch'
 import rule4, { RULE_NAME as RULE_NAME4 } from '../src/rules/no-unsafe-token-fn-usage'
+import rule5, { RULE_NAME as RULE_NAME5 } from '../src/rules/no-invalid-token-paths'
 import { eslintTester } from '../test-utils'
 import { getArbitraryValue } from '@pandacss/shared'
 
@@ -184,5 +185,33 @@ eslintTester.run(RULE_NAME4, rule4 as any, {
 
     errors: 1,
     output: imports4 + output,
+  })),
+})
+
+//? Testing token paths in template literals syntax
+
+const imports5 = `import { css } from './panda/css';
+import { Circle, styled } from './panda/jsx';\n\n`
+
+const valids5 = [
+  'const className = css`\n  font-size: {fontSizes.md};`',
+  'const className = styled.h1`\n  font-size: {fontSizes.md};`',
+  'const className = styled(Circle)`\n  font-size: {fontSizes.md};`',
+]
+
+const invalids5 = [
+  { code: 'const className = css`\n  font-size: {fontSizes.emd};`' },
+  { code: 'const Heading = styled.h1`\n  font-size: {fontSizes.emd};`' },
+  { code: 'const Comp = styled(Circle)`\n  font-size: {fontSizes.emd};`' },
+  { code: 'const Comp = styled(Circle)`\n  margin: {sizess.4} {sizes.f4};`', errors: 2 },
+]
+
+eslintTester.run(RULE_NAME5, rule5 as any, {
+  valid: valids5.map((code) => ({
+    code: imports5 + code,
+  })),
+  invalid: invalids5.map(({ code, errors = 1 }) => ({
+    code: imports5 + code,
+    errors,
   })),
 })

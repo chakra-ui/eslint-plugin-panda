@@ -1,8 +1,16 @@
-import { getInvalidTokens, isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { getInvalidTokens, isPandaAttribute, isPandaIsh, isPandaProp } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { AST_NODE_TYPES } from '@typescript-eslint/utils'
 import { isNodeOfTypes } from '@typescript-eslint/utils/ast-utils'
-import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
+import {
+  isCallExpression,
+  isIdentifier,
+  isJSXExpressionContainer,
+  isLiteral,
+  isMemberExpression,
+  isTemplateLiteral,
+  type Node,
+} from '../utils/nodes'
 
 export const RULE_NAME = 'no-invalid-token-paths'
 
@@ -67,6 +75,54 @@ const rule: Rule = createRule({
 
         handleLiteral(node.value)
         handleTemplateLiteral(node.value)
+      },
+
+      TaggedTemplateExpression(node) {
+        const handleExpression = (caller: string) => {
+          if (!isPandaIsh(caller, context)) return
+
+          const quasis = node.quasi.quasis[0]
+          const styles = quasis.value.raw
+          const tokens = getInvalidTokens(styles, context)
+
+          tokens.forEach((token, i, arr) => {
+            // Avoid duplicate reports on the same token
+            if (arr.indexOf(token) < i) return
+
+            let index = styles.indexOf(token)
+
+            while (index !== -1) {
+              const start = quasis.range[0] + 1 + index
+              const end = start + token.length
+
+              context.report({
+                loc: { start: context.sourceCode.getLocFromIndex(start), end: context.sourceCode.getLocFromIndex(end) },
+                messageId: 'noInvalidTokenPaths',
+                data: { token },
+              })
+
+              // Check for other occurences of the invalid token
+              index = styles.indexOf(token, index + 1)
+            }
+          })
+        }
+
+        // css``
+        if (isIdentifier(node.tag)) {
+          handleExpression(node.tag.name)
+        }
+
+        // styled.h1``
+        if (isMemberExpression(node.tag)) {
+          if (!isIdentifier(node.tag.object)) return
+          handleExpression(node.tag.object.name)
+        }
+
+        // styled(Comp)``
+        if (isCallExpression(node.tag)) {
+          if (!isIdentifier(node.tag.callee)) return
+          handleExpression(node.tag.callee.name)
+        }
       },
     }
   },

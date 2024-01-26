@@ -13,7 +13,14 @@ const keyframes = defineKeyframes({
   },
 })
 
-console.log('keyframes', keyframes)
+//@ts-expect-error noidea
+const literal = css`
+  margin-right: {sizess.4};
+  padding-left: {sizess.4};
+  font-weight: token(fontWeightss.bold, 700);
+`
+
+console.log(keyframes, literal)
 
 const LocalFactoryComp = panda('button')
 
