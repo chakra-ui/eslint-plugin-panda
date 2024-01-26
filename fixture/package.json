@@ -1,5 +1,5 @@
 {
-  "name": "@pandacss/fixture",
+  "name": "fixture",
   "version": "0.27.3",
   "private": true,
   "description": "Test fixtures for Panda CSS",
