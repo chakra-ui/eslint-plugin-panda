@@ -6,6 +6,5 @@
   "proseWrap": "always",
   "semi": false,
   "tabWidth": 2,
-  "trailingComma": "all",
-  "endOfLine": "crlf"
+  "trailingComma": "all"
 }
