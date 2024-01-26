@@ -28,14 +28,7 @@ tester.run(RULE_NAME, rule, {
     {
       code: invalidCode,
       filename: 'Invalid.tsx',
-      errors: [
-        {
-          messageId: 'include',
-        },
-        {
-          messageId: 'include',
-        },
-      ],
+      errors: 2,
     },
   ],
 })

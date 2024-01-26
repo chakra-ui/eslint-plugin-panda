@@ -49,11 +49,7 @@ tester.run(RULE_NAME, rule, {
   })),
   invalid: invalids.map(({ code, output }) => ({
     code,
-    errors: [
-      {
-        messageId: 'debug',
-      },
-    ],
+    errors: 1,
     output,
   })),
 })

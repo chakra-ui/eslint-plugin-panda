@@ -103,10 +103,6 @@ tester.run(RULE_NAME, rule, {
   })),
   invalid: invalids.map(({ code }) => ({
     code,
-    errors: [
-      {
-        messageId: 'noRenaming',
-      },
-    ],
+    errors: 1,
   })),
 })

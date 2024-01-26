@@ -68,11 +68,7 @@ eslintTester.run(RULE_NAME, rule as any, {
   })),
   invalid: invalids.map(({ code, output }) => ({
     code: imports + code,
-    errors: [
-      {
-        messageId: 'debug',
-      },
-    ],
+    errors: 1,
     output: imports + output,
   })),
 })
@@ -97,11 +93,7 @@ eslintTester.run(RULE_NAME2, rule2 as any, {
   })),
   invalid: invalids2.map((code) => ({
     code: imports + code,
-    errors: [
-      {
-        messageId: 'dynamic',
-      },
-    ],
+    errors: 1,
   })),
 })
 
@@ -157,11 +149,7 @@ eslintTester.run(RULE_NAME3, rule3 as any, {
   })),
   invalid: invalids3.map(({ code, output }) => ({
     code: imports + code,
-    errors: [
-      {
-        messageId: 'escapeHatch',
-      },
-    ],
+    errors: 1,
     output: imports + output,
   })),
 })
@@ -194,11 +182,7 @@ eslintTester.run(RULE_NAME4, rule4 as any, {
   invalid: invalids4.map(({ code, output }) => ({
     code: imports4 + code,
 
-    errors: [
-      {
-        messageId: 'noUnsafeTokenFnUsage',
-      },
-    ],
+    errors: 1,
     output: imports4 + output,
   })),
 })

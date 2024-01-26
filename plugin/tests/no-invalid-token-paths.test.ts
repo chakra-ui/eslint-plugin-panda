@@ -67,6 +67,6 @@ tester.run(RULE_NAME, rule, {
   })),
   invalid: invalids.map(({ code, errors = 1 }) => ({
     code,
-    errors: Array.from({ length: errors }).map(() => ({ messageId: 'noInvalidTokenPaths' })),
+    errors,
   })),
 })

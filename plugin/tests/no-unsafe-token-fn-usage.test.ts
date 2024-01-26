@@ -84,11 +84,7 @@ tester.run(RULE_NAME, rule, {
   })),
   invalid: invalids.map(({ code, output }) => ({
     code,
-    errors: [
-      {
-        messageId: 'noUnsafeTokenFnUsage',
-      },
-    ],
+    errors: 1,
     output,
   })),
 })

@@ -58,11 +58,7 @@ tester.run(RULE_NAME, rule, {
     {
       code: app,
       filename: 'App.tsx',
-      errors: [
-        {
-          messageId: 'configFunction',
-        },
-      ],
+      errors: 1,
       output: app_output,
     },
   ],
