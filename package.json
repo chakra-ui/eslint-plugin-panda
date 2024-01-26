@@ -4,6 +4,7 @@
   "description": "Eslint plugin for Panda CSS",
   "author": "Abraham Aremu <anubra266@gmail.com>",
   "scripts": {
+    "prepare": "husky",
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
@@ -33,7 +34,15 @@
     "eslint": "^8.56.0",
     "eslint-docgen": "^0.7.1",
     "eslint-plugin-eslint-plugin": "^5.2.1",
+    "husky": "^9.0.6",
+    "lint-staged": "^15.2.0",
     "prettier": "^3.2.4",
     "vitest": "^1.2.1"
-  }
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,tsx}": [
+      "pnpm prettier-fix"
+    ]
+  },
+  "packageManager": "pnpm@8.6.4"
 }
