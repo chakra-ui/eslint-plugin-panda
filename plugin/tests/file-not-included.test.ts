@@ -4,14 +4,14 @@ import rule, { RULE_NAME } from '../src/rules/file-not-included'
 const javascript = String.raw
 
 const validCode = javascript`
-// File \`App.tsx\` is covered in the include config, so it's okay to import \`css\` and \`Circle\` from panda into it.
+// File App.tsx is covered in the include config, so it's okay to import css and Circle from panda into it.
 
 import { css } from './panda/css';
 import { Circle } from './panda/jsx';
 `
 
 const invalidCode = javascript`
-// File \`Invalid.tsx\` is not covered in the include config, so imporing \`css\` and \`Circle\` from panda into it is not allowed.
+// File Invalid.tsx is not covered in the include config, so imporing css and Circle from panda into it is not allowed.
 
 import { css } from './panda/css';
 import { Circle } from './panda/jsx';
