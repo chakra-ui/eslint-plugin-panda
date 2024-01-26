@@ -1,0 +1,9 @@
+{
+  "extends": "../tsconfig.build.json",
+  "include": ["src/**/*", "tests", "test-utils.ts"],
+  "compilerOptions": {
+    "paths": {
+      "fixture": ["../fixture/src/index.ts"],
+    },
+  },
+}

@@ -1,64 +1,48 @@
 {
-  "name": "@pandacss/eslint-plugin",
+  "name": "eslint-plugin-panda",
   "version": "0.0.1",
   "description": "Eslint plugin for Panda CSS",
   "author": "Abraham Aremu <anubra266@gmail.com>",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
-  "sideEffects": false,
-  "publishConfig": {
-    "access": "public"
-  },
-  "exports": {
-    ".": {
-      "source": "./src/index.ts",
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.js",
-      "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      }
-    },
-    "./package.json": "./package.json"
-  },
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
-    "lint": "eslint packages --ext .ts",
-    "prettier": "prettier --check packages",
-    "prettier-fix": "prettier --write packages",
-    "typecheck": "tsc --noEmit"
+    "prepare": "husky",
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r --parallel build",
+    "test": "vitest run",
+    "docs": "rm -rf docs/rules && DOCGEN=1 vitest run && node tools/build-readme.js",
+    "deps": "pnpm -r --parallel deps",
+    "lint": "eslint . --ext .ts",
+    "prettier": "prettier --check .",
+    "prettier-fix": "prettier --write .",
+    "typecheck": "pnpm -r --parallel typecheck"
   },
+  "main": "plugin/dist/index.js",
   "files": [
     "dist"
   ],
   "dependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
-    "@pandacss/config": "^0.27.3",
-    "@pandacss/generator": "^0.27.3",
-    "@pandacss/node": "^0.27.3",
-    "@pandacss/preset-base": "^0.27.3",
-    "@pandacss/preset-panda": "^0.27.3",
-    "@pandacss/shared": "^0.27.3",
-    "@pandacss/types": "^0.27.3",
     "@typescript-eslint/utils": "^6.19.1",
-    "hookable": "^5.5.3",
-    "synckit": "^0.9.0",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
-  },
-  "peerDependencies": {
-    "eslint": "*"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
-    "@typescript-eslint/rule-tester": "^6.19.1",
     "eslint": "^8.56.0",
-    "prettier": "^3.2.4"
-  }
+    "eslint-docgen": "^0.7.1",
+    "eslint-plugin-eslint-plugin": "^5.2.1",
+    "husky": "^9.0.6",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.4",
+    "vitest": "^1.2.1"
+  },
+  "lint-staged": {
+    "packages/**/*.{ts,tsx}": [
+      "pnpm prettier-fix"
+    ]
+  },
+  "packageManager": "pnpm@8.6.4"
 }

@@ -1,0 +1,4 @@
+packages:
+  - 'fixture'
+  - 'sandbox'
+  - 'plugin'
