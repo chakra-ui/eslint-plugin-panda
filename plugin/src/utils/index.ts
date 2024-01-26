@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url'
 import type { run } from './worker'
 
 export const createRule: ReturnType<(typeof ESLintUtils)['RuleCreator']> = ESLintUtils.RuleCreator(
-  (name) => `https://panda-css.com/docs/references/eslint#${name}`,
+  (name) => `https://github.com/chakra-ui/eslint-plugin-panda/blob/main/docs/rules/${name}.md`,
 )
 
 export type Rule<A extends readonly unknown[] = any, B extends string = any> = ReturnType<typeof createRule<A, B>>
