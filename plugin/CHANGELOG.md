@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.4
+
+### Patch Changes
+
+- 3f722a1: Baseline release 🎉
+
 ## 0.0.3
 
 ### Patch Changes
