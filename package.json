@@ -14,6 +14,8 @@
     "lint": "eslint . --ext .ts",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
+    "release": "changeset publish",
+    "release-dev": "changeset version --snapshot dev && changeset publish --tag dev",
     "typecheck": "pnpm -r --parallel typecheck"
   },
   "main": "plugin/dist/index.js",
