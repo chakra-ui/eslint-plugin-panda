@@ -30,6 +30,7 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
+    "@pandacss/dev": "^0.28.0",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
@@ -47,5 +48,10 @@
       "pnpm prettier-fix"
     ]
   },
-  "packageManager": "pnpm@8.6.4"
+  "packageManager": "pnpm@8.6.4",
+  "pnpm": {
+    "patchedDependencies": {
+      "eslint-docgen@0.7.1": "patches/eslint-docgen@0.7.1.patch"
+    }
+  }
 }
