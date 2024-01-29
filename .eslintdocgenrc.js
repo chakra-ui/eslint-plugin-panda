@@ -6,4 +6,5 @@ module.exports = {
   excludeExamplesByDefault: false,
   showFilenames: true,
   minExamples: null,
+  globalTemplatePath: 'docs/templates',
 }
