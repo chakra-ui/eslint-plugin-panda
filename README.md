@@ -75,8 +75,6 @@ Or enable all rules in extends:
 
 ## Rules
 
-Rules with options are indicated with ⚙️.
-
 Where rules are included in the configs `recommended`, or `all` it is indicated below.
 
 - [`@pandacss/file-not-included`](docs/rules/file-not-included.md) `all`, `recommended`
