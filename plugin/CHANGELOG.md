@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.6
+
+### Patch Changes
+
+- c84bf9e: Switch from auto fixable to suggestions
+
 ## 0.0.5
 
 ### Patch Changes
