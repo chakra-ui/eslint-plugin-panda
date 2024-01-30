@@ -125,6 +125,10 @@ export const isValidFile = (context: RuleContext<any, any>) => {
   return syncAction('isValidFile', getSyncOpts(context))
 }
 
+export const isConfigFile = (context: RuleContext<any, any>) => {
+  return syncAction('isConfigFile', getSyncOpts(context))
+}
+
 export const isValidProperty = (name: string, context: RuleContext<any, any>) => {
   return syncAction('isValidProperty', getSyncOpts(context), name)
 }
@@ -134,7 +138,11 @@ export const isPandaImport = (node: TSESTree.ImportDeclaration, context: RuleCon
   return imports.some((imp) => imp.mod === node.source.value)
 }
 
-export const isPandaProp = <T extends Node>(node: T, context: RuleContext<any, any>) => {
+export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<any, any>) => {
+  // Ensure prop is a styled prop
+  const prop = node.name.name
+  if (typeof prop !== 'string' || !isValidProperty(prop, context)) return
+
   const jsxAncestor = getAncestor(isJSXOpeningElement, node)
 
   if (!jsxAncestor) return
@@ -149,10 +157,11 @@ export const isPandaProp = <T extends Node>(node: T, context: RuleContext<any, a
 
   // Ensure component is a panda component
   if (!isPandaIsh(jsxAncestor.name.name, context) && !isLocalStyledFactory(jsxAncestor, context)) return
+
   return true
 }
 
-export const isPandaAttribute = <T extends Node>(node: T, context: RuleContext<any, any>) => {
+export const isPandaAttribute = (node: TSESTree.Property, context: RuleContext<any, any>) => {
   const callAncestor = getAncestor(isCallExpression, node)
 
   // Object could be in JSX prop value i.e css prop or a pseudo
@@ -161,11 +170,16 @@ export const isPandaAttribute = <T extends Node>(node: T, context: RuleContext<a
     const jsxAttrAncestor = getAncestor(isJSXAttribute, node)
 
     if (!jsxExprAncestor || !jsxAttrAncestor) return
-    if (!isPandaProp(jsxAttrAncestor.name, context)) return
+    if (!isPandaProp(jsxAttrAncestor, context)) return
     if (!isValidStyledProp(jsxAttrAncestor.name, context)) return
 
     return true
   }
+
+  // Ensure attribute is a styled attribute
+  if (!isIdentifier(node.key)) return
+  const attr = node.key.name
+  if (!isValidProperty(attr, context)) return
 
   // E.g. css({...})
   if (isIdentifier(callAncestor.callee)) {
@@ -222,6 +236,10 @@ export const getInvalidTokens = (value: string, context: RuleContext<any, any>) 
   const tokens = extractTokens(value)
   if (!tokens.length) return []
   return syncAction('filterInvalidTokenz', getSyncOpts(context), tokens)
+}
+
+export const getExtendWarnings = (context: RuleContext<any, any>) => {
+  return syncAction('getExtendWarnings', getSyncOpts(context))
 }
 
 export const getTokenImport = (context: RuleContext<any, any>) => {

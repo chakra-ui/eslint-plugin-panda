@@ -33,7 +33,7 @@ const rule: Rule = createRule({
         )
           return
 
-        if (!isPandaProp(node.name, context)) return
+        if (!isPandaProp(node, context)) return
 
         context.report({
           node: node.value,

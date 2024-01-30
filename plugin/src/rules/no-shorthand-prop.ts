@@ -1,6 +1,6 @@
 import { isPandaAttribute, isPandaProp, resolveLonghand } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
-import { isIdentifier } from '../utils/nodes'
+import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 
 export const RULE_NAME = 'no-shorthand-prop'
 
@@ -37,12 +37,14 @@ const rule: Rule = createRule({
     }
 
     return {
-      JSXIdentifier(node) {
+      JSXAttribute(node) {
+        if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
-        const longhand = resolveLonghand(node.name, context)
+
+        const longhand = resolveLonghand(node.name.name, context)
         if (!longhand) return
 
-        sendReport(node, node.name)
+        sendReport(node.name, node.name.name)
       },
 
       Property(node) {

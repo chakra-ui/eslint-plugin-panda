@@ -1,7 +1,7 @@
 import { isPandaAttribute, isPandaProp, isValidProperty, resolveShorthand } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { shorthandProperties } from '../utils/shorthand-properties'
-import { isIdentifier } from '../utils/nodes'
+import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 
 export const RULE_NAME = 'prefer-atomic-properties'
 
@@ -42,12 +42,14 @@ const rule: Rule = createRule({
     }
 
     return {
-      JSXIdentifier(node) {
+      JSXAttribute(node) {
+        if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
-        const cpd = resolveCompositeProperty(node.name)
+
+        const cpd = resolveCompositeProperty(node.name.name)
         if (!cpd) return
 
-        sendReport(node, node.name)
+        sendReport(node, node.name.name)
       },
 
       Property(node) {

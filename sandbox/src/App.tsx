@@ -36,7 +36,7 @@ function App() {
 
   const color = 'red'
   const circleSize = '4'
-  const text = '4px'
+  const ta = 'left'
 
   return (
     <div
@@ -48,9 +48,10 @@ function App() {
         color: '#111',
         backgroundColor: color,
         content: "['escape hatch']",
-        textStyle: text,
+        textAlign: ta,
       })}
     >
+      <panda.a href={`mailto:${1}`} />
       <Circle size={circleSize} />
       <HStack gap="40px" debug>
         <div className={className}>Element 1</div>

@@ -1,4 +1,4 @@
-import { isIdentifier } from '../utils/nodes'
+import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 import { type Rule, createRule } from '../utils'
 import { isPandaAttribute, isPandaProp } from '../utils/helpers'
 
@@ -20,20 +20,19 @@ const rule: Rule = createRule({
   defaultOptions: [],
   create(context) {
     return {
-      JSXIdentifier(node) {
-        if (node.name !== 'debug') return
+      JSXAttribute(node) {
+        if (!isJSXIdentifier(node.name) || node.name.name !== 'debug') return
         if (!isPandaProp(node, context)) return
 
         context.report({
           node,
           messageId: 'debug',
-          fix: (fixer) => fixer.remove(node.parent),
+          fix: (fixer) => fixer.remove(node),
         })
       },
 
       Property(node) {
         if (!isIdentifier(node.key) || node.key.name !== 'debug') return
-
         if (!isPandaAttribute(node, context)) return
 
         context.report({

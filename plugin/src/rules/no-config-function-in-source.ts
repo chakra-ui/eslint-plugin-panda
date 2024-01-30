@@ -21,10 +21,9 @@ const rule: Rule = createRule({
   create(context) {
     return {
       CallExpression(node) {
+        if (!isValidFile(context)) return
         if (!isIdentifier(node.callee)) return
         if (!CONFIG_FUNCTIONS.includes(node.callee.name)) return
-
-        if (!isValidFile(context)) return
 
         context.report({
           node,
