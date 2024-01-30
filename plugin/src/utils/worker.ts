@@ -2,8 +2,9 @@ import { PandaContext, loadConfigAndCreateContext } from '@pandacss/node'
 import { runAsWorker } from 'synckit'
 import { createContext } from 'fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
-import { findConfig } from '@pandacss/config'
+import { findConfig, bundleConfig } from '@pandacss/config'
 import path from 'path'
+import fs from 'fs'
 import type { ImportResult } from '.'
 
 let promise: Promise<PandaContext> | undefined
@@ -20,6 +21,7 @@ async function _getContext(configPath: string | undefined) {
 
 export async function getContext(opts: Opts) {
   if (process.env.NODE_ENV === 'test') {
+    configPath = opts.configPath
     const ctx = createContext({ importMap: './panda' })
     ctx.getFiles = () => ['App.tsx']
     return ctx
@@ -28,6 +30,32 @@ export async function getContext(opts: Opts) {
     promise = promise || _getContext(configPath)
     return await promise
   }
+}
+
+async function getExtendWarnings(): Promise<string[]> {
+  if (!configPath) return []
+
+  const cwd = path.dirname(configPath)
+  const { config } = await bundleConfig({ cwd, file: configPath! })
+
+  if (!config.presets || config.presets.length === 0) return []
+  if (config.eject) return []
+
+  const warnings = new Set<string>()
+
+  if (config.theme && !config.theme.extend) {
+    warnings.add('theme')
+  }
+
+  if (config.conditions && !config.conditions.extend) {
+    warnings.add('conditions')
+  }
+
+  if (config.patterns && !config.patterns.extend) {
+    warnings.add('patterns')
+  }
+
+  return Array.from(warnings)
 }
 
 async function filterInvalidTokenz(ctx: PandaContext, paths: string[]): Promise<string[]> {
@@ -43,6 +71,17 @@ async function isColorAttribute(ctx: PandaContext, _attr: string): Promise<boole
   const attr = longhand || _attr
   const attrConfig = ctx.utility.config[attr]
   return attrConfig?.values === 'colors'
+}
+
+const arePathsEqual = (path1: string, path2: string) => {
+  const stats1 = fs.statSync(path1)
+  const stats2 = fs.statSync(path2)
+
+  return stats1.dev === stats2.dev && stats1.ino === stats2.ino
+}
+
+async function isConfigFile(fileName: string): Promise<boolean> {
+  return arePathsEqual(configPath!, fileName)
 }
 
 async function isValidFile(ctx: PandaContext, fileName: string): Promise<boolean> {
@@ -93,9 +132,11 @@ type Opts = {
   configPath?: string
 }
 
+export function runAsync(action: 'getExtendWarnings', opts: Opts): Promise<string[]>
 export function runAsync(action: 'filterInvalidTokenz', opts: Opts, paths: string[]): Promise<string[]>
 export function runAsync(action: 'isColorToken', opts: Opts, value: string): Promise<boolean>
 export function runAsync(action: 'isColorAttribute', opts: Opts, attr: string): Promise<boolean>
+export function runAsync(action: 'isConfigFile', opts: Opts, fileName: string): Promise<string>
 export function runAsync(action: 'isValidFile', opts: Opts, fileName: string): Promise<string>
 export function runAsync(action: 'resolveShorthand', opts: Opts, name: string): Promise<string>
 export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): Promise<string>
@@ -121,6 +162,8 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'resolveShorthand':
       // @ts-expect-error cast
       return resolveShorthand(ctx, ...args)
+    case 'isConfigFile':
+      return isConfigFile(opts.currentFile)
     case 'isValidFile':
       return isValidFile(ctx, opts.currentFile)
     case 'isColorAttribute':
@@ -132,12 +175,16 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'filterInvalidTokenz':
       // @ts-expect-error cast
       return filterInvalidTokenz(ctx, ...args)
+    case 'getExtendWarnings':
+      return getExtendWarnings()
   }
 }
 
+export function run(action: 'getExtendWarnings', opts: Opts): string[]
 export function run(action: 'filterInvalidTokenz', opts: Opts, paths: string[]): string[]
 export function run(action: 'isColorToken', opts: Opts, value: string): boolean
 export function run(action: 'isColorAttribute', opts: Opts, attr: string): boolean
+export function run(action: 'isConfigFile', opts: Opts): boolean
 export function run(action: 'isValidFile', opts: Opts): boolean
 export function run(action: 'resolveShorthand', opts: Opts, name: string): string
 export function run(action: 'resolveLongHand', opts: Opts, name: string): string
