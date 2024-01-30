@@ -13,12 +13,16 @@ Prohibit the use of escape hatch syntax in the code.
 import { css } from './panda/css';
 
 const styles = css({ marginLeft: '[4px]' });
+```
+```js
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: '[#111]' })} />;
 };
+```
+```js
 
 import { Circle } from './panda/jsx';
 
@@ -32,12 +36,16 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ marginLeft: '4' });
+```
+```js
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'red.100' })} />;
 };
+```
+```js
 
 import { Circle } from './panda/jsx';
 

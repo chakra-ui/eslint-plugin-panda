@@ -15,6 +15,8 @@ Disallow the inclusion of the debug attribute when shipping code to the producti
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900', debug: true });
+```
+```js
 
 import { css } from './panda/css';
 
@@ -26,6 +28,8 @@ const styles = css.raw({ color: 'gray.50', debug: true })
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900' });
+```
+```js
 
 import { css } from './panda/css';
 

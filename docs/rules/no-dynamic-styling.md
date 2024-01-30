@@ -17,11 +17,15 @@ import { css } from './panda/css';
 
 const color = 'red.100';
 const styles = css({ bg: color });
+```
+```js
 
 import { stack } from './panda/patterns';
 
 const align = 'center';
 const styles = stack({ align: align });
+```
+```js
 
 import { Circle } from './panda/jsx';
 
@@ -29,6 +33,8 @@ function App(){
   const bool = true;
   return  <Circle debug={bool} />;
 };
+```
+```js
 
 import { styled } from './panda/jsx';
 
@@ -43,12 +49,16 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900' });
+```
+```js
 
 import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle debug={true} />;
 };
+```
+```js
 
 import { styled } from './panda/jsx';
 

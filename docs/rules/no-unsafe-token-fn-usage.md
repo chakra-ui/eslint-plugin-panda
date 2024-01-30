@@ -14,6 +14,8 @@ import { token } from './panda/tokens';
 import { css } from './panda/css';
 
 const styles = css({ bg: token('colors.red.300') });
+```
+```js
 
 import { token } from './panda/tokens';
   import { css } from './panda/css';
@@ -21,6 +23,8 @@ import { token } from './panda/tokens';
   function App(){
     return  <div className={css({ bg: 'token(colors.red.300)' })} />;
   };
+```
+```js
 
 import { Circle } from './panda/jsx';
 
@@ -34,6 +38,8 @@ import { Circle } from './panda/jsx';
 import { css } from './panda/css';
 
 const styles = css({ bg: 'token(colors.red.300) 50%' });
+```
+```js
 
 import { css } from './panda/css';
 import { token } from './panda/tokens';
@@ -41,6 +47,8 @@ import { token } from './panda/tokens';
 function App(){
   return  <div style={{ color: token('colors.red.50') }} />;
 };
+```
+```js
 
 import { Circle } from './panda/jsx';
 

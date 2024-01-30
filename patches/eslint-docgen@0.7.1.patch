@@ -1,3 +1,16 @@
+diff --git a/src/build-docs-from-tests.js b/src/build-docs-from-tests.js
+index 76048eb69188004ee7b0d6d45a4f5f52684c1c78..ff77591430a55823f104da1006a818b7db75d7ca 100644
+--- a/src/build-docs-from-tests.js
++++ b/src/build-docs-from-tests.js
+@@ -240,7 +240,7 @@ async function buildDocsFromTests(
+ 				options: options ? JSON.stringify( options ) : '',
+ 				settings: settings ? JSON.stringify( settings ) : '',
+ 				filename: filename || '',
+-				examples: examples,
++				examples: section.tests.map((sec) => '```' + lang + '\n' + sec + '\n```').join('\n'),
+ 				testCount: section.tests.length
+ 			};
+ 		} );
 diff --git a/src/write-docs-from-tests.js b/src/write-docs-from-tests.js
 index b409d5df46b7bc6ec8b15b1c94f2569d87857adc..b7fda61f7c766c1015f8e3f28e9bc1daf9b808be 100644
 --- a/src/write-docs-from-tests.js

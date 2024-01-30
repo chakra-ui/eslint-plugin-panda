@@ -13,12 +13,16 @@ Enforce the exclusive use of design tokens as values for colors within the codeb
 import { css } from './panda/css';
 
 const styles = css({ color: '#FEE2E2' });
+```
+```js
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'rgb(134, 239, 172)' })} />;
 };
+```
+```js
 
 import { Circle } from './panda/jsx';
 
@@ -32,12 +36,16 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ color: 'red.100' });
+```
+```js
 
 import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: 'green.300' })} />;
 };
+```
+```js
 
 import { Circle } from './panda/jsx';
 
