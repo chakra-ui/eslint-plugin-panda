@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.7
+
+### Patch Changes
+
+- ed5d9de: Detect pattern properties
+
 ## 0.0.6
 
 ### Patch Changes
