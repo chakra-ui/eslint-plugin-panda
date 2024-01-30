@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.5
+
+### Patch Changes
+
+- b9d37ff: Fix linting on non panda attributes
+
 ## 0.0.4
 
 ### Patch Changes
