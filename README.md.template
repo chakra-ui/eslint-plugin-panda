@@ -74,8 +74,6 @@ Or enable all rules in extends:
 
 ## Rules
 
-Rules with options are indicated with ⚙️. Rules which are fixable are indicated with 🔧.
-
 Where rules are included in the configs `recommended`, or `all` it is indicated below.
 
 <!-- rules -->
