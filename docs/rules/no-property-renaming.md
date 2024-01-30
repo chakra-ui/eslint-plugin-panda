@@ -2,7 +2,8 @@
 
 # no-property-renaming
 
-Ensure user does not rename a property for a pattern or style prop. It doesn't get tracked.
+Ensure user does not rename a property for a pattern or style prop. 
+It doesn't get tracked.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -22,27 +23,6 @@ import { css } from './panda/css';
 
 function Text(props){
   return <p className={css({ textStyle: props.variant })} />;
-};
-
-import { Circle } from './panda/jsx';
-
-function CustomCircle(props){
-  const { circleSize = '3' } = props
-  return (
-    <Circle
-      size={circleSize}
-    />
-  )
-};
-
-import { Circle } from './panda/jsx';
-
-function CustomCircle(props){
-  return (
-    <Circle
-      size={props.circleSize}
-    />
-  )
 }
 ```
 

@@ -11,10 +11,12 @@ const rule: Rule = createRule({
       description: 'Disallow the inclusion of the debug attribute when shipping code to the production environment.',
     },
     messages: {
-      debug: 'Remove the debug utility.',
+      debug: 'Unnecessary debug utility.',
+      prop: 'Remove the debug prop.',
+      property: 'Remove the debug property.',
     },
     type: 'suggestion',
-    fixable: 'code',
+    hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
@@ -27,7 +29,12 @@ const rule: Rule = createRule({
         context.report({
           node,
           messageId: 'debug',
-          fix: (fixer) => fixer.remove(node),
+          suggest: [
+            {
+              messageId: 'prop',
+              fix: (fixer) => fixer.remove(node),
+            },
+          ],
         })
       },
 
@@ -38,7 +45,12 @@ const rule: Rule = createRule({
         context.report({
           node: node.key,
           messageId: 'debug',
-          fix: (fixer) => fixer.removeRange([node.range[0], node.range[1] + 1]),
+          suggest: [
+            {
+              messageId: 'property',
+              fix: (fixer) => fixer.removeRange([node.range[0], node.range[1] + 1]),
+            },
+          ],
         })
       },
     }

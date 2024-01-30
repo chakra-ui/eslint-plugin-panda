@@ -36,10 +36,6 @@ const invalids = [
 import { css } from './panda/css';
 
 const styles = css({ marginLeft: '[4px]' })`,
-    output: javascript`
-import { css } from './panda/css';
-
-const styles = css({ marginLeft: '4px' })`,
   },
 
   {
@@ -48,12 +44,6 @@ import { css } from './panda/css';
 
 function App(){
   return  <div className={css({ background: '[#111]' })} />;
-}`,
-    output: javascript`
-import { css } from './panda/css';
-
-function App(){
-  return  <div className={css({ background: '#111' })} />;
 }`,
   },
 
@@ -64,12 +54,6 @@ import { Circle } from './panda/jsx';
 function App(){
   return  <Circle _hover={{ position: '[absolute]' }} />;
 }`,
-    output: javascript`
-import { Circle } from './panda/jsx';
-
-function App(){
-  return  <Circle _hover={{ position: 'absolute' }} />;
-}`,
   },
 ]
 
@@ -77,9 +61,8 @@ tester.run(RULE_NAME, rule, {
   valid: valids.map(({ code }) => ({
     code,
   })),
-  invalid: invalids.map(({ code, output }) => ({
+  invalid: invalids.map(({ code }) => ({
     code,
     errors: 1,
-    output,
   })),
 })

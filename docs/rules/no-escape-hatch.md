@@ -6,8 +6,6 @@ Prohibit the use of escape hatch syntax in the code.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
-🔧 The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) can automatically fix some of the problems reported by this rule.
-
 ## Rule details
 
 ❌ Examples of **incorrect** code:
@@ -46,25 +44,6 @@ import { Circle } from './panda/jsx';
 function App(){
   return  <Circle _hover={{ position: 'absolute' }} />;
 }
-```
-
-🔧 Examples of code **fixed** by this rule:
-```js
-import { css } from './panda/css';                           /* → */ import { css } from './panda/css';
-                                                             /* → */
-const styles = css({ marginLeft: '[4px]' });                 /* → */ const styles = css({ marginLeft: '4px' });
-
-import { css } from './panda/css';                           /* → */ import { css } from './panda/css';
-                                                             /* → */
-function App(){                                              /* → */ function App(){
-  return  <div className={css({ background: '[#111]' })} />; /* → */   return  <div className={css({ background: '#111' })} />;
-};                                                           /* → */ };
-
-import { Circle } from './panda/jsx';                        /* → */ import { Circle } from './panda/jsx';
-                                                             /* → */
-function App(){                                              /* → */ function App(){
-  return  <Circle _hover={{ position: '[absolute]' }} />;    /* → */   return  <Circle _hover={{ position: 'absolute' }} />;
-}                                                            /* → */ }
 ```
 
 ## Resources

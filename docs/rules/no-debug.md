@@ -8,8 +8,6 @@ Disallow the inclusion of the debug attribute when shipping code to the producti
 
 📋 This rule is enabled in `plugin:@pandacss/recommended`.
 
-🔧 The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) can automatically fix some of the problems reported by this rule.
-
 ## Rule details
 
 ❌ Examples of **incorrect** code:
@@ -32,17 +30,6 @@ const styles = css({ bg: 'gray.900' });
 import { css } from './panda/css';
 
 const styles = css.raw({ color: 'gray.50' })
-```
-
-🔧 Examples of code **fixed** by this rule:
-```js
-import { css } from './panda/css';                        /* → */ import { css } from './panda/css';
-                                                          /* → */
-const styles = css({ bg: 'gray.900', debug: true });      /* → */ const styles = css({ bg: 'gray.900', });
-
-import { css } from './panda/css';                        /* → */ import { css } from './panda/css';
-                                                          /* → */
-const styles = css.raw({ color: 'gray.50', debug: true }) /* → */ const styles = css.raw({ color: 'gray.50', })
 ```
 
 ## Resources

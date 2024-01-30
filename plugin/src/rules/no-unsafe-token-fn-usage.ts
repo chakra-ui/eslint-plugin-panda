@@ -21,9 +21,10 @@ const rule: Rule = createRule({
     },
     messages: {
       noUnsafeTokenFnUsage: 'Unneccessary token function usage. Prefer design token',
+      replace: 'Replace token function with `{{safe}}`',
     },
     type: 'suggestion',
-    fixable: 'code',
+    hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
@@ -78,9 +79,15 @@ const rule: Rule = createRule({
       return context.report({
         node,
         messageId: 'noUnsafeTokenFnUsage',
-        fix: (fixer) => {
-          return fixer.replaceTextRange(node.range, `'${token}'`)
-        },
+        suggest: [
+          {
+            messageId: 'replace',
+            data: { safe: token },
+            fix: (fixer) => {
+              return fixer.replaceTextRange(node.range, `'${token}'`)
+            },
+          },
+        ],
       })
     }
 

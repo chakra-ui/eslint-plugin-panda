@@ -2,7 +2,8 @@
 
 # no-dynamic-styling
 
-Ensure user doesn't use dynamic styling at any point. Prefer to use static styles, leverage css variables or recipes for known dynamic styles.
+Ensure user doesn't use dynamic styling at any point. 
+Prefer to use static styles, leverage css variables or recipes for known dynamic styles.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 

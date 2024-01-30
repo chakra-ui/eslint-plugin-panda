@@ -25,10 +25,6 @@ const invalids = [
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900', debug: true })`,
-    output: javascript`
-import { css } from './panda/css';
-
-const styles = css({ bg: 'gray.900', })`,
   },
 
   {
@@ -36,10 +32,6 @@ const styles = css({ bg: 'gray.900', })`,
 import { css } from './panda/css';
 
 const styles = css.raw({ color: 'gray.50', debug: true })`,
-    output: javascript`
-import { css } from './panda/css';
-
-const styles = css.raw({ color: 'gray.50', })`,
   },
 ]
 
@@ -47,9 +39,8 @@ tester.run(RULE_NAME, rule, {
   valid: valids.map(({ code }) => ({
     code,
   })),
-  invalid: invalids.map(({ code, output }) => ({
+  invalid: invalids.map(({ code }) => ({
     code,
     errors: 1,
-    output,
   })),
 })

@@ -9,7 +9,7 @@ const rule: Rule = createRule({
   meta: {
     docs: {
       description:
-        "Ensure user doesn't use dynamic styling at any point. Prefer to use static styles, leverage css variables or recipes for known dynamic styles.",
+        "Ensure user doesn't use dynamic styling at any point. \nPrefer to use static styles, leverage css variables or recipes for known dynamic styles.",
     },
     messages: {
       dynamic: 'Remove dynamic value. Prefer static styles',

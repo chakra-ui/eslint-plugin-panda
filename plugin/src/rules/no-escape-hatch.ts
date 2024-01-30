@@ -13,10 +13,11 @@ const rule: Rule = createRule({
     },
     messages: {
       escapeHatch:
-        'Avoid using the escape hatch [value] for undefined tokens. Define a corresponding token in your design system for better consistency and maintainability.',
+        'Avoid using the escape hatch [value] for undefined tokens. \nDefine a corresponding token in your design system for better consistency and maintainability.',
+      remove: 'Remove the square brackets (`[]`).',
     },
     type: 'suggestion',
-    fixable: 'code',
+    hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
@@ -49,9 +50,14 @@ const rule: Rule = createRule({
       return context.report({
         node,
         messageId: 'escapeHatch',
-        fix: (fixer) => {
-          return fixer.replaceTextRange(removeQuotes(node.range), getArbitraryValue(value))
-        },
+        suggest: [
+          {
+            messageId: 'remove',
+            fix: (fixer) => {
+              return fixer.replaceTextRange(removeQuotes(node.range), getArbitraryValue(value))
+            },
+          },
+        ],
       })
     }
 

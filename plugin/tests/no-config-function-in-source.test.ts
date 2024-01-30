@@ -3,7 +3,7 @@ import rule, { RULE_NAME } from '../src/rules/no-config-function-in-source'
 
 const javascript = String.raw
 
-const panda_config = javascript`
+const config = javascript`
 import { defineConfig, defineKeyframes } from '@pandacss/dev';
 
 const keyframes = defineKeyframes({
@@ -36,21 +36,10 @@ const styles = css({
 });
 `
 
-const app_output = javascript`
-import {   } from '@pandacss/dev';
-import { css } from './panda/css';
-
-
-
-const styles = css({
-  animation: 'fadeIn 1s ease-in-out',
-});
-`
-
 tester.run(RULE_NAME, rule, {
   valid: [
     {
-      code: panda_config,
+      code: config,
       filename: 'panda.config.ts',
     },
   ],
@@ -59,7 +48,6 @@ tester.run(RULE_NAME, rule, {
       code: app,
       filename: 'App.tsx',
       errors: 1,
-      output: app_output,
     },
   ],
 })

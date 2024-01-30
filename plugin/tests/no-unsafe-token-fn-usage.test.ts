@@ -38,43 +38,25 @@ import { token } from './panda/tokens';
 import { css } from './panda/css';
 
 const styles = css({ bg: token('colors.red.300') })`,
-    output: javascript`
-import { token } from './panda/tokens';
-import { css } from './panda/css';
-
-const styles = css({ bg: 'red.300' })`,
   },
 
   {
     code: javascript`
-import { token } from './panda/tokens';
-import { css } from './panda/css';
+  import { token } from './panda/tokens';
+  import { css } from './panda/css';
 
-function App(){
-  return  <div className={css({ bg: 'token(colors.red.300)' })} />;
-}`,
-    output: javascript`
-import { token } from './panda/tokens';
-import { css } from './panda/css';
-
-function App(){
-  return  <div className={css({ bg: 'red.300' })} />;
-}`,
+  function App(){
+    return  <div className={css({ bg: 'token(colors.red.300)' })} />;
+  }`,
   },
 
   {
     code: javascript`
-import { Circle } from './panda/jsx';
+  import { Circle } from './panda/jsx';
 
-function App(){
-  return  <Circle margin='{sizes.4}' />;
-}`,
-    output: javascript`
-import { Circle } from './panda/jsx';
-
-function App(){
-  return  <Circle margin='4' />;
-}`,
+  function App(){
+    return  <Circle margin='{sizes.4}' />;
+  }`,
   },
 ]
 
@@ -82,9 +64,8 @@ tester.run(RULE_NAME, rule, {
   valid: valids.map(({ code }) => ({
     code,
   })),
-  invalid: invalids.map(({ code, output }) => ({
+  invalid: invalids.map(({ code }) => ({
     code,
     errors: 1,
-    output,
   })),
 })

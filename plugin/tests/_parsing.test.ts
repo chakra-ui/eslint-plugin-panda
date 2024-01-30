@@ -28,37 +28,28 @@ const valids = [
 const invalids = [
   {
     code: 'const styles = css({ bg: "red", debug: true })',
-    output: 'const styles = css({ bg: "red", })',
   },
   {
     code: 'const styles = css.raw({ bg: "red", debug: true })',
-    output: 'const styles = css.raw({ bg: "red", })',
   },
   {
     code: 'const styles = css({ bg: "red", "&:hover": { debug: true } })',
-    output: 'const styles = css({ bg: "red", "&:hover": { } })',
   },
   {
     code: 'const styles = css({ bg: "red", "&:hover": { "&:disabled": { debug: true } } })',
-    output: 'const styles = css({ bg: "red", "&:hover": { "&:disabled": { } } })',
   },
-  { code: '<Circle debug />', output: '<Circle  />' },
-  { code: '<Circle debug={true} />', output: '<Circle  />' },
-  { code: '<Circle css={{ debug: true }} />', output: '<Circle css={{ }} />' },
-  { code: '<Circle css={{ "&:hover": { debug: true } }} />', output: '<Circle css={{ "&:hover": { } }} />' },
-  { code: '<styled.div _hover={{ debug: true }} />', output: '<styled.div _hover={{ }} />' },
+  { code: '<Circle debug />' },
+  { code: '<Circle debug={true} />' },
+  { code: '<Circle css={{ debug: true }} />' },
+  { code: '<Circle css={{ "&:hover": { debug: true } }} />' },
+  { code: '<styled.div _hover={{ debug: true }} />' },
   {
     code: `const PandaComp = styled(div); <PandaComp css={{ debug: true }} />`,
-    output: 'const PandaComp = styled(div); <PandaComp css={{ }} />',
   },
   {
     code: `function App() {
   const PandaComp = styled(div);
   return <PandaComp css={{ debug: true }} />;
-}`,
-    output: `function App() {
-  const PandaComp = styled(div);
-  return <PandaComp css={{ }} />;
 }`,
   },
 ]
@@ -67,10 +58,9 @@ eslintTester.run(RULE_NAME, rule as any, {
   valid: valids.map(({ code }) => ({
     code: imports + code,
   })),
-  invalid: invalids.map(({ code, output }) => ({
+  invalid: invalids.map(({ code }) => ({
     code: imports + code,
     errors: 1,
-    output: imports + output,
   })),
 })
 
@@ -132,15 +122,9 @@ const invalids3 = [
     gridTemplateColumns: \`${namedGridLines}\`,
   });
   `,
-    output: `const layout = css({
-    display: "grid",
-    gridTemplateColumns: \`${getArbitraryValue(namedGridLines)}\`,
-  });
-  `,
   },
   {
     code: `<Circle gridTemplateColumns={\`${namedGridLines}\`} />`,
-    output: `<Circle gridTemplateColumns={\`${getArbitraryValue(namedGridLines)}\`} />`,
   },
 ]
 
@@ -148,10 +132,9 @@ eslintTester.run(RULE_NAME3, rule3 as any, {
   valid: valids3.map((code) => ({
     code: imports + code,
   })),
-  invalid: invalids3.map(({ code, output }) => ({
+  invalid: invalids3.map(({ code }) => ({
     code: imports + code,
     errors: 1,
-    output: imports + output,
   })),
 })
 
@@ -166,25 +149,21 @@ const valids4 = ['const styles = css({ bg: "token(colors.red.300) 50%" })']
 const invalids4 = [
   {
     code: 'const styles = css({ bg: tk("colors.red.300") })',
-    output: `const styles = css({ bg: 'red.300' })`,
   },
   {
     code: 'const styles = css({ bg: tk(`colors.red.300`) })',
-    output: `const styles = css({ bg: 'red.300' })`,
   },
 
-  { code: '<Circle bg={tk("colors.red.300")} />', output: `<Circle bg={'red.300'} />` },
+  { code: '<Circle bg={tk("colors.red.300")} />' },
 ]
 
 eslintTester.run(RULE_NAME4, rule4 as any, {
   valid: valids4.map((code) => ({
     code: imports4 + code,
   })),
-  invalid: invalids4.map(({ code, output }) => ({
+  invalid: invalids4.map(({ code }) => ({
     code: imports4 + code,
-
     errors: 1,
-    output: imports4 + output,
   })),
 })
 

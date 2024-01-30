@@ -11,10 +11,11 @@ const rule: Rule = createRule({
       description: 'Prohibit the use of config functions outside the Panda config.',
     },
     messages: {
-      configFunction: 'Remove `{{name}}` usage. Config functions should only be used in panda config',
+      configFunction: 'Unnecessary`{{name}}` call. \nConfig functions should only be used in panda config.',
+      delete: 'Delete `{{name}}` call.',
     },
     type: 'suggestion',
-    fixable: 'code',
+    hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
@@ -31,16 +32,24 @@ const rule: Rule = createRule({
           data: {
             name: node.callee.name,
           },
-          fix(fixer) {
-            const declaration = getAncestor(isVariableDeclaration, node)
-            const importSpec = getImportSpecifiers(context).find(
-              (s) => isIdentifier(node.callee) && s.specifier.local.name === node.callee.name,
-            )
-            return [
-              fixer.remove(declaration ?? node),
-              importSpec?.specifier ? fixer.remove(importSpec?.specifier) : ({} as any),
-            ]
-          },
+          suggest: [
+            {
+              messageId: 'delete',
+              data: {
+                name: node.callee.name,
+              },
+              fix(fixer) {
+                const declaration = getAncestor(isVariableDeclaration, node)
+                const importSpec = getImportSpecifiers(context).find(
+                  (s) => isIdentifier(node.callee) && s.specifier.local.name === node.callee.name,
+                )
+                return [
+                  fixer.remove(declaration ?? node),
+                  importSpec?.specifier ? fixer.remove(importSpec?.specifier) : ({} as any),
+                ]
+              },
+            },
+          ],
         })
       },
     }

@@ -8,8 +8,6 @@ Prohibit the use of config functions outside the Panda config.
 
 📋 This rule is enabled in `plugin:@pandacss/recommended`.
 
-🔧 The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) can automatically fix some of the problems reported by this rule.
-
 ## Rule details
 
 ❌ Examples of **incorrect** code for a file named `App.tsx`:
@@ -45,23 +43,6 @@ export default defineConfig({
     keyframes
   }
 });
-```
-
-🔧 Examples of code **fixed** by this rule for a file named `App.tsx`:
-```js
-import {  defineKeyframes } from '@pandacss/dev'; /* → */ import {   } from '@pandacss/dev';
-import { css } from './panda/css';                /* → */ import { css } from './panda/css';
-                                                  /* → */
-const keyframes = defineKeyframes({               /* → */
-  fadeIn: {                                       /* → */
-    '0%': { opacity: '0' },                       /* → */ const styles = css({
-    '100%': { opacity: '1' },                     /* → */   animation: 'fadeIn 1s ease-in-out',
-  },                                              /* → */ });
-});                                               /* → */
-                                                  /* → */
-const styles = css({                              /* → */
-  animation: 'fadeIn 1s ease-in-out',             /* → */
-});                                               /* → */
 ```
 
 ## Resources

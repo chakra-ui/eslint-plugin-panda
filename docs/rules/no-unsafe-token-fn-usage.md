@@ -6,8 +6,6 @@ Prevent users from using the token function in situations where they could simpl
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
-🔧 The `--fix` option on the [command line](https://eslint.org/docs/user-guide/command-line-interface#fixing-problems) can automatically fix some of the problems reported by this rule.
-
 ## Rule details
 
 ❌ Examples of **incorrect** code:
@@ -18,17 +16,17 @@ import { css } from './panda/css';
 const styles = css({ bg: token('colors.red.300') });
 
 import { token } from './panda/tokens';
-import { css } from './panda/css';
+  import { css } from './panda/css';
 
-function App(){
-  return  <div className={css({ bg: 'token(colors.red.300)' })} />;
-};
+  function App(){
+    return  <div className={css({ bg: 'token(colors.red.300)' })} />;
+  };
 
 import { Circle } from './panda/jsx';
 
-function App(){
-  return  <Circle margin='{sizes.4}' />;
-}
+  function App(){
+    return  <Circle margin='{sizes.4}' />;
+  }
 ```
 
 ✔️ Examples of **correct** code:
@@ -49,27 +47,6 @@ import { Circle } from './panda/jsx';
 function App(){
   return  <Circle _hover={{  border: 'solid 1px {colors.blue.400}' }} />;
 }
-```
-
-🔧 Examples of code **fixed** by this rule:
-```js
-import { token } from './panda/tokens';                             /* → */ import { token } from './panda/tokens';
-import { css } from './panda/css';                                  /* → */ import { css } from './panda/css';
-                                                                    /* → */
-const styles = css({ bg: token('colors.red.300') });                /* → */ const styles = css({ bg: 'red.300' });
-
-import { token } from './panda/tokens';                             /* → */ import { token } from './panda/tokens';
-import { css } from './panda/css';                                  /* → */ import { css } from './panda/css';
-                                                                    /* → */
-function App(){                                                     /* → */ function App(){
-  return  <div className={css({ bg: 'token(colors.red.300)' })} />; /* → */   return  <div className={css({ bg: 'red.300' })} />;
-};                                                                  /* → */ };
-
-import { Circle } from './panda/jsx';                               /* → */ import { Circle } from './panda/jsx';
-                                                                    /* → */
-function App(){                                                     /* → */ function App(){
-  return  <Circle margin='{sizes.4}' />;                            /* → */   return  <Circle margin='4' />;
-}                                                                   /* → */ }
 ```
 
 ## Resources

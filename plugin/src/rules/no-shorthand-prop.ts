@@ -13,9 +13,10 @@ const rule: Rule = createRule({
     },
     messages: {
       longhand: 'Use longhand property of `{{shorthand}}` instead. Prefer `{{longhand}}`',
+      replace: 'Replace `{{shorthand}}` with `{{longhand}}`',
     },
     type: 'suggestion',
-    fixable: 'code',
+    hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
@@ -23,16 +24,24 @@ const rule: Rule = createRule({
     const sendReport = (node: any, name: string) => {
       const longhand = resolveLonghand(name, context)!
 
+      const data = {
+        shorthand: name,
+        longhand,
+      }
+
       return context.report({
         node,
         messageId: 'longhand' as const,
-        data: {
-          shorthand: name,
-          longhand,
-        },
-        fix: (fixer) => {
-          return fixer.replaceTextRange(node.range, longhand)
-        },
+        data,
+        suggest: [
+          {
+            messageId: 'replace',
+            data,
+            fix: (fixer) => {
+              return fixer.replaceTextRange(node.range, longhand)
+            },
+          },
+        ],
       })
     }
 

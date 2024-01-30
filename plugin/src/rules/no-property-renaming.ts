@@ -8,7 +8,7 @@ const rule: Rule = createRule({
   name: RULE_NAME,
   meta: {
     docs: {
-      description: "Ensure user does not rename a property for a pattern or style prop. It doesn't get tracked.",
+      description: "Ensure user does not rename a property for a pattern or style prop. \nIt doesn't get tracked.",
     },
     messages: {
       noRenaming:
@@ -34,7 +34,7 @@ const rule: Rule = createRule({
       JSXAttribute(node) {
         if (!node.value) return
         if (!isJSXExpressionContainer(node.value)) return
-        if (!isPandaProp(node.name, context)) return
+        if (!isPandaProp(node, context)) return
 
         const attr = node.name.name.toString()
         const expression = node.value.expression

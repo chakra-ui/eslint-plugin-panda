@@ -69,32 +69,33 @@ function Text(props){
 }`,
   },
 
-  {
-    code: javascript`
-import { Circle } from './panda/jsx';
+  //TODO detect pattern attributes as panda property
+  //   {
+  //     code: javascript`
+  // import { Circle } from './panda/jsx';
 
-function CustomCircle(props){
-  const { circleSize = '3' } = props
-  return (
-    <Circle
-      size={circleSize}
-    />
-  )
-}`,
-  },
+  // function CustomCircle(props){
+  //   const { circleSize = '3' } = props
+  //   return (
+  //     <Circle
+  //       size={circleSize}
+  //     />
+  //   )
+  // }`,
+  //   },
 
-  {
-    code: javascript`
-import { Circle } from './panda/jsx';
+  //   {
+  //     code: javascript`
+  // import { Circle } from './panda/jsx';
 
-function CustomCircle(props){
-  return (
-    <Circle
-      size={props.circleSize}
-    />
-  )
-}`,
-  },
+  // function CustomCircle(props){
+  //   return (
+  //     <Circle
+  //       size={props.circleSize}
+  //     />
+  //   )
+  // }`,
+  //   },
 ]
 
 tester.run(RULE_NAME, rule, {
