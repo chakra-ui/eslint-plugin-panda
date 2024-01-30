@@ -35,7 +35,16 @@ const invalids = [
     code: javascript`
 import { css } from './panda/css';
 
+const color = 'red.100';
 const styles = css({ bg: color })`,
+  },
+
+  {
+    code: javascript`
+import { stack } from './panda/patterns';
+
+const align = 'center';
+const styles = stack({ align: align })`,
   },
 
   {

@@ -129,8 +129,8 @@ export const isConfigFile = (context: RuleContext<any, any>) => {
   return syncAction('isConfigFile', getSyncOpts(context))
 }
 
-export const isValidProperty = (name: string, context: RuleContext<any, any>) => {
-  return syncAction('isValidProperty', getSyncOpts(context), name)
+export const isValidProperty = (name: string, context: RuleContext<any, any>, calleName?: string) => {
+  return syncAction('isValidProperty', getSyncOpts(context), name, calleName)
 }
 
 export const isPandaImport = (node: TSESTree.ImportDeclaration, context: RuleContext<any, any>) => {
@@ -139,10 +139,6 @@ export const isPandaImport = (node: TSESTree.ImportDeclaration, context: RuleCon
 }
 
 export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<any, any>) => {
-  // Ensure prop is a styled prop
-  const prop = node.name.name
-  if (typeof prop !== 'string' || !isValidProperty(prop, context)) return
-
   const jsxAncestor = getAncestor(isJSXOpeningElement, node)
 
   if (!jsxAncestor) return
@@ -158,40 +154,54 @@ export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<an
   // Ensure component is a panda component
   if (!isPandaIsh(jsxAncestor.name.name, context) && !isLocalStyledFactory(jsxAncestor, context)) return
 
+  // Ensure prop is a styled prop
+  const prop = node.name.name
+  if (typeof prop !== 'string' || !isValidProperty(prop, context, jsxAncestor.name.name)) return
+
+  return true
+}
+
+const isInPandaFunction = (node: TSESTree.Property, context: RuleContext<any, any>) => {
+  const callAncestor = getAncestor(isCallExpression, node)
+  if (!callAncestor) return
+
+  let calleeName: string | undefined
+
+  // E.g. css({...}), cvs({...})
+  if (isIdentifier(callAncestor.callee)) {
+    calleeName = callAncestor.callee.name
+  }
+
+  // E.g. css.raw({...})
+  if (isMemberExpression(callAncestor.callee) && isIdentifier(callAncestor.callee.object)) {
+    calleeName = callAncestor.callee.object.name
+  }
+
+  if (!calleeName) return
+  if (!isPandaIsh(calleeName, context)) return
+
+  // Ensure attribute is a styled attribute
+  if (!isIdentifier(node.key)) return
+  const attr = node.key.name
+  if (!isValidProperty(attr, context, calleeName)) return
+
   return true
 }
 
 export const isPandaAttribute = (node: TSESTree.Property, context: RuleContext<any, any>) => {
   const callAncestor = getAncestor(isCallExpression, node)
 
+  if (callAncestor) return isInPandaFunction(node, context)
+
   // Object could be in JSX prop value i.e css prop or a pseudo
-  if (!callAncestor) {
-    const jsxExprAncestor = getAncestor(isJSXExpressionContainer, node)
-    const jsxAttrAncestor = getAncestor(isJSXAttribute, node)
+  const jsxExprAncestor = getAncestor(isJSXExpressionContainer, node)
+  const jsxAttrAncestor = getAncestor(isJSXAttribute, node)
 
-    if (!jsxExprAncestor || !jsxAttrAncestor) return
-    if (!isPandaProp(jsxAttrAncestor, context)) return
-    if (!isValidStyledProp(jsxAttrAncestor.name, context)) return
+  if (!jsxExprAncestor || !jsxAttrAncestor) return
+  if (!isPandaProp(jsxAttrAncestor, context)) return
+  if (!isValidStyledProp(jsxAttrAncestor.name, context)) return
 
-    return true
-  }
-
-  // Ensure attribute is a styled attribute
-  if (!isIdentifier(node.key)) return
-  const attr = node.key.name
-  if (!isValidProperty(attr, context)) return
-
-  // E.g. css({...})
-  if (isIdentifier(callAncestor.callee)) {
-    return isPandaIsh(callAncestor.callee.name, context)
-  }
-
-  // css.raw({...})
-  if (isMemberExpression(callAncestor.callee) && isIdentifier(callAncestor.callee.object)) {
-    return isPandaIsh(callAncestor.callee.object.name, context)
-  }
-
-  return
+  return true
 }
 
 export const resolveLonghand = (name: string, context: RuleContext<any, any>) => {

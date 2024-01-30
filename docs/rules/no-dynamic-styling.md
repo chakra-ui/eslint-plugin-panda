@@ -15,7 +15,13 @@ Prefer to use static styles, leverage css variables or recipes for known dynamic
 ```js
 import { css } from './panda/css';
 
+const color = 'red.100';
 const styles = css({ bg: color });
+
+import { stack } from './panda/patterns';
+
+const align = 'center';
+const styles = stack({ align: align });
 
 import { Circle } from './panda/jsx';
 

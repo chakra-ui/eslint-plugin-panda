@@ -37,6 +37,7 @@ function App() {
   const color = 'red'
   const circleSize = '4'
   const ta = 'left'
+  const justify = 'center'
 
   return (
     <div
@@ -49,6 +50,7 @@ function App() {
         backgroundColor: color,
         content: "['escape hatch']",
         textAlign: ta,
+        justify: justify,
       })}
     >
       <panda.a href={`mailto:${1}`} />

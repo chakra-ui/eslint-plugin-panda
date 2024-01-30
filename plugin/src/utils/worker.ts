@@ -104,8 +104,14 @@ async function resolveLongHand(ctx: PandaContext, name: string): Promise<string>
   return reverseShorthandsMap.get(name)
 }
 
-async function isValidProperty(ctx: PandaContext, name: string) {
-  return ctx.isValidProperty(name)
+async function isValidProperty(ctx: PandaContext, name: string, patternName?: string) {
+  if (ctx.isValidProperty(name)) return true
+  if (!patternName) return
+
+  const pattern = ctx.patterns.details.find((p) => p.baseName === patternName || p.jsx.includes(patternName))?.config
+    .properties
+  if (!pattern) return
+  return Object.keys(pattern).includes(name)
 }
 
 async function matchFile(ctx: PandaContext, name: string, imports: ImportResult[]) {
@@ -140,7 +146,7 @@ export function runAsync(action: 'isConfigFile', opts: Opts, fileName: string): 
 export function runAsync(action: 'isValidFile', opts: Opts, fileName: string): Promise<string>
 export function runAsync(action: 'resolveShorthand', opts: Opts, name: string): Promise<string>
 export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): Promise<string>
-export function runAsync(action: 'isValidProperty', opts: Opts, name: string): Promise<boolean>
+export function runAsync(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): Promise<boolean>
 export function runAsync(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): Promise<boolean>
 export function runAsync(action: 'matchImports', opts: Opts, result: MatchImportResult): Promise<boolean>
 export async function runAsync(action: string, opts: Opts, ...args: any): Promise<any> {
@@ -188,7 +194,7 @@ export function run(action: 'isConfigFile', opts: Opts): boolean
 export function run(action: 'isValidFile', opts: Opts): boolean
 export function run(action: 'resolveShorthand', opts: Opts, name: string): string
 export function run(action: 'resolveLongHand', opts: Opts, name: string): string
-export function run(action: 'isValidProperty', opts: Opts, name: string): boolean
+export function run(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): boolean
 export function run(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): boolean
 export function run(action: 'matchImports', opts: Opts, result: MatchImportResult): boolean
 export function run(action: string, opts: Opts, ...args: any[]): any {
