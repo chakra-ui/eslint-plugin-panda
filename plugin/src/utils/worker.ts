@@ -22,7 +22,7 @@ async function _getContext(configPath: string | undefined) {
 export async function getContext(opts: Opts) {
   if (process.env.NODE_ENV === 'test') {
     configPath = opts.configPath
-    const ctx = createContext({ importMap: './panda' })
+    const ctx = createContext({ importMap: './panda' }) as unknown as PandaContext
     ctx.getFiles = () => ['App.tsx']
     return ctx
   } else {
