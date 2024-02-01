@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.8
+
+### Patch Changes
+
+- ec81fec: Fix conditions being parsed as dynamic styles
+
 ## 0.0.7
 
 ### Patch Changes
