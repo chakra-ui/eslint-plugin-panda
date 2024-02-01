@@ -11,6 +11,8 @@ export const isLiteral = isNodeOfType(AST_NODE_TYPES.Literal)
 
 export const isTemplateLiteral = isNodeOfType(AST_NODE_TYPES.TemplateLiteral)
 
+export const isObjectExpression = isNodeOfType(AST_NODE_TYPES.ObjectExpression)
+
 export const isMemberExpression = isNodeOfType(AST_NODE_TYPES.MemberExpression)
 
 export const isVariableDeclarator = isNodeOfType(AST_NODE_TYPES.VariableDeclarator)

@@ -51,6 +51,9 @@ function App() {
         content: "['escape hatch']",
         textAlign: ta,
         justify: justify,
+        _hover: {
+          backgroundColor: 'green.300',
+        },
       })}
     >
       <panda.a href={`mailto:${1}`} />

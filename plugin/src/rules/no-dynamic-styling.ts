@@ -1,6 +1,12 @@
 import { type Rule, createRule } from '../utils'
 import { isPandaAttribute, isPandaProp } from '../utils/helpers'
-import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral } from '../utils/nodes'
+import {
+  isIdentifier,
+  isJSXExpressionContainer,
+  isLiteral,
+  isObjectExpression,
+  isTemplateLiteral,
+} from '../utils/nodes'
 
 export const RULE_NAME = 'no-dynamic-styling'
 
@@ -33,6 +39,9 @@ const rule: Rule = createRule({
         )
           return
 
+        // Don't warn for objects. Those are conditions
+        if (isObjectExpression(node.value)) return
+
         if (!isPandaProp(node, context)) return
 
         context.report({
@@ -47,6 +56,9 @@ const rule: Rule = createRule({
 
         // For syntax like: { property: `value that could be multiline` }
         if (isTemplateLiteral(node.value) && node.value.expressions.length === 0) return
+
+        // Don't warn for objects. Those are conditions
+        if (isObjectExpression(node.value)) return
 
         if (!isPandaAttribute(node, context)) return
 
