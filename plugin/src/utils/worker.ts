@@ -88,11 +88,12 @@ async function isValidFile(ctx: PandaContext, fileName: string): Promise<boolean
   return ctx.getFiles().includes(fileName)
 }
 
-async function resolveShorthand(ctx: PandaContext, name: string): Promise<string> {
-  return ctx.utility.resolveShorthand(name)
+async function resolveShorthands(ctx: PandaContext, name: string): Promise<string[] | undefined> {
+  console.log('name', name, ctx.utility.getPropShorthandsMap().get(name))
+  return ctx.utility.getPropShorthandsMap().get(name)
 }
 
-async function resolveLongHand(ctx: PandaContext, name: string): Promise<string> {
+async function resolveLongHand(ctx: PandaContext, name: string): Promise<string | undefined> {
   const reverseShorthandsMap = new Map()
 
   for (const [key, values] of ctx.utility.getPropShorthandsMap()) {
@@ -144,8 +145,8 @@ export function runAsync(action: 'isColorToken', opts: Opts, value: string): Pro
 export function runAsync(action: 'isColorAttribute', opts: Opts, attr: string): Promise<boolean>
 export function runAsync(action: 'isConfigFile', opts: Opts, fileName: string): Promise<string>
 export function runAsync(action: 'isValidFile', opts: Opts, fileName: string): Promise<string>
-export function runAsync(action: 'resolveShorthand', opts: Opts, name: string): Promise<string>
-export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): Promise<string>
+export function runAsync(action: 'resolveShorthands', opts: Opts, name: string): Promise<string[] | undefined>
+export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): Promise<string | undefined>
 export function runAsync(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): Promise<boolean>
 export function runAsync(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): Promise<boolean>
 export function runAsync(action: 'matchImports', opts: Opts, result: MatchImportResult): Promise<boolean>
@@ -165,9 +166,9 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'resolveLongHand':
       // @ts-expect-error cast
       return resolveLongHand(ctx, ...args)
-    case 'resolveShorthand':
+    case 'resolveShorthands':
       // @ts-expect-error cast
-      return resolveShorthand(ctx, ...args)
+      return resolveShorthands(ctx, ...args)
     case 'isConfigFile':
       return isConfigFile(opts.currentFile)
     case 'isValidFile':
@@ -192,8 +193,8 @@ export function run(action: 'isColorToken', opts: Opts, value: string): boolean
 export function run(action: 'isColorAttribute', opts: Opts, attr: string): boolean
 export function run(action: 'isConfigFile', opts: Opts): boolean
 export function run(action: 'isValidFile', opts: Opts): boolean
-export function run(action: 'resolveShorthand', opts: Opts, name: string): string
-export function run(action: 'resolveLongHand', opts: Opts, name: string): string
+export function run(action: 'resolveShorthands', opts: Opts, name: string): string[] | undefined
+export function run(action: 'resolveLongHand', opts: Opts, name: string): string | undefined
 export function run(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): boolean
 export function run(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): boolean
 export function run(action: 'matchImports', opts: Opts, result: MatchImportResult): boolean

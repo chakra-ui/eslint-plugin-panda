@@ -1,19 +1,19 @@
-import { isPandaAttribute, isPandaProp, resolveLonghand } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, resolveLonghand, resolveShorthands } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 
-export const RULE_NAME = 'prefer-longhand-properties'
+export const RULE_NAME = 'prefer-shorthand-properties'
 
 const rule: Rule = createRule({
   name: RULE_NAME,
   meta: {
     docs: {
       description:
-        'Discourage the use of shorthand properties and promote the preference for longhand properties in the codebase.',
+        'Discourage the use of longhand properties and promote the preference for shorthand properties in the codebase.',
     },
     messages: {
-      longhand: 'Use longhand property of `{{shorthand}}` instead. Prefer `{{longhand}}`',
-      replace: 'Replace `{{shorthand}}` with `{{longhand}}`',
+      shorthand: 'Use shorthand property of `{{longhand}}` instead. Prefer {{shorthand}}',
+      replace: 'Replace `{{longhand}}` with `{{shorthand}}`',
     },
     type: 'suggestion',
     hasSuggestions: true,
@@ -22,23 +22,26 @@ const rule: Rule = createRule({
   defaultOptions: [],
   create(context) {
     const sendReport = (node: any, name: string) => {
-      const longhand = resolveLonghand(name, context)!
+      const shorthands = resolveShorthands(name, context)
+      if (!shorthands) return
+
+      const shorthand = shorthands.map((s) => '`' + s + '`')?.join(', ')
 
       const data = {
-        shorthand: name,
-        longhand,
+        longhand: name,
+        shorthand,
       }
 
       return context.report({
         node,
-        messageId: 'longhand',
+        messageId: 'shorthand',
         data,
         suggest: [
           {
             messageId: 'replace',
             data,
             fix: (fixer) => {
-              return fixer.replaceTextRange(node.range, longhand)
+              return fixer.replaceTextRange(node.range, shorthands[0])
             },
           },
         ],
@@ -51,7 +54,7 @@ const rule: Rule = createRule({
         if (!isPandaProp(node, context)) return
 
         const longhand = resolveLonghand(node.name.name, context)
-        if (!longhand) return
+        if (longhand) return
 
         sendReport(node.name, node.name.name)
       },
@@ -60,7 +63,7 @@ const rule: Rule = createRule({
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
         const longhand = resolveLonghand(node.key.name, context)
-        if (!longhand) return
+        if (longhand) return
 
         sendReport(node.key, node.key.name)
       },

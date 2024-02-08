@@ -7,6 +7,7 @@ import noHardCodedColor, { RULE_NAME as NoHardCodedColor } from './no-hardcoded-
 import noInvalidTokenPaths, { RULE_NAME as NoInvalidTokenPaths } from './no-invalid-token-paths'
 import noPropertyRenaming, { RULE_NAME as NoPropertyRenaming } from './no-property-renaming'
 import preferLonghandProperties, { RULE_NAME as PreferLonghandProperties } from './prefer-longhand-properties'
+import preferShorthandProperties, { RULE_NAME as PreferShorthandProperties } from './prefer-shorthand-properties'
 import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
 import preferAtomicProperties, { RULE_NAME as PreferAtomicProperties } from './prefer-atomic-properties'
 
@@ -20,6 +21,7 @@ export const rules = {
   [NoInvalidTokenPaths]: noInvalidTokenPaths,
   [NoPropertyRenaming]: noPropertyRenaming,
   [PreferLonghandProperties]: preferLonghandProperties,
+  [PreferShorthandProperties]: preferShorthandProperties,
   [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferAtomicProperties]: preferAtomicProperties,
 } as any

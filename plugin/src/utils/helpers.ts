@@ -208,8 +208,8 @@ export const resolveLonghand = (name: string, context: RuleContext<any, any>) =>
   return syncAction('resolveLongHand', getSyncOpts(context), name)
 }
 
-export const resolveShorthand = (name: string, context: RuleContext<any, any>) => {
-  return syncAction('resolveShorthand', getSyncOpts(context), name)
+export const resolveShorthands = (name: string, context: RuleContext<any, any>) => {
+  return syncAction('resolveShorthands', getSyncOpts(context), name)
 }
 
 export const isColorAttribute = (attr: string, context: RuleContext<any, any>) => {

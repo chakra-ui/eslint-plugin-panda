@@ -77,17 +77,18 @@ Or enable all rules in extends:
 
 Where rules are included in the configs `recommended`, or `all` it is indicated below.
 
-* [`@pandacss/file-not-included`](docs/rules/file-not-included.md) `all`, `recommended`
-* [`@pandacss/no-config-function-in-source`](docs/rules/no-config-function-in-source.md) `all`, `recommended`
-* [`@pandacss/no-debug`](docs/rules/no-debug.md) `all`, `recommended`
-* [`@pandacss/no-dynamic-styling`](docs/rules/no-dynamic-styling.md) `all`, `recommended`
-* [`@pandacss/no-escape-hatch`](docs/rules/no-escape-hatch.md) `all`
-* [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md) `all`
-* [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md) `all`, `recommended`
-* [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md) `all`, `recommended`
-* [`@pandacss/no-shorthand-prop`](docs/rules/no-shorthand-prop.md) `all`
-* [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md) `all`
-* [`@pandacss/prefer-atomic-properties`](docs/rules/prefer-atomic-properties.md) `all`
+- [`@pandacss/file-not-included`](docs/rules/file-not-included.md) `all`, `recommended`
+- [`@pandacss/no-config-function-in-source`](docs/rules/no-config-function-in-source.md) `all`, `recommended`
+- [`@pandacss/no-debug`](docs/rules/no-debug.md) `all`, `recommended`
+- [`@pandacss/no-dynamic-styling`](docs/rules/no-dynamic-styling.md) `all`, `recommended`
+- [`@pandacss/no-escape-hatch`](docs/rules/no-escape-hatch.md) `all`
+- [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md) `all`
+- [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md) `all`, `recommended`
+- [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md) `all`, `recommended`
+- [`@pandacss/prefer-longhand-properties`](docs/rules/prefer-longhand-properties.md) `all`
+- [`@pandacss/prefer-shorthand-properties`](docs/rules/prefer-shorthand-properties.md) `all`
+- [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md) `all`
+- [`@pandacss/prefer-atomic-properties`](docs/rules/prefer-atomic-properties.md) `all`
 
 ## Settings
 

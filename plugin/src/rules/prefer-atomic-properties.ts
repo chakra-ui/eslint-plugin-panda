@@ -1,4 +1,4 @@
-import { isPandaAttribute, isPandaProp, isValidProperty, resolveShorthand } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, isValidProperty, resolveLonghand } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { compositeProperties } from '../utils/composite-properties'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
@@ -22,7 +22,7 @@ const rule: Rule = createRule({
     const resolveCompositeProperty = (name: string) => {
       if (Object.hasOwn(compositeProperties, name)) return name
 
-      const longhand = resolveShorthand(name, context)
+      const longhand = resolveLonghand(name, context) ?? name
       if (isValidProperty(longhand, context) && Object.hasOwn(compositeProperties, longhand)) return longhand
     }
 
