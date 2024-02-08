@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.10
+
+### Patch Changes
+
+- 5c3577d: Add `prefer-shorthand-properties` rule
+
 ## 0.0.9
 
 ### Patch Changes
