@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.9
+
+### Patch Changes
+
+- 3aaba9f: - Rename `no-shorthand-prop` rule to `prefer-longhand-properties`
+
 ## 0.0.8
 
 ### Patch Changes
