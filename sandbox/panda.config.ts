@@ -1,13 +1,4 @@
-import { defineConfig, defineRecipe } from '@pandacss/dev'
-
-const someRecipe = defineRecipe({
-  className: 'some-recipe',
-  base: { color: 'green', fontSize: '16px' },
-  variants: {
-    size: { small: { fontSize: '14px' } },
-  },
-  compoundVariants: [{ size: 'small', css: { color: 'blue' } }],
-})
+import { defineConfig } from '@pandacss/dev'
 
 export default defineConfig({
   preflight: true,
@@ -23,7 +14,6 @@ export default defineConfig({
       },
     },
     recipes: {
-      someRecipe,
       button: {
         className: 'button',
         jsx: ['Button', 'ListedButton', /WithRegex$/, 'PrimaryButtonLike'],

@@ -1,4 +1,4 @@
-export const shorthandProperties: Record<string, string[]> = {
+export const compositeProperties: Record<string, string[]> = {
   animation: [
     'animationName',
     'animationDuration',

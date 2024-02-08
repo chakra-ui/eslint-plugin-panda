@@ -1,5 +1,5 @@
 import { tester } from '../test-utils'
-import rule, { RULE_NAME } from '../src/rules/no-shorthand-prop'
+import rule, { RULE_NAME } from '../src/rules/prefer-longhand-properties'
 
 const javascript = String.raw
 

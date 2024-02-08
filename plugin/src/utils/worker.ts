@@ -58,12 +58,12 @@ async function getExtendWarnings(): Promise<string[]> {
   return Array.from(warnings)
 }
 
-async function filterInvalidTokenz(ctx: PandaContext, paths: string[]): Promise<string[]> {
-  return paths.filter((path) => !ctx.utility.tokens.get(path))
+async function filterInvalidTokens(ctx: PandaContext, paths: string[]): Promise<string[]> {
+  return paths.filter((path) => !ctx.utility.tokens.view.get(path))
 }
 
 async function isColorToken(ctx: PandaContext, value: string): Promise<boolean> {
-  return !!ctx.utility.tokens.values.get('colors')?.get(value)
+  return !!ctx.utility.tokens.view.categoryMap.get('colors')?.get(value)
 }
 
 async function isColorAttribute(ctx: PandaContext, _attr: string): Promise<boolean> {
@@ -139,7 +139,7 @@ type Opts = {
 }
 
 export function runAsync(action: 'getExtendWarnings', opts: Opts): Promise<string[]>
-export function runAsync(action: 'filterInvalidTokenz', opts: Opts, paths: string[]): Promise<string[]>
+export function runAsync(action: 'filterInvalidTokens', opts: Opts, paths: string[]): Promise<string[]>
 export function runAsync(action: 'isColorToken', opts: Opts, value: string): Promise<boolean>
 export function runAsync(action: 'isColorAttribute', opts: Opts, attr: string): Promise<boolean>
 export function runAsync(action: 'isConfigFile', opts: Opts, fileName: string): Promise<string>
@@ -178,16 +178,16 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'isColorToken':
       // @ts-expect-error cast
       return isColorToken(ctx, ...args)
-    case 'filterInvalidTokenz':
+    case 'filterInvalidTokens':
       // @ts-expect-error cast
-      return filterInvalidTokenz(ctx, ...args)
+      return filterInvalidTokens(ctx, ...args)
     case 'getExtendWarnings':
       return getExtendWarnings()
   }
 }
 
 export function run(action: 'getExtendWarnings', opts: Opts): string[]
-export function run(action: 'filterInvalidTokenz', opts: Opts, paths: string[]): string[]
+export function run(action: 'filterInvalidTokens', opts: Opts, paths: string[]): string[]
 export function run(action: 'isColorToken', opts: Opts, value: string): boolean
 export function run(action: 'isColorAttribute', opts: Opts, attr: string): boolean
 export function run(action: 'isConfigFile', opts: Opts): boolean

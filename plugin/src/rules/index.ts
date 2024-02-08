@@ -6,7 +6,7 @@ import noEscapeHatch, { RULE_NAME as NoEscapeHatch } from './no-escape-hatch'
 import noHardCodedColor, { RULE_NAME as NoHardCodedColor } from './no-hardcoded-color'
 import noInvalidTokenPaths, { RULE_NAME as NoInvalidTokenPaths } from './no-invalid-token-paths'
 import noPropertyRenaming, { RULE_NAME as NoPropertyRenaming } from './no-property-renaming'
-import noShorthandProp, { RULE_NAME as NoShorthandProp } from './no-shorthand-prop'
+import preferLonghandProperties, { RULE_NAME as PreferLonghandProperties } from './prefer-longhand-properties'
 import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
 import preferAtomicProperties, { RULE_NAME as PreferAtomicProperties } from './prefer-atomic-properties'
 
@@ -19,7 +19,7 @@ export const rules = {
   [NoHardCodedColor]: noHardCodedColor,
   [NoInvalidTokenPaths]: noInvalidTokenPaths,
   [NoPropertyRenaming]: noPropertyRenaming,
-  [NoShorthandProp]: noShorthandProp,
+  [PreferLonghandProperties]: preferLonghandProperties,
   [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferAtomicProperties]: preferAtomicProperties,
 } as any

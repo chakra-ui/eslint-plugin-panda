@@ -245,7 +245,7 @@ export const extractTokens = (value: string) => {
 export const getInvalidTokens = (value: string, context: RuleContext<any, any>) => {
   const tokens = extractTokens(value)
   if (!tokens.length) return []
-  return syncAction('filterInvalidTokenz', getSyncOpts(context), tokens)
+  return syncAction('filterInvalidTokens', getSyncOpts(context), tokens)
 }
 
 export const getExtendWarnings = (context: RuleContext<any, any>) => {

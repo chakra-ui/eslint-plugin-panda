@@ -1,6 +1,6 @@
 import { isPandaAttribute, isPandaProp, isValidProperty, resolveShorthand } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
-import { shorthandProperties } from '../utils/shorthand-properties'
+import { compositeProperties } from '../utils/composite-properties'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 
 export const RULE_NAME = 'prefer-atomic-properties'
@@ -20,16 +20,16 @@ const rule: Rule = createRule({
   defaultOptions: [],
   create(context) {
     const resolveCompositeProperty = (name: string) => {
-      if (Object.hasOwn(shorthandProperties, name)) return name
+      if (Object.hasOwn(compositeProperties, name)) return name
 
       const longhand = resolveShorthand(name, context)
-      if (isValidProperty(longhand, context) && Object.hasOwn(shorthandProperties, longhand)) return longhand
+      if (isValidProperty(longhand, context) && Object.hasOwn(compositeProperties, longhand)) return longhand
     }
 
     const sendReport = (node: any, name: string) => {
       const cpd = resolveCompositeProperty(name)!
 
-      const atomics = shorthandProperties[cpd].map((name) => `\`${name}\``).join(',\n')
+      const atomics = compositeProperties[cpd].map((name) => `\`${name}\``).join(',\n')
 
       return context.report({
         node,
