@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.11
+
+### Patch Changes
+
+- 084f07b: Add `prefer-composite-properties` rule
+
 ## 0.0.10
 
 ### Patch Changes
