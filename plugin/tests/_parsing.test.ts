@@ -74,6 +74,7 @@ const valids2 = [
   '<Circle debug={true} />',
   '<Circle color={"red"} />',
   '<Circle color={`red`} />',
+  '<Circle _hover={{ bg: "red.100" }} />',
 ]
 
 const invalids2 = ['const styles = css({ bg: color })', '<Circle debug={bool} />', '<styled.div color={color} />']

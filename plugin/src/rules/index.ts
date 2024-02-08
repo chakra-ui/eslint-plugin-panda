@@ -10,6 +10,7 @@ import preferLonghandProperties, { RULE_NAME as PreferLonghandProperties } from 
 import preferShorthandProperties, { RULE_NAME as PreferShorthandProperties } from './prefer-shorthand-properties'
 import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
 import preferAtomicProperties, { RULE_NAME as PreferAtomicProperties } from './prefer-atomic-properties'
+import preferCompositeProperties, { RULE_NAME as PreferCompositeProperties } from './prefer-composite-properties'
 
 export const rules = {
   [FileNotIncluded]: fileNotIncluded,
@@ -24,4 +25,5 @@ export const rules = {
   [PreferShorthandProperties]: preferShorthandProperties,
   [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferAtomicProperties]: preferAtomicProperties,
+  [PreferCompositeProperties]: preferCompositeProperties,
 } as any

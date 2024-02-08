@@ -13,5 +13,8 @@ module.exports = {
   plugins: ['react-refresh'],
   rules: {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
+
+    //* Panda rules overrides
+    '@pandacss/prefer-shorthand-properties': 'off',
   },
 }

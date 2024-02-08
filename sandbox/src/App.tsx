@@ -57,7 +57,7 @@ function App() {
       })}
     >
       <panda.a href={`mailto:${1}`} />
-      <Circle size={circleSize} />
+      <Circle size={circleSize} _hover={{ bg: 'red.200' }} />
       <HStack gap="40px" debug>
         <div className={className}>Element 1</div>
         <panda.div color={color} fontWeight="bold" fontSize="50px" bg="red.200" borderTopColor={'#111'}>

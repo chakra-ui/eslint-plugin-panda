@@ -40,7 +40,7 @@ const rule: Rule = createRule({
           return
 
         // Don't warn for objects. Those are conditions
-        if (isObjectExpression(node.value)) return
+        if (isObjectExpression(node.value.expression)) return
 
         if (!isPandaProp(node, context)) return
 
