@@ -89,6 +89,8 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 - [`@pandacss/prefer-shorthand-properties`](docs/rules/prefer-shorthand-properties.md) `all`
 - [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md) `all`
 - [`@pandacss/prefer-atomic-properties`](docs/rules/prefer-atomic-properties.md) `all`
+- [`@pandacss/prefer-composite-properties`](docs/rules/prefer-composite-properties.md) `all`
+- [`@pandacss/prefer-unified-property-style`](docs/rules/prefer-unified-property-style.md) `all`, `recommended`
 
 ## Settings
 

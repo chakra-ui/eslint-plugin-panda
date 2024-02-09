@@ -2,7 +2,7 @@
 
 # prefer-atomic-properties
 
-Encourage the use of atomic properties instead of composite shorthand properties in the codebase.
+Encourage the use of atomic properties instead of composite properties in the codebase.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
