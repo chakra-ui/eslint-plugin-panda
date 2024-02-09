@@ -11,6 +11,7 @@ import preferShorthandProperties, { RULE_NAME as PreferShorthandProperties } fro
 import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
 import preferAtomicProperties, { RULE_NAME as PreferAtomicProperties } from './prefer-atomic-properties'
 import preferCompositeProperties, { RULE_NAME as PreferCompositeProperties } from './prefer-composite-properties'
+import preferUnifiedPropertyStyle, { RULE_NAME as PreferUnifiedPropertyStyle } from './prefer-unified-property-style'
 
 export const rules = {
   [FileNotIncluded]: fileNotIncluded,
@@ -26,4 +27,5 @@ export const rules = {
   [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferAtomicProperties]: preferAtomicProperties,
   [PreferCompositeProperties]: preferCompositeProperties,
+  [PreferUnifiedPropertyStyle]: preferUnifiedPropertyStyle,
 } as any

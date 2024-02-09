@@ -27,9 +27,9 @@ const rule: Rule = createRule({
     }
 
     const sendReport = (node: any, name: string) => {
-      const cpd = resolveCompositeProperty(name)!
+      const cmp = resolveCompositeProperty(name)!
 
-      const atomics = compositeProperties[cpd].map((name) => `\`${name}\``).join(',\n')
+      const atomics = compositeProperties[cmp].map((name) => `\`${name}\``).join(',\n')
 
       return context.report({
         node,
@@ -46,8 +46,8 @@ const rule: Rule = createRule({
         if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
 
-        const cpd = resolveCompositeProperty(node.name.name)
-        if (!cpd) return
+        const cmp = resolveCompositeProperty(node.name.name)
+        if (!cmp) return
 
         sendReport(node, node.name.name)
       },
@@ -55,8 +55,8 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
-        const cpd = resolveCompositeProperty(node.key.name)
-        if (!cpd) return
+        const cmp = resolveCompositeProperty(node.key.name)
+        if (!cmp) return
 
         sendReport(node.key, node.key.name)
       },

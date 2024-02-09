@@ -25,7 +25,7 @@ const rule: Rule = createRule({
       const shorthands = resolveShorthands(name, context)
       if (!shorthands) return
 
-      const shorthand = shorthands.map((s) => '`' + s + '`')?.join(', ')
+      const shorthand = shorthands.map((s) => `\`${s}\``)?.join(', ')
 
       const data = {
         longhand: name,

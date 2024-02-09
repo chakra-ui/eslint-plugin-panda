@@ -34,3 +34,5 @@ export const isCallExpression = isNodeOfType(AST_NODE_TYPES.CallExpression)
 export const isImportDeclaration = isNodeOfType(AST_NODE_TYPES.ImportDeclaration)
 
 export const isImportSpecifier = isNodeOfType(AST_NODE_TYPES.ImportSpecifier)
+
+export const isProperty = isNodeOfType(AST_NODE_TYPES.Property)

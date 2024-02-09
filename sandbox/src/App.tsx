@@ -30,7 +30,8 @@ function App() {
     debug: true,
     color: '{colors.red.400}',
     fontSize: 'token(fontSizes.2xl, 4px)',
-    marginInline: '{spacings.4} token(spacing.600)',
+    marginTop: '{spacings.4} token(spacing.600)',
+    margin: '4',
     paddingTop: token('sizes.4'),
   })
 
@@ -45,8 +46,8 @@ function App() {
         debug: true,
         padding: '40px',
         align: 'stretch',
-        bg: 'red.300',
         color: '#111',
+        background: 'red',
         backgroundColor: color,
         content: "['escape hatch']",
         textAlign: ta,
@@ -60,7 +61,14 @@ function App() {
       <Circle size={circleSize} _hover={{ bg: 'red.200' }} />
       <HStack gap="40px" debug>
         <div className={className}>Element 1</div>
-        <panda.div color={color} fontWeight="bold" fontSize="50px" bg="red.200" borderTopColor={'#111'}>
+        <panda.div
+          color={color}
+          fontWeight="bold"
+          fontSize="50px"
+          bg="red.200"
+          borderColor="red.500"
+          borderTopColor={'#111'}
+        >
           Element 2
         </panda.div>
       </HStack>
