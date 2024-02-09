@@ -45,7 +45,7 @@ function App() {
       className={stack({
         debug: true,
         padding: '40px',
-        align: 'stretch',
+        align: 'stretch !',
         color: '#111',
         background: 'red',
         backgroundColor: color,

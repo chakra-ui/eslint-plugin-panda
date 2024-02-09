@@ -4,11 +4,12 @@ import noDebug, { RULE_NAME as NoDebug } from './no-debug'
 import noDynamicStyling, { RULE_NAME as NoDynamicStyling } from './no-dynamic-styling'
 import noEscapeHatch, { RULE_NAME as NoEscapeHatch } from './no-escape-hatch'
 import noHardCodedColor, { RULE_NAME as NoHardCodedColor } from './no-hardcoded-color'
+import noImportant, { RULE_NAME as NoImportant } from './no-important'
 import noInvalidTokenPaths, { RULE_NAME as NoInvalidTokenPaths } from './no-invalid-token-paths'
 import noPropertyRenaming, { RULE_NAME as NoPropertyRenaming } from './no-property-renaming'
+import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
 import preferLonghandProperties, { RULE_NAME as PreferLonghandProperties } from './prefer-longhand-properties'
 import preferShorthandProperties, { RULE_NAME as PreferShorthandProperties } from './prefer-shorthand-properties'
-import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
 import preferAtomicProperties, { RULE_NAME as PreferAtomicProperties } from './prefer-atomic-properties'
 import preferCompositeProperties, { RULE_NAME as PreferCompositeProperties } from './prefer-composite-properties'
 import preferUnifiedPropertyStyle, { RULE_NAME as PreferUnifiedPropertyStyle } from './prefer-unified-property-style'
@@ -20,11 +21,12 @@ export const rules = {
   [NoDynamicStyling]: noDynamicStyling,
   [NoEscapeHatch]: noEscapeHatch,
   [NoHardCodedColor]: noHardCodedColor,
+  [NoImportant]: noImportant,
   [NoInvalidTokenPaths]: noInvalidTokenPaths,
   [NoPropertyRenaming]: noPropertyRenaming,
+  [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferLonghandProperties]: preferLonghandProperties,
   [PreferShorthandProperties]: preferShorthandProperties,
-  [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferAtomicProperties]: preferAtomicProperties,
   [PreferCompositeProperties]: preferCompositeProperties,
   [PreferUnifiedPropertyStyle]: preferUnifiedPropertyStyle,
