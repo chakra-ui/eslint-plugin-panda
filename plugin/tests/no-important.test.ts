@@ -52,7 +52,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{ position: 'absolute !' }} />;
+  return  <Circle _hover={{ position: '[absolute!]' }} />;
 }`,
   },
 ]

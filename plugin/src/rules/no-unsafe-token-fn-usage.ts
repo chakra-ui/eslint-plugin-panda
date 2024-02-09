@@ -9,6 +9,7 @@ import {
   isTemplateLiteral,
   type Node,
 } from '../utils/nodes'
+import { getArbitraryValue } from '@pandacss/shared'
 
 export const RULE_NAME = 'no-unsafe-token-fn-usage'
 
@@ -43,10 +44,10 @@ const rule: Rule = createRule({
       const value = node.arguments[0]
 
       if (isLiteral(value)) {
-        sendReport(node, tokenWrap(value.value?.toString()))
+        sendReport(node, tokenWrap(getArbitraryValue(value.value?.toString() ?? '')))
       }
       if (isTemplateLiteral(value)) {
-        sendReport(node, tokenWrap(value.quasis[0].value.raw))
+        sendReport(node, tokenWrap(getArbitraryValue(value.quasis[0].value.raw)))
       }
     }
 
@@ -59,20 +60,20 @@ const rule: Rule = createRule({
 
     const handleLiteral = (node: Node) => {
       if (!isLiteral(node)) return
-      if (isCompositeValue(node.value?.toString())) return
+      const value = getArbitraryValue(node.value?.toString() ?? '')
+      if (isCompositeValue(value)) return
 
-      sendReport(node)
+      sendReport(node, value)
     }
 
     const handleTemplateLiteral = (node: Node) => {
       if (!isTemplateLiteral(node)) return
       if (node.expressions.length > 0) return
 
-      sendReport(node, node.quasis[0].value.raw)
+      sendReport(node, getArbitraryValue(node.quasis[0].value.raw))
     }
 
-    const sendReport = (node: any, _value?: string) => {
-      const value = _value ?? node.value?.toString()
+    const sendReport = (node: any, value: string) => {
       const tkImports = extractTokens(value)
       const token = tkImports[0].replace(/^[^.]*\./, '')
 

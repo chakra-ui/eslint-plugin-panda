@@ -1,6 +1,7 @@
 import { isPandaAttribute, isPandaProp } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
+import { getArbitraryValue } from '@pandacss/shared'
 
 // Check if the string ends with '!' with optional whitespace before it
 const exclamationRegex = /\s*!$/
@@ -29,8 +30,9 @@ const rule: Rule = createRule({
   create(context) {
     const removeQuotes = ([start, end]: readonly [number, number]) => [start + 1, end - 1] as const
 
-    const hasImportantKeyword = (value?: string) => {
-      if (!value) return false
+    const hasImportantKeyword = (_value?: string) => {
+      if (!_value) return false
+      const value = getArbitraryValue(_value)
       return exclamationRegex.test(value) || importantRegex.test(value)
     }
 

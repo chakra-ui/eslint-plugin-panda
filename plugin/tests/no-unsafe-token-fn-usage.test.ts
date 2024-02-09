@@ -55,7 +55,7 @@ const styles = css({ bg: token('colors.red.300') })`,
   import { Circle } from './panda/jsx';
 
   function App(){
-    return  <Circle margin='{sizes.4}' />;
+    return  <Circle margin='[{sizes.4}]' />;
   }`,
   },
 ]
