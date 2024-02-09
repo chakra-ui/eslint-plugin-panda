@@ -29,7 +29,7 @@ import { token } from './panda/tokens';
 import { Circle } from './panda/jsx';
 
   function App(){
-    return  <Circle margin='{sizes.4}' />;
+    return  <Circle margin='[{sizes.4}]' />;
   }
 ```
 
