@@ -77,21 +77,23 @@ Or enable all rules in extends:
 
 Where rules are included in the configs `recommended`, or `all` it is indicated below.
 
-- [`@pandacss/file-not-included`](docs/rules/file-not-included.md) `all`, `recommended`
-- [`@pandacss/no-config-function-in-source`](docs/rules/no-config-function-in-source.md) `all`, `recommended`
-- [`@pandacss/no-debug`](docs/rules/no-debug.md) `all`, `recommended`
-- [`@pandacss/no-dynamic-styling`](docs/rules/no-dynamic-styling.md) `all`, `recommended`
-- [`@pandacss/no-escape-hatch`](docs/rules/no-escape-hatch.md) `all`
-- [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md) `all`
-- [`@pandacss/no-important`](docs/rules/no-important.md) `all`
-- [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md) `all`, `recommended`
-- [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md) `all`, `recommended`
-- [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md) `all`
-- [`@pandacss/prefer-longhand-properties`](docs/rules/prefer-longhand-properties.md) `all`
-- [`@pandacss/prefer-shorthand-properties`](docs/rules/prefer-shorthand-properties.md) `all`
-- [`@pandacss/prefer-atomic-properties`](docs/rules/prefer-atomic-properties.md) `all`
-- [`@pandacss/prefer-composite-properties`](docs/rules/prefer-composite-properties.md) `all`
-- [`@pandacss/prefer-unified-property-style`](docs/rules/prefer-unified-property-style.md) `all`, `recommended`
+| Rule                                                                                     | `recommended` |
+| ---------------------------------------------------------------------------------------- | ------------- |
+| [`@pandacss/file-not-included`](docs/rules/file-not-included.md)                         | ✔️            |
+| [`@pandacss/no-config-function-in-source`](docs/rules/no-config-function-in-source.md)   | ✔️            |
+| [`@pandacss/no-debug`](docs/rules/no-debug.md)                                           | ✔️            |
+| [`@pandacss/no-dynamic-styling`](docs/rules/no-dynamic-styling.md)                       | ✔️            |
+| [`@pandacss/no-escape-hatch`](docs/rules/no-escape-hatch.md)                             |               |
+| [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md)                       |               |
+| [`@pandacss/no-important`](docs/rules/no-important.md)                                   |               |
+| [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md)               | ✔️            |
+| [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md)                   | ✔️            |
+| [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md)           |               |
+| [`@pandacss/prefer-longhand-properties`](docs/rules/prefer-longhand-properties.md)       |               |
+| [`@pandacss/prefer-shorthand-properties`](docs/rules/prefer-shorthand-properties.md)     |               |
+| [`@pandacss/prefer-atomic-properties`](docs/rules/prefer-atomic-properties.md)           |               |
+| [`@pandacss/prefer-composite-properties`](docs/rules/prefer-composite-properties.md)     |               |
+| [`@pandacss/prefer-unified-property-style`](docs/rules/prefer-unified-property-style.md) | ✔️            |
 
 ## Settings
 

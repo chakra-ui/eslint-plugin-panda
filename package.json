@@ -8,7 +8,7 @@
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
-    "docs": "rm -rf docs/rules && DOCGEN=1 vitest run && node tools/build-readme.js",
+    "docs": "rm -rf docs/rules && DOCGEN=1 vitest run && pnpm readme",
     "readme": "node tools/build-readme.js && pnpm prettier-fix",
     "deps": "pnpm -r --parallel deps",
     "lint": "eslint . --ext .ts",

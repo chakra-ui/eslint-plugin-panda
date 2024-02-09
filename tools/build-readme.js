@@ -7,44 +7,45 @@ const pluginName = '@pandacss'
 const docPath = 'docs/rules/{name}.md'
 
 function getRules(deprecated) {
-  return Array.from(rulesWithConfig.keys())
-    .map((rule) => {
-      const fullRule = pluginName + '/' + rule
-      const ruleData = rulesWithConfig.get(rule)
-      const docs = ruleData.meta.docs
-      if (!!docs.deprecated === deprecated) {
-        return (
-          '* [`' +
-          fullRule +
-          '`](' +
-          docPath.replace('{name}', rule) +
-          ')' +
-          (ruleData.meta.schema.length ? ' ⚙️' : '') +
-          (ruleData.meta.fixable ? ' 🔧' : '') +
-          (docs.replacedBy
-            ? ' (use [`' +
-              pluginName +
-              '/' +
-              docs.replacedBy +
-              '`](' +
-              docPath.replace('{name}', docs.replacedBy) +
-              '))'
-            : '') +
-          (ruleData.configMap.size
-            ? ' ' +
-              Array.from(ruleData.configMap.keys())
-                .map((name) => {
-                  const options = ruleData.configMap.get(name)
-                  return '`' + name + (options && Object.keys(options[0]).length ? '†' : '') + '`'
-                })
-                .join(', ')
-            : '')
-        )
-      }
-      return null
-    })
-    .filter((rule) => rule)
-    .join('\n')
+  const thead = '| Rule | `recommended` | \n | --- | --- | \n'
+
+  return (
+    thead +
+    Array.from(rulesWithConfig.keys())
+      .map((rule) => {
+        const fullRule = pluginName + '/' + rule
+        const ruleData = rulesWithConfig.get(rule)
+
+        const docs = ruleData.meta.docs
+        if (!!docs.deprecated === deprecated) {
+          return (
+            '|' +
+            '[`' +
+            fullRule +
+            '`](' +
+            docPath.replace('{name}', rule) +
+            ')' +
+            (ruleData.meta.schema.length ? ' ⚙️' : '') +
+            (ruleData.meta.fixable ? ' 🔧' : '') +
+            (docs.replacedBy
+              ? ' (use [`' +
+                pluginName +
+                '/' +
+                docs.replacedBy +
+                '`](' +
+                docPath.replace('{name}', docs.replacedBy) +
+                '))'
+              : '') +
+            '|' +
+            (ruleData.configMap.has('recommended') ? '✔️' : '') +
+            '|'
+          )
+        }
+        return null
+      })
+      .filter((rule) => rule)
+      .join('\n')
+  )
 }
 
 fs.writeFile(
