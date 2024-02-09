@@ -1,5 +1,12 @@
 # @pandacss/eslint-plugin
 
+## 0.0.12
+
+### Patch Changes
+
+- 54f309e: Add `prefer-unified-property-style` rule
+- 9e43308: Add `no-important` rule
+
 ## 0.0.11
 
 ### Patch Changes
