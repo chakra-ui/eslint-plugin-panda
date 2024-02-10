@@ -1,5 +1,12 @@
 # @pandacss/eslint-plugin
 
+## 0.0.15
+
+### Patch Changes
+
+- 7ecd6ad: Improve nested styling detection in `no-invalid-nesting` rule
+- b8cfeec: Add `no-physical-properties` rule
+
 ## 0.0.14
 
 ### Patch Changes
