@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.14
+
+### Patch Changes
+
+- 782889b: Normalize paths
+
 ## 0.0.13
 
 ### Patch Changes
