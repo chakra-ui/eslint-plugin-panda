@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.13
+
+### Patch Changes
+
+- 587b69a: Add `no-invalid-nesting` rule
+
 ## 0.0.12
 
 ### Patch Changes
