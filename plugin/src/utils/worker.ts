@@ -4,7 +4,6 @@ import { createContext } from 'fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
 import { findConfig, bundleConfig } from '@pandacss/config'
 import path from 'path'
-import fs from 'fs'
 import type { ImportResult } from '.'
 
 let promise: Promise<PandaContext> | undefined
