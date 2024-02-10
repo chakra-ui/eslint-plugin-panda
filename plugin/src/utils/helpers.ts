@@ -163,7 +163,7 @@ export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<an
   return true
 }
 
-export const isStyledProperty = (node: TSESTree.Property, context: RuleContext<any, any>, calleeName: string) => {
+export const isStyledProperty = (node: TSESTree.Property, context: RuleContext<any, any>, calleeName?: string) => {
   if (!isIdentifier(node.key) && !isLiteral(node.key) && !isTemplateLiteral(node.key)) return
 
   if (isIdentifier(node.key) && !isValidProperty(node.key.name, context, calleeName)) return
@@ -221,7 +221,7 @@ export const isPandaAttribute = (node: TSESTree.Property, context: RuleContext<a
   }
 
   // Object could be in JSX prop value i.e css prop or a pseudo
-  return isInJSXProp(node, context)
+  return isInJSXProp(node, context) && isStyledProperty(node, context)
 }
 
 export const resolveLonghand = (name: string, context: RuleContext<any, any>) => {

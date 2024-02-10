@@ -1,6 +1,6 @@
 import { isIdentifier, isLiteral, isObjectExpression, isTemplateLiteral } from '../utils/nodes'
 import { type Rule, createRule } from '../utils'
-import { isInJSXProp, isInPandaFunction } from '../utils/helpers'
+import { isPandaAttribute } from '../utils/helpers'
 
 export const RULE_NAME = 'no-invalid-nesting'
 
@@ -21,7 +21,7 @@ const rule: Rule = createRule({
     return {
       Property(node) {
         if (!isObjectExpression(node.value) || isIdentifier(node.key)) return
-        if (!isInPandaFunction(node, context) && !isInJSXProp(node, context)) return
+        if (isPandaAttribute(node, context)) return
 
         const invalidLiteral =
           isLiteral(node.key) && typeof node.key.value === 'string' && !node.key.value.includes('&')
