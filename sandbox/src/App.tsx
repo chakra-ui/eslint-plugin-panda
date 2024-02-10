@@ -72,7 +72,6 @@ function App() {
           Element 2
         </panda.div>
       </HStack>
-      {/* Not considered for now */}
       <LocalFactoryComp debug />
     </div>
   )

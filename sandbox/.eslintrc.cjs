@@ -6,7 +6,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     //* Panda plugin
-    'plugin:@pandacss/all',
+    'plugin:@pandacss/recommended',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
   parser: '@typescript-eslint/parser',
@@ -15,6 +15,6 @@ module.exports = {
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
 
     //* Panda rules overrides
-    '@pandacss/prefer-shorthand-properties': 'off',
+    '@pandacss/no-debug': 'off',
   },
 }
