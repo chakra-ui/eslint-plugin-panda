@@ -24,10 +24,10 @@ const rule: Rule = createRule({
     const getLonghand = (name: string) => resolveLonghand(name, context) ?? name
 
     const resolveCompositeProperty = (name: string) => {
-      if (Object.hasOwn(compositeProperties, name)) return name
+      if (name in compositeProperties) return name
 
       const longhand = getLonghand(name)
-      if (isValidProperty(longhand, context) && Object.hasOwn(compositeProperties, longhand)) return longhand
+      if (isValidProperty(longhand, context) && longhand in compositeProperties) return longhand
     }
 
     const sendReport = (node: any, cmp: string, siblings: string[]) => {
@@ -54,6 +54,7 @@ const rule: Rule = createRule({
       JSXAttribute(node) {
         if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
+
         const cmp = resolveCompositeProperty(node.name.name)
         if (!cmp) return
         if (!isJSXOpeningElement(node.parent)) return
@@ -65,6 +66,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
+
         const cmp = resolveCompositeProperty(node.key.name)
         if (!cmp) return
         if (!isObjectExpression(node.parent)) return

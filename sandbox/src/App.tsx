@@ -32,7 +32,7 @@ function App() {
     fontSize: 'token(fontSizes.2xl, 4px)',
     marginTop: '{spacings.4} token(spacing.600)',
     margin: '4',
-    paddingTop: token('sizes.4'),
+    pt: token('sizes.4'),
   })
 
   const color = 'red'

@@ -55,6 +55,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
+
         const cmp = resolveCompositeProperty(node.key.name)
         if (!cmp) return
 

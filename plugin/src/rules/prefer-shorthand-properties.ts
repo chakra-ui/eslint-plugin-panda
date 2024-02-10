@@ -62,6 +62,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
+
         const longhand = resolveLonghand(node.key.name, context)
         if (longhand) return
 
