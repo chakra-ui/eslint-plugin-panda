@@ -74,10 +74,10 @@ async function isColorAttribute(ctx: PandaContext, _attr: string): Promise<boole
 }
 
 const arePathsEqual = (path1: string, path2: string) => {
-  const stats1 = fs.statSync(path1)
-  const stats2 = fs.statSync(path2)
+  const normalizedPath1 = path.resolve(path1)
+  const normalizedPath2 = path.resolve(path2)
 
-  return stats1.dev === stats2.dev && stats1.ino === stats2.ino
+  return normalizedPath1 === normalizedPath2
 }
 
 async function isConfigFile(fileName: string): Promise<boolean> {
@@ -85,11 +85,10 @@ async function isConfigFile(fileName: string): Promise<boolean> {
 }
 
 async function isValidFile(ctx: PandaContext, fileName: string): Promise<boolean> {
-  return ctx.getFiles().includes(fileName)
+  return ctx.getFiles().some((file) => arePathsEqual(file, fileName))
 }
 
 async function resolveShorthands(ctx: PandaContext, name: string): Promise<string[] | undefined> {
-  console.log('name', name, ctx.utility.getPropShorthandsMap().get(name))
   return ctx.utility.getPropShorthandsMap().get(name)
 }
 
