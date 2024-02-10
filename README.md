@@ -87,6 +87,7 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 | [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md)                       |               |
 | [`@pandacss/no-important`](docs/rules/no-important.md)                                   |               |
 | [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md)               | ✔️            |
+| [`@pandacss/no-invalid-nesting`](docs/rules/no-invalid-nesting.md)                       | ✔️            |
 | [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md)                   | ✔️            |
 | [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md)           |               |
 | [`@pandacss/prefer-longhand-properties`](docs/rules/prefer-longhand-properties.md)       |               |
