@@ -53,7 +53,7 @@ import { Circle } from './panda/jsx';
 
 function App(){
   const bool = true;
-  return  <Circle debug={bool} />;
+  return <Circle debug={bool} />;
 }`,
   },
 
@@ -63,7 +63,7 @@ import { styled } from './panda/jsx';
 
 function App(){
   const color = 'red.100';
-  return  <styled.div color={color} />;
+  return <styled.div color={color} />;
 }`,
   },
 ]

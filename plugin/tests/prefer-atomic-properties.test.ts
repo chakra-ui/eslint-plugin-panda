@@ -16,7 +16,7 @@ const styles = css({ rowGap: '4', columnGap: '4' })`,
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ backgroundColor: 'red.100' })} />;
+  return <div className={css({ backgroundColor: 'red.100' })} />;
 }`,
   },
 
@@ -25,7 +25,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  borderTopStyle: 'solid', borderTopWidth: '1px', borderTopColor: 'blue' }} />;
+  return <Circle _hover={{  borderTopStyle: 'solid', borderTopWidth: '1px', borderTopColor: 'blue' }} />;
 }`,
   },
 ]
@@ -43,7 +43,7 @@ const styles = css({ gap: '4' })`,
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ background: 'red.100' })} />;
+  return <div className={css({ background: 'red.100' })} />;
 }`,
   },
 
@@ -52,7 +52,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  borderTop: 'solid 1px blue' }} />;
+  return <Circle _hover={{  borderTop: 'solid 1px blue' }} />;
 }`,
   },
 ]

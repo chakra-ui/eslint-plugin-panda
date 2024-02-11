@@ -19,7 +19,7 @@ const styles = css({ color: '#FEE2E2' });
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ background: 'rgb(134, 239, 172)' })} />;
+  return <div className={css({ background: 'rgb(134, 239, 172)' })} />;
 };
 ```
 ```js
@@ -27,7 +27,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  borderColor: 'hsl(220deg, 14%, 96%)' }} />;
+  return <Circle _hover={{  borderColor: 'hsl(220deg, 14%, 96%)' }} />;
 }
 ```
 
@@ -42,7 +42,7 @@ const styles = css({ color: 'red.100' });
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ background: 'green.300' })} />;
+  return <div className={css({ background: 'green.300' })} />;
 };
 ```
 ```js
@@ -50,7 +50,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  borderColor: 'gray.100' }} />;
+  return <Circle _hover={{  borderColor: 'gray.100' }} />;
 }
 ```
 

@@ -21,7 +21,7 @@ import { token } from './panda/tokens';
   import { css } from './panda/css';
 
   function App(){
-    return  <div className={css({ bg: 'token(colors.red.300)' })} />;
+    return <div className={css({ bg: 'token(colors.red.300)' })} />;
   };
 ```
 ```js
@@ -29,7 +29,7 @@ import { token } from './panda/tokens';
 import { Circle } from './panda/jsx';
 
   function App(){
-    return  <Circle margin='[{sizes.4}]' />;
+    return <Circle margin='[{sizes.4}]' />;
   }
 ```
 
@@ -45,7 +45,7 @@ import { css } from './panda/css';
 import { token } from './panda/tokens';
 
 function App(){
-  return  <div style={{ color: token('colors.red.50') }} />;
+  return <div style={{ color: token('colors.red.50') }} />;
 };
 ```
 ```js
@@ -53,7 +53,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  border: 'solid 1px {colors.blue.400}' }} />;
+  return <Circle _hover={{  border: 'solid 1px {colors.blue.400}' }} />;
 }
 ```
 

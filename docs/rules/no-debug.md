@@ -14,26 +14,46 @@ Disallow the inclusion of the debug attribute when shipping code to the producti
 ```js
 import { css } from './panda/css';
 
-const styles = css({ bg: 'gray.900', debug: true });
+const styles = css({ marginLeft: '4', debug: true });
 ```
 ```js
 
 import { css } from './panda/css';
 
-const styles = css.raw({ color: 'gray.50', debug: true })
+function App(){
+  return <div className={css({ background: 'red.100', debug: true })} />;
+};
+```
+```js
+
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle _hover={{ position: 'absolute' }} debug />;
+}
 ```
 
 ✔️ Examples of **correct** code:
 ```js
 import { css } from './panda/css';
 
-const styles = css({ bg: 'gray.900' });
+const styles = css({ marginLeft: '4' });
 ```
 ```js
 
 import { css } from './panda/css';
 
-const styles = css.raw({ color: 'gray.50' })
+function App(){
+  return <div className={css({ background: 'red.100' })} />;
+};
+```
+```js
+
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle _hover={{ position: 'absolute' }} />;
+}
 ```
 
 ## Resources

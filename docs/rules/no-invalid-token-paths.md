@@ -23,7 +23,7 @@ import { css } from './panda/css';
 
 function App(){
   // \`4000\` is not a valid size token. Assuming we're using the default panda presets
-  return  <div className={css({ marginX: '{sizes.4000} 20px' })} />;
+  return <div className={css({ marginX: '{sizes.4000} 20px' })} />;
 };
 ```
 ```js
@@ -32,7 +32,7 @@ import { Circle } from './panda/jsx';
 
 function App(){
   // \`1\` does not exist in borderWidths, and \`grays\` is not a valid color token. Assuming we're using the default panda presets
-  return  <Circle _hover={{  border: 'solid {borderWidths.1} token(colors.grays.100, #F3F4F6)' }} />;
+  return <Circle _hover={{  border: 'solid {borderWidths.1} token(colors.grays.100, #F3F4F6)' }} />;
 };
 ```
 ```js
@@ -55,7 +55,7 @@ const styles = css({ bg: 'token(colors.red.300) 50%' });
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ marginX: '{sizes.4} 20px' })} />;
+  return <div className={css({ marginX: '{sizes.4} 20px' })} />;
 };
 ```
 ```js
@@ -63,7 +63,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  border: 'solid 1px token(colors.gray.100, #F3F4F6)' }} />;
+  return <Circle _hover={{  border: 'solid 1px token(colors.gray.100, #F3F4F6)' }} />;
 };
 ```
 ```js

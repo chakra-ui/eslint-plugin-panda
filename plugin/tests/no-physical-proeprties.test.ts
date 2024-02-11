@@ -16,7 +16,7 @@ const styles = css({ insetInlineStart: '0' })`,
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ marginInlineStart: '4' })} />;
+  return <div className={css({ marginInlineStart: '4' })} />;
 }`,
   },
 
@@ -25,7 +25,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  borderBlockEnd: 'solid 1px' }} />;
+  return <Circle _hover={{  borderBlockEnd: 'solid 1px' }} />;
 }`,
   },
 ]
@@ -43,7 +43,7 @@ const styles = css({ left: '0' })`,
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ marginLeft: '4' })} />;
+  return <div className={css({ marginLeft: '4' })} />;
 }`,
   },
 
@@ -52,7 +52,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{  borderBottom: 'solid 1px' }} />;
+  return <Circle _hover={{  borderBottom: 'solid 1px' }} />;
 }`,
   },
 ]

@@ -19,7 +19,7 @@ const styles = css({ marginLeft: '4px!' });
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ background: '#111 !important' })} />;
+  return <div className={css({ background: '#111 !important' })} />;
 };
 ```
 ```js
@@ -27,7 +27,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{ position: '[absolute!]' }} />;
+  return <Circle _hover={{ position: '[absolute!]' }} />;
 }
 ```
 
@@ -42,7 +42,7 @@ const styles = css({ marginLeft: '4' });
 import { css } from './panda/css';
 
 function App(){
-  return  <div className={css({ background: 'red.100' })} />;
+  return <div className={css({ background: 'red.100' })} />;
 };
 ```
 ```js
@@ -50,7 +50,7 @@ function App(){
 import { Circle } from './panda/jsx';
 
 function App(){
-  return  <Circle _hover={{ position: 'absolute' }} />;
+  return <Circle _hover={{ position: 'absolute' }} />;
 }
 ```
 

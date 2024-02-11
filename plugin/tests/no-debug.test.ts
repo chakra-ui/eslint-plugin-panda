@@ -8,14 +8,25 @@ const valids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ bg: 'gray.900' })`,
+const styles = css({ marginLeft: '4' })`,
   },
 
   {
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css.raw({ color: 'gray.50' })`,
+function App(){
+  return <div className={css({ background: 'red.100' })} />;
+}`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle _hover={{ position: 'absolute' }} />;
+}`,
   },
 ]
 
@@ -24,14 +35,25 @@ const invalids = [
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css({ bg: 'gray.900', debug: true })`,
+const styles = css({ marginLeft: '4', debug: true })`,
   },
 
   {
     code: javascript`
 import { css } from './panda/css';
 
-const styles = css.raw({ color: 'gray.50', debug: true })`,
+function App(){
+  return <div className={css({ background: 'red.100', debug: true })} />;
+}`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle _hover={{ position: 'absolute' }} debug />;
+}`,
   },
 ]
 
