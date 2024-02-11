@@ -88,8 +88,9 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 | [`@pandacss/no-important`](docs/rules/no-important.md)                                   |               |
 | [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md)               | ✔️            |
 | [`@pandacss/no-invalid-nesting`](docs/rules/no-invalid-nesting.md)                       | ✔️            |
-| [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md)                   | ✔️            |
+| [`@pandacss/no-margin-properties`](docs/rules/no-margin-properties.md)                   |               |
 | [`@pandacss/no-physical-properties`](docs/rules/no-physical-properties.md)               |               |
+| [`@pandacss/no-property-renaming`](docs/rules/no-property-renaming.md)                   | ✔️            |
 | [`@pandacss/no-unsafe-token-fn-usage`](docs/rules/no-unsafe-token-fn-usage.md)           |               |
 | [`@pandacss/prefer-longhand-properties`](docs/rules/prefer-longhand-properties.md)       |               |
 | [`@pandacss/prefer-shorthand-properties`](docs/rules/prefer-shorthand-properties.md)     |               |
