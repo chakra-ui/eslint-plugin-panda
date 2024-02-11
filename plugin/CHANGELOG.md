@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.17
+
+### Patch Changes
+
+- db8ac8e: Update recommended config
+
 ## 0.0.16
 
 ### Patch Changes
