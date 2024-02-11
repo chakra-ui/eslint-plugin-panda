@@ -2,6 +2,7 @@ import { isPandaAttribute, isPandaProp, isValidProperty, resolveLonghand } from 
 import { type Rule, createRule } from '../utils'
 import { compositeProperties } from '../utils/composite-properties'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
+import type { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'prefer-atomic-properties'
 
@@ -26,8 +27,9 @@ const rule: Rule = createRule({
       if (isValidProperty(longhand, context) && Object.hasOwn(compositeProperties, longhand)) return longhand
     }
 
-    const sendReport = (node: any, name: string) => {
-      const cmp = resolveCompositeProperty(name)!
+    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
+      const cmp = resolveCompositeProperty(node.name)
+      if (!cmp) return
 
       const atomics = compositeProperties[cmp].map((name) => `\`${name}\``).join(',\n')
 
@@ -35,7 +37,7 @@ const rule: Rule = createRule({
         node,
         messageId: 'atomic',
         data: {
-          composite: name,
+          composite: node.name,
           atomics,
         },
       })
@@ -46,20 +48,14 @@ const rule: Rule = createRule({
         if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
 
-        const cmp = resolveCompositeProperty(node.name.name)
-        if (!cmp) return
-
-        sendReport(node, node.name.name)
+        sendReport(node.name)
       },
 
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
 
-        const cmp = resolveCompositeProperty(node.key.name)
-        if (!cmp) return
-
-        sendReport(node.key, node.key.name)
+        sendReport(node.key)
       },
     }
   },

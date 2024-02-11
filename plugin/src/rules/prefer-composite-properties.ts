@@ -2,6 +2,7 @@ import { isPandaAttribute, isPandaProp, isValidProperty, resolveLonghand } from 
 import { type Rule, createRule } from '../utils'
 import { compositeProperties } from '../utils/composite-properties'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
+import type { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'prefer-composite-properties'
 
@@ -26,15 +27,16 @@ const rule: Rule = createRule({
       return Object.keys(compositeProperties).find((cpd) => compositeProperties[cpd].includes(longhand))
     }
 
-    const sendReport = (node: any, name: string) => {
-      const cmp = resolveCompositeProperty(name)!
+    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
+      const cmp = resolveCompositeProperty(node.name)
+      if (!cmp) return
 
       return context.report({
         node,
         messageId: 'composite',
         data: {
           composite: cmp,
-          atomic: name,
+          atomic: node.name,
         },
       })
     }
@@ -44,20 +46,14 @@ const rule: Rule = createRule({
         if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
 
-        const atm = resolveCompositeProperty(node.name.name)
-        if (!atm) return
-
-        sendReport(node, node.name.name)
+        sendReport(node.name)
       },
 
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
 
-        const atm = resolveCompositeProperty(node.key.name)
-        if (!atm) return
-
-        sendReport(node.key, node.key.name)
+        sendReport(node.key)
       },
     }
   },

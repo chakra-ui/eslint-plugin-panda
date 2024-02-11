@@ -7,6 +7,7 @@ import noHardCodedColor, { RULE_NAME as NoHardCodedColor } from './no-hardcoded-
 import noImportant, { RULE_NAME as NoImportant } from './no-important'
 import noInvalidNesting, { RULE_NAME as NoInvalidNesting } from './no-invalid-nesting'
 import noInvalidTokenPaths, { RULE_NAME as NoInvalidTokenPaths } from './no-invalid-token-paths'
+import noMarginProperties, { RULE_NAME as NoMarginProperties } from './no-margin-properties'
 import noPhysicalProperties, { RULE_NAME as NoPhysicalProperties } from './no-physical-properties'
 import noPropertyRenaming, { RULE_NAME as NoPropertyRenaming } from './no-property-renaming'
 import noUnsafeTokenUsage, { RULE_NAME as NoUnsafeTokenUsage } from './no-unsafe-token-fn-usage'
@@ -26,8 +27,9 @@ export const rules = {
   [NoImportant]: noImportant,
   [NoInvalidTokenPaths]: noInvalidTokenPaths,
   [NoInvalidNesting]: noInvalidNesting,
-  [NoPropertyRenaming]: noPropertyRenaming,
+  [NoMarginProperties]: noMarginProperties,
   [NoPhysicalProperties]: noPhysicalProperties,
+  [NoPropertyRenaming]: noPropertyRenaming,
   [NoUnsafeTokenUsage]: noUnsafeTokenUsage,
   [PreferLonghandProperties]: preferLonghandProperties,
   [PreferShorthandProperties]: preferShorthandProperties,

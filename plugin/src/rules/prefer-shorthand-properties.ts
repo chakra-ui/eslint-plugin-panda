@@ -1,6 +1,7 @@
 import { isPandaAttribute, isPandaProp, resolveLonghand, resolveShorthands } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
+import type { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'prefer-shorthand-properties'
 
@@ -21,14 +22,17 @@ const rule: Rule = createRule({
   },
   defaultOptions: [],
   create(context) {
-    const sendReport = (node: any, name: string) => {
-      const shorthands = resolveShorthands(name, context)
+    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
+      const longhand = resolveLonghand(node.name, context)
+      if (longhand) return
+
+      const shorthands = resolveShorthands(node.name, context)
       if (!shorthands) return
 
       const shorthand = shorthands.map((s) => `\`${s}\``)?.join(', ')
 
       const data = {
-        longhand: name,
+        longhand: node.name,
         shorthand,
       }
 
@@ -53,20 +57,14 @@ const rule: Rule = createRule({
         if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context)) return
 
-        const longhand = resolveLonghand(node.name.name, context)
-        if (longhand) return
-
-        sendReport(node.name, node.name.name)
+        sendReport(node.name)
       },
 
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
 
-        const longhand = resolveLonghand(node.key.name, context)
-        if (longhand) return
-
-        sendReport(node.key, node.key.name)
+        sendReport(node.key)
       },
     }
   },

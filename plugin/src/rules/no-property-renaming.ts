@@ -1,3 +1,4 @@
+import type { TSESTree } from '@typescript-eslint/utils'
 import { type Rule, createRule } from '../utils'
 import { isPandaAttribute, isPandaProp } from '../utils/helpers'
 import { isIdentifier, isJSXExpressionContainer, isMemberExpression } from '../utils/nodes'
@@ -30,6 +31,16 @@ const rule: Rule = createRule({
       })
     }
 
+    const handleReport = (node: TSESTree.Node, value: any, attr: string) => {
+      if (isIdentifier(value) && attr !== value.name) {
+        return sendReport(node, attr, value.name)
+      }
+
+      if (isMemberExpression(value) && isIdentifier(value.property) && attr !== value.property.name) {
+        return sendReport(node, attr, value.property.name)
+      }
+    }
+
     return {
       JSXAttribute(node) {
         if (!node.value) return
@@ -39,13 +50,7 @@ const rule: Rule = createRule({
         const attr = node.name.name.toString()
         const expression = node.value.expression
 
-        if (isIdentifier(expression) && attr !== expression.name) {
-          return sendReport(node, attr, expression.name)
-        }
-
-        if (isMemberExpression(expression) && isIdentifier(expression.property) && attr !== expression.property.name) {
-          return sendReport(node, attr, expression.property.name)
-        }
+        handleReport(node, expression, attr)
       },
 
       Property(node) {
@@ -56,13 +61,7 @@ const rule: Rule = createRule({
         const attr = node.key.name.toString()
         const value = node.value
 
-        if (isIdentifier(value) && attr !== value.name) {
-          return sendReport(node, attr, value.name)
-        }
-
-        if (isMemberExpression(value) && isIdentifier(value.property) && attr !== value.property.name) {
-          return sendReport(node, attr, value.property.name)
-        }
+        handleReport(node, value, attr)
       },
     }
   },
