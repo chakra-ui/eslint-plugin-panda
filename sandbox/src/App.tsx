@@ -6,8 +6,6 @@ import { Circle, HStack, panda } from '../styled-system/jsx'
 import { stack } from '../styled-system/patterns'
 import { token } from '../styled-system/tokens'
 
-const css = String.raw
-
 const keyframes = defineKeyframes({
   fadeIn: {
     '0%': { opacity: '0' },
@@ -15,6 +13,7 @@ const keyframes = defineKeyframes({
   },
 })
 
+//@ts-expect-error noidea
 const literal = css`
   margin-right: {sizess.4};
   padding-left: {sizess.4};
