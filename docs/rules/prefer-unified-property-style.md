@@ -14,15 +14,13 @@ Discourage against mixing atomic and composite forms of the same property in a s
 ```js
 import { css } from './panda/css';
 
-const color = 'red.100';
-const styles = css({ borderRadius:"lg", borderTopRightRadius: "0" });
+const styles = css({ margin:"2", marginLeft: "5" });
 ```
 ```js
 
 import { Circle } from './panda/jsx';
 
 function App(){
-  const bool = true;
   return <Circle border="solid 1px" borderColor="gray.800" />;
 }
 ```
@@ -31,14 +29,14 @@ function App(){
 ```js
 import { css } from './panda/css';
 
-const styles = css({ borderColor: 'gray.900', borderWidth: '1px' });
+const styles = css({ marginTop: "2", marginRight: "2", marginBottom: "2", marginLeft: "5" });
 ```
 ```js
 
 import { Circle } from './panda/jsx';
 
 function App(){
-  return <Circle marginTop="2" marginRight="3" />;
+  return <Circle borderStyle="solid" borderColor="gray.900" borderWidth="1px" />;
 }
 ```
 

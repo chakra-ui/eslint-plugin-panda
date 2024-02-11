@@ -10,6 +10,6 @@ export default {
     '@pandacss/no-invalid-nesting': 'error',
     '@pandacss/no-invalid-token-paths': 'error',
     '@pandacss/no-property-renaming': 'warn',
-    '@pandacss/prefer-unified-property-style': 'warn',
+    '@pandacss/no-unsafe-token-fn-usage': 'warn',
   },
 }
