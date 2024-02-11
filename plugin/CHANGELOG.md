@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.16
+
+### Patch Changes
+
+- 6c2004d: Add `no-margin-properties` rule
+
 ## 0.0.15
 
 ### Patch Changes
