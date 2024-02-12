@@ -6,8 +6,6 @@ Discourage against mixing atomic and composite forms of the same property in a s
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
-📋 This rule is enabled in `plugin:@pandacss/recommended`.
-
 ## Rule details
 
 ❌ Examples of **incorrect** code:

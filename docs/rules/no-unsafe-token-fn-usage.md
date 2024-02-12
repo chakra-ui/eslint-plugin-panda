@@ -6,6 +6,8 @@ Prevent users from using the token function in situations where they could simpl
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
+📋 This rule is enabled in `plugin:@pandacss/recommended`.
+
 ## Rule details
 
 ❌ Examples of **incorrect** code:
