@@ -48,7 +48,7 @@
       "pnpm prettier-fix"
     ]
   },
-  "packageManager": "pnpm@8.15.1",
+  "packageManager": "pnpm@8.15.3",
   "pnpm": {
     "patchedDependencies": {
       "eslint-docgen@0.7.1": "patches/eslint-docgen@0.7.1.patch"
