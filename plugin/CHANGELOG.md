@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.19
+
+### Patch Changes
+
+- 22cc4ac: Add `noOpacity` option to `no-hardcoded-color` rule
+
 ## 0.0.18
 
 ### Patch Changes
