@@ -41,6 +41,12 @@ const styles = css({ color: 'red.100' });
 
 import { css } from './panda/css';
 
+const styles = css({ color: 'red.100/30' });
+```
+```js
+
+import { css } from './panda/css';
+
 function App(){
   return <div className={css({ background: 'green.300' })} />;
 };

@@ -24,6 +24,12 @@ const rule: Rule = createRule({
       return tokens.length > 0
     }
 
+    const testColorToken = (value?: string) => {
+      if (!value) return false
+      const color = value?.split('/')
+      return isColorToken(color[0], context)
+    }
+
     return {
       JSXAttribute(node) {
         if (!isJSXIdentifier(node.name)) return
@@ -33,7 +39,7 @@ const rule: Rule = createRule({
           isLiteral(node.value) &&
           isColorAttribute(node.name.name, context) &&
           !isTokenFn(node.value.value?.toString()) &&
-          !isColorToken(node.value.value?.toString(), context)
+          !testColorToken(node.value.value?.toString())
         ) {
           context.report({
             node: node.value,
@@ -50,7 +56,7 @@ const rule: Rule = createRule({
           isLiteral(node.value.expression) &&
           isColorAttribute(node.name.name, context) &&
           !isTokenFn(node.value.expression.value?.toString()) &&
-          !isColorToken(node.value.expression.value?.toString(), context)
+          !testColorToken(node.value.expression.value?.toString())
         ) {
           context.report({
             node: node.value.expression,
@@ -69,7 +75,7 @@ const rule: Rule = createRule({
         if (!isPandaAttribute(node, context)) return
         if (!isColorAttribute(node.key.name, context)) return
         if (isTokenFn(node.value.value?.toString())) return
-        if (isColorToken(node.value.value?.toString(), context)) return
+        if (testColorToken(node.value.value?.toString())) return
 
         context.report({
           node: node.value,

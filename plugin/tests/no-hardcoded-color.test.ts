@@ -3,14 +3,18 @@ import rule, { RULE_NAME } from '../src/rules/no-hardcoded-color'
 
 const javascript = String.raw
 
-// TODO Watch out for color opacity in the future
-
 const valids = [
   {
     code: javascript`
 import { css } from './panda/css';
 
 const styles = css({ color: 'red.100' })`,
+  },
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ color: 'red.100/30' })`,
   },
 
   {

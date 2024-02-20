@@ -53,6 +53,7 @@ function App() {
         textAlign: ta,
         justify: justify,
         _hover: {
+          color: 'green.300/40',
           backgroundColor: 'green.300',
         },
       })}
