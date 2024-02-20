@@ -17,6 +17,6 @@ module.exports = {
     //* Panda rules overrides
     '@pandacss/no-debug': 'off',
     '@pandacss/no-margin-properties': 'warn',
-    '@pandacss/no-hardcoded-color': 'error',
+    '@pandacss/no-hardcoded-color': ['error', { noOpacity: true }],
   },
 }

@@ -60,6 +60,13 @@ function App(){
 }
 ```
 
+❌ Examples of **incorrect** code with `[{"noOpacity":true}]` options:
+```js
+import { css } from './panda/css';
+
+const styles = css({ color: 'red.100/30' });
+```
+
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-hardcoded-color.ts)

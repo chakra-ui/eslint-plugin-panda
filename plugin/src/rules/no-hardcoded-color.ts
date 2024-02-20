@@ -14,10 +14,25 @@ const rule: Rule = createRule({
       invalidColor: '`{{color}}` is not a valid color token.',
     },
     type: 'suggestion',
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          noOpacity: {
+            type: 'boolean',
+          },
+        },
+      },
+    ],
   },
-  defaultOptions: [],
+  defaultOptions: [
+    {
+      noOpacity: false,
+    },
+  ],
   create(context) {
+    const noOpacity = context.options[0]?.noOpacity
+
     const isTokenFn = (value?: string) => {
       if (!value) return false
       const tokens = extractTokens(value)
@@ -27,7 +42,9 @@ const rule: Rule = createRule({
     const testColorToken = (value?: string) => {
       if (!value) return false
       const color = value?.split('/')
-      return isColorToken(color[0], context)
+      const isOpacityToken = !!color[1]?.length
+      const isValidToken = isColorToken(color[0], context)
+      return noOpacity ? isValidToken && !isOpacityToken : isValidToken
     }
 
     return {

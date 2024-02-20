@@ -10,6 +10,7 @@ import { css } from './panda/css';
 
 const styles = css({ color: 'red.100' })`,
   },
+
   {
     code: javascript`
 import { css } from './panda/css';
@@ -45,6 +46,14 @@ const styles = css({ color: '#FEE2E2' })`,
   },
 
   {
+    options: [{ noOpacity: true }],
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ color: 'red.100/30' })`,
+  },
+
+  {
     code: javascript`
 import { css } from './panda/css';
 
@@ -67,8 +76,13 @@ tester.run(RULE_NAME, rule, {
   valid: valids.map(({ code }) => ({
     code,
   })),
-  invalid: invalids.map(({ code }) => ({
-    code,
-    errors: 1,
-  })),
+  invalid: invalids.map(({ code, options }) =>
+    options
+      ? {
+          code,
+          options,
+          errors: 1,
+        }
+      : { code, errors: 1 },
+  ),
 })
