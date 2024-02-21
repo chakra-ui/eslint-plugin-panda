@@ -85,7 +85,7 @@ or `all` it is indicated below.
 | [`@pandacss/no-debug`](docs/rules/no-debug.md)                                           | ✔️            |
 | [`@pandacss/no-dynamic-styling`](docs/rules/no-dynamic-styling.md)                       | ✔️            |
 | [`@pandacss/no-escape-hatch`](docs/rules/no-escape-hatch.md)                             |               |
-| [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md) ⚙️                    |               |
+| [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md) ⚙️                    | ✔️            |
 | [`@pandacss/no-important`](docs/rules/no-important.md)                                   |               |
 | [`@pandacss/no-invalid-token-paths`](docs/rules/no-invalid-token-paths.md)               | ✔️            |
 | [`@pandacss/no-invalid-nesting`](docs/rules/no-invalid-nesting.md)                       | ✔️            |

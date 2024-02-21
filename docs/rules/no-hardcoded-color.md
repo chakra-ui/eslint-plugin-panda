@@ -6,6 +6,8 @@ Enforce the exclusive use of design tokens as values for colors within the codeb
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
+📋 This rule is enabled in `plugin:@pandacss/recommended`.
+
 ## Rule details
 
 ❌ Examples of **incorrect** code:
