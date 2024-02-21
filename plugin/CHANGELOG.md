@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.0.20
+
+### Patch Changes
+
+- 2a61cf6: Add `no-hardcoded-color` rule to recommended config
+
 ## 0.0.19
 
 ### Patch Changes
