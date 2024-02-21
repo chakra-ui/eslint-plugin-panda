@@ -75,8 +75,9 @@ Or enable all rules in extends:
 
 ## Rules
 
-Rules with ⚙️ have options. Click on the rule to see the options. Where rules are included in the configs `recommended`,
-or `all` it is indicated below.
+Rules with ⚙️ have options. Click on the rule to see the options.
+
+Where rules are included in the configs `recommended`, or `all` it is indicated below.
 
 | Rule                                                                                     | `recommended` |
 | ---------------------------------------------------------------------------------------- | ------------- |
