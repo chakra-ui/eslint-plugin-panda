@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.0
+
+### Minor Changes
+
+- 8be6eef: First Minor Release
+
 ## 0.0.20
 
 ### Patch Changes
