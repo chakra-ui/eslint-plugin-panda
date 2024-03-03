@@ -3,6 +3,7 @@ import noConfigunctionInSource, { RULE_NAME as NoConfigunctionInSource } from '.
 import noDebug, { RULE_NAME as NoDebug } from './no-debug'
 import noDynamicStyling, { RULE_NAME as NoDynamicStyling } from './no-dynamic-styling'
 import noEscapeHatch, { RULE_NAME as NoEscapeHatch } from './no-escape-hatch'
+import noExtendKeyword, { RULE_NAME as NoExtendKeyword } from './no-extend-keyword'
 import noHardCodedColor, { RULE_NAME as NoHardCodedColor } from './no-hardcoded-color'
 import noImportant, { RULE_NAME as NoImportant } from './no-important'
 import noInvalidNesting, { RULE_NAME as NoInvalidNesting } from './no-invalid-nesting'
@@ -23,6 +24,7 @@ export const rules = {
   [NoDebug]: noDebug,
   [NoDynamicStyling]: noDynamicStyling,
   [NoEscapeHatch]: noEscapeHatch,
+  [NoExtendKeyword]: noExtendKeyword,
   [NoHardCodedColor]: noHardCodedColor,
   [NoImportant]: noImportant,
   [NoInvalidTokenPaths]: noInvalidTokenPaths,

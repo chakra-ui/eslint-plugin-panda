@@ -8,6 +8,7 @@ export default {
     '@pandacss/no-debug': 'warn',
     '@pandacss/no-dynamic-styling': 'warn',
     '@pandacss/no-hardcoded-color': 'warn',
+    '@pandacss/no-extend-keyword': 'warn',
     '@pandacss/no-invalid-nesting': 'error',
     '@pandacss/no-invalid-token-paths': 'error',
     '@pandacss/no-property-renaming': 'warn',
