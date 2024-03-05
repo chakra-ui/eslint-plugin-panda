@@ -145,20 +145,17 @@ export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<an
 
   if (!jsxAncestor) return
 
-  if (
-    isJSXMemberExpression(jsxAncestor.name) &&
-    isJSXIdentifier(jsxAncestor.name.object) &&
-    isPandaIsh(jsxAncestor.name.object.name, context)
-  )
-    return true
-  else if (!isJSXIdentifier(jsxAncestor.name)) return
+  // <styled.div /> && <Box />
+  if (!isJSXMemberExpression(jsxAncestor.name) && !isJSXIdentifier(jsxAncestor.name)) return
+
+  const name = isJSXMemberExpression(jsxAncestor.name) ? (jsxAncestor.name.object as any).name : jsxAncestor.name.name
+  const prop = node.name.name
 
   // Ensure component is a panda component
-  if (!isPandaIsh(jsxAncestor.name.name, context) && !isLocalStyledFactory(jsxAncestor, context)) return
+  if (!isPandaIsh(name, context) && !isLocalStyledFactory(jsxAncestor, context)) return
 
   // Ensure prop is a styled prop
-  const prop = node.name.name
-  if (typeof prop !== 'string' || !isValidProperty(prop, context, jsxAncestor.name.name)) return
+  if (typeof prop !== 'string' || !isValidProperty(prop, context, name)) return
 
   return true
 }
