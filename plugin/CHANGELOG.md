@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.1
+
+### Patch Changes
+
+- 28b3dfc: Fix checking non styled props in panda dotted components. i.e. `<styled.xxx />`
+
 ## 0.1.0
 
 ### Minor Changes
