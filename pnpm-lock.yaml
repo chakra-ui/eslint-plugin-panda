@@ -52,7 +52,7 @@ importers:
         version: 0.7.1(patch_hash=p77twjqsfvxgexanaxs5fam73u)
       eslint-plugin-eslint-plugin:
         specifier: ^5.2.1
-        version: 5.2.1(eslint@8.57.0)
+        version: 5.5.1(eslint@8.57.0)
       husky:
         specifier: ^9.0.6
         version: 9.0.11
@@ -3041,8 +3041,8 @@ packages:
     dev: true
     patched: true
 
-  /eslint-plugin-eslint-plugin@5.2.1(eslint@8.57.0):
-    resolution: {integrity: sha512-W+WergGahmRTz5yhw/+6TVqlXZkxucK0rM6KWRjona3MYx8+QJ+9KpXn3sYi1lgLduitfmT8YiAmO4RPC/mxEQ==}
+  /eslint-plugin-eslint-plugin@5.5.1(eslint@8.57.0):
+    resolution: {integrity: sha512-9AmfZzcQ7QHwpzfAQpZ7xdtwHYViylmlnruCH0aV64/tuoH3igGXg91vr0e6ShLf/mrAYGqLw5LZ/gOxJeRXnw==}
     engines: {node: ^14.17.0 || ^16.0.0 || >= 18.0.0}
     peerDependencies:
       eslint: '>=7.0.0'
