@@ -98,6 +98,7 @@ const isValidStyledProp = <T extends Node | string>(node: T, context: RuleContex
 
 export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   const imports = getImports(context)
+  if (imports.length === 0) return false
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 

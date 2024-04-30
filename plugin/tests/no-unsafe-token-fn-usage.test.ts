@@ -29,6 +29,12 @@ function App(){
   return <Circle _hover={{  border: 'solid 1px {colors.blue.400}' }} />;
 }`,
   },
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ '--my-var': '{spacing.8}' })`,
+  },
 ]
 
 const invalids = [
