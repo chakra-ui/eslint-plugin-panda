@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.2
+
+### Patch Changes
+
+- 86d8aab: Ignore `no-unsafe-token-fn-usage` rule in css variables
+
 ## 0.1.1
 
 ### Patch Changes
