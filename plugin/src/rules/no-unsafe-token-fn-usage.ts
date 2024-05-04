@@ -107,8 +107,6 @@ const rule: Rule = createRule({
       },
 
       Property(node) {
-        // Ignore css variables
-        if (isLiteral(node.key) && node.key.value?.toString().startsWith('--')) return
         if (!isCallExpression(node.value) && !isLiteral(node.value) && !isTemplateLiteral(node.value)) return
         if (!isPandaAttribute(node, context)) return
 

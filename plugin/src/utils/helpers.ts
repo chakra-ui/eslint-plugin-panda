@@ -47,6 +47,7 @@ export const getImportSpecifiers = (context: RuleContext<any, any>) => {
 
     node.specifiers.forEach((specifier) => {
       if (!isImportSpecifier(specifier)) return
+
       specifiers.push({ specifier, mod })
     })
   })
@@ -54,33 +55,24 @@ export const getImportSpecifiers = (context: RuleContext<any, any>) => {
   return specifiers
 }
 
+export const hasPkgImport = (context: RuleContext<any, any>) => {
+  const imports = _getImports(context)
+  return imports.some(({ mod }) => mod === '@pandacss/dev')
+}
+
+export const isPandaConfigFunction = (context: RuleContext<any, any>, name: string) => {
+  const imports = _getImports(context)
+  return imports.some(({ alias, mod }) => alias === name && mod === '@pandacss/dev')
+}
+
 const _getImports = (context: RuleContext<any, any>) => {
   const specifiers = getImportSpecifiers(context)
-  specifiers.map(({ specifier, mod }) => ({
+
+  const imports: ImportResult[] = specifiers.map(({ specifier, mod }) => ({
     name: specifier.imported.name,
     alias: specifier.local.name,
     mod,
   }))
-
-  const imports: ImportResult[] = []
-
-  context.sourceCode.ast.body.forEach((node) => {
-    if (!isImportDeclaration(node)) return
-
-    const mod = node.source.value
-    if (!mod) return
-
-    node.specifiers.forEach((specifier) => {
-      if (!isImportSpecifier(specifier)) return
-
-      const name = specifier.imported.name
-      const alias = specifier.local.name
-
-      const result = { name, alias, mod }
-
-      imports.push(result)
-    })
-  })
 
   return imports
 }

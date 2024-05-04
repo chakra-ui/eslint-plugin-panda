@@ -1,6 +1,6 @@
 import { isIdentifier, isVariableDeclaration } from '../utils/nodes'
 import { type Rule, createRule } from '../utils'
-import { getAncestor, getImportSpecifiers, isValidFile } from '../utils/helpers'
+import { getAncestor, getImportSpecifiers, hasPkgImport, isPandaConfigFunction, isValidFile } from '../utils/helpers'
 
 export const RULE_NAME = 'no-config-function-in-source'
 
@@ -20,11 +20,14 @@ const rule: Rule = createRule({
   },
   defaultOptions: [],
   create(context) {
+    if (!hasPkgImport(context)) return {}
+
     return {
       CallExpression(node) {
         if (!isValidFile(context)) return
         if (!isIdentifier(node.callee)) return
         if (!CONFIG_FUNCTIONS.includes(node.callee.name)) return
+        if (!isPandaConfigFunction(context, node.callee.name)) return
 
         context.report({
           node,
