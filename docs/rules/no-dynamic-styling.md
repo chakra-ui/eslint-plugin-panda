@@ -70,4 +70,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-dynamic-styling.ts)
-* [Test source](/tests/no-dynamic-styling.test.ts)
+* [Test source](/plugin/tests/no-dynamic-styling.test.ts)

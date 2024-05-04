@@ -41,4 +41,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/prefer-unified-property-style.ts)
-* [Test source](/tests/prefer-unified-property-style.test.ts)
+* [Test source](/plugin/tests/prefer-unified-property-style.test.ts)

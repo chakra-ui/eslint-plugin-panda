@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/prefer-shorthand-properties.ts)
-* [Test source](/tests/prefer-shorthand-properties.test.ts)
+* [Test source](/plugin/tests/prefer-shorthand-properties.test.ts)

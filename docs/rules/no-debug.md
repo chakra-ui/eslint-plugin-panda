@@ -59,4 +59,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-debug.ts)
-* [Test source](/tests/no-debug.test.ts)
+* [Test source](/plugin/tests/no-debug.test.ts)

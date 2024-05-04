@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/prefer-composite-properties.ts)
-* [Test source](/tests/prefer-composite-properties.test.ts)
+* [Test source](/plugin/tests/prefer-composite-properties.test.ts)

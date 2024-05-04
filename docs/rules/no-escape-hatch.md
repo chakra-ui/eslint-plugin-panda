@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-escape-hatch.ts)
-* [Test source](/tests/no-escape-hatch.test.ts)
+* [Test source](/plugin/tests/no-escape-hatch.test.ts)

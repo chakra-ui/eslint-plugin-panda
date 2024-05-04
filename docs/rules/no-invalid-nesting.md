@@ -87,4 +87,4 @@ function App() {
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-invalid-nesting.ts)
-* [Test source](/tests/no-invalid-nesting.test.ts)
+* [Test source](/plugin/tests/no-invalid-nesting.test.ts)

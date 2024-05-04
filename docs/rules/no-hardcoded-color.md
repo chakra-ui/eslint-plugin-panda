@@ -72,4 +72,4 @@ const styles = css({ color: 'red.100/30' });
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-hardcoded-color.ts)
-* [Test source](/tests/no-hardcoded-color.test.ts)
+* [Test source](/plugin/tests/no-hardcoded-color.test.ts)

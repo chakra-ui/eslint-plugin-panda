@@ -73,4 +73,4 @@ function CustomCircle(props){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-property-renaming.ts)
-* [Test source](/tests/no-property-renaming.test.ts)
+* [Test source](/plugin/tests/no-property-renaming.test.ts)

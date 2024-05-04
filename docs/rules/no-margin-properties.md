@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-margin-properties.ts)
-* [Test source](/tests/no-margin-properties.test.ts)
+* [Test source](/plugin/tests/no-margin-properties.test.ts)

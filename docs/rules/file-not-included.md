@@ -29,4 +29,4 @@ import { Circle } from './panda/jsx';
 ## Resources
 
 * [Rule source](/plugin/src/rules/file-not-included.ts)
-* [Test source](/tests/file-not-included.test.ts)
+* [Test source](/plugin/tests/file-not-included.test.ts)

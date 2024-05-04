@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-physical-properties.ts)
-* [Test source](/tests/no-physical-properties.test.ts)
+* [Test source](/plugin/tests/no-physical-properties.test.ts)

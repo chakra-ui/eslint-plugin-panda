@@ -62,4 +62,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-unsafe-token-fn-usage.ts)
-* [Test source](/tests/no-unsafe-token-fn-usage.test.ts)
+* [Test source](/plugin/tests/no-unsafe-token-fn-usage.test.ts)
