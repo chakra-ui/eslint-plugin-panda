@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.4
+
+### Patch Changes
+
+- e3d07b6: Fix tokens resolving
+
 ## 0.1.3
 
 ### Patch Changes
