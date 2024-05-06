@@ -75,6 +75,7 @@ const rule: Rule = createRule({
 
     const sendReport = (node: any, value: string) => {
       const tkImports = extractTokens(value)
+      if (!tkImports.length) return
       const token = tkImports[0].replace(/^[^.]*\./, '')
 
       return context.report({
