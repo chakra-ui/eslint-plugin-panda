@@ -1,11 +1,17 @@
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
+import eslintPlugin from 'eslint-plugin-eslint-plugin'
 import globals from 'globals'
 
 export default tseslint.config({
   files: ['**/*.ts', '**/*.tsx'],
   ignores: ['**/*.d.ts'],
-  extends: [eslint.configs.recommended, ...tseslint.configs.recommended, ...tseslint.configs.stylistic],
+  extends: [
+    eslint.configs.recommended,
+    eslintPlugin.configs['flat/recommended'],
+    ...tseslint.configs.recommended,
+    ...tseslint.configs.stylistic,
+  ],
   languageOptions: {
     globals: {
       ...globals.browser,
@@ -51,7 +57,4 @@ export default tseslint.config({
     '@typescript-eslint/prefer-for-of': 'off',
     '@typescript-eslint/prefer-function-type': 'off',
   },
-  //  "extends": [
-  //    "plugin:eslint-plugin/recommended"
-  //  ],
 })
