@@ -31,11 +31,11 @@
   },
   "devDependencies": {
     "@pandacss/dev": "^0.31.0",
-    "@types/eslint": "^8.56.2",
+    "@types/eslint": "^8.56.10",
     "@types/node": "^20.11.5",
     "@typescript-eslint/eslint-plugin": "^6.19.1",
     "@typescript-eslint/parser": "^6.19.1",
-    "eslint": "^8.56.0",
+    "eslint": "^9.2.0",
     "eslint-docgen": "^0.7.1",
     "eslint-plugin-eslint-plugin": "^5.2.1",
     "husky": "^9.0.6",
