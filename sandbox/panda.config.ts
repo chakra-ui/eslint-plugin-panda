@@ -8,80 +8,94 @@ export default defineConfig({
   jsxFactory: 'panda',
   jsxFramework: 'react',
   theme: {
-    semanticTokens: {
-      colors: {
-        text: { value: { base: '{colors.gray.600}', _osDark: '{colors.gray.400}' } },
+    extend: {
+      tokens: {
+        colors: {
+          red: {
+            400: {
+              value: '#ff0000',
+              description: 'red color',
+              deprecated: true,
+            },
+          },
+        },
       },
-    },
-    recipes: {
-      button: {
-        className: 'button',
-        jsx: ['Button', 'ListedButton', /WithRegex$/, 'PrimaryButtonLike'],
-        description: 'A button styles',
-        base: {
-          fontSize: 'lg',
+      semanticTokens: {
+        colors: {
+          text: { value: { base: '{colors.gray.600}', _osDark: '{colors.gray.400}' } },
+          bg: { value: { base: '{colors.gray.600}', _osDark: '{colors.gray.400}' } },
         },
-        variants: {
-          size: {
-            sm: {
-              padding: '2',
-              borderRadius: 'sm',
+      },
+      recipes: {
+        button: {
+          className: 'button',
+          jsx: ['Button', 'ListedButton', /WithRegex$/, 'PrimaryButtonLike'],
+          description: 'A button styles',
+          base: {
+            fontSize: 'lg',
+          },
+          variants: {
+            size: {
+              sm: {
+                padding: '2',
+                borderRadius: 'sm',
+              },
+              md: {
+                padding: '4',
+                borderRadius: 'md',
+              },
             },
-            md: {
-              padding: '4',
-              borderRadius: 'md',
+            variant: {
+              primary: {
+                color: 'white',
+                backgroundColor: 'blue.500',
+              },
+              danger: {
+                color: 'white',
+                backgroundColor: 'red.500',
+              },
+              secondary: {
+                color: 'pink.300',
+                backgroundColor: 'green.500',
+              },
+              purple: {
+                color: 'amber.300',
+                backgroundColor: 'purple.500',
+              },
+            },
+            state: {
+              focused: {
+                color: 'green',
+              },
+              hovered: {
+                color: 'pink.400',
+              },
+            },
+            rounded: {
+              true: {
+                borderRadius: 'md',
+              },
             },
           },
-          variant: {
-            primary: {
-              color: 'white',
-              backgroundColor: 'blue.500',
+          compoundVariants: [
+            {
+              size: 'sm',
+              variant: 'primary',
+              css: {
+                fontSize: '12px',
+              },
             },
-            danger: {
-              color: 'white',
-              backgroundColor: 'red.500',
+            {
+              variant: ['primary', 'danger'],
+              state: 'focused',
+              css: {
+                padding: 4,
+                fontWeight: 'bold',
+                fontSize: '24px',
+              },
             },
-            secondary: {
-              color: 'pink.300',
-              backgroundColor: 'green.500',
-            },
-            purple: {
-              color: 'amber.300',
-              backgroundColor: 'purple.500',
-            },
-          },
-          state: {
-            focused: {
-              color: 'green',
-            },
-            hovered: {
-              color: 'pink.400',
-            },
-          },
-          rounded: {
-            true: {
-              borderRadius: 'md',
-            },
-          },
+          ],
         },
-        compoundVariants: [
-          {
-            size: 'sm',
-            variant: 'primary',
-            css: {
-              fontSize: '12px',
-            },
-          },
-          {
-            variant: ['primary', 'danger'],
-            state: 'focused',
-            css: {
-              padding: 4,
-              fontWeight: 'bold',
-              fontSize: '24px',
-            },
-          },
-        ],
       },
     },
   },

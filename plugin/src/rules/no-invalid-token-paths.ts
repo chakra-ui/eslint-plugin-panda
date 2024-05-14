@@ -1,16 +1,8 @@
-import { getInvalidTokens, isPandaAttribute, isPandaIsh, isPandaProp } from '../utils/helpers'
+import { getInvalidTokens, getTaggedTemplateCaller, isPandaAttribute, isPandaIsh, isPandaProp } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { AST_NODE_TYPES } from '@typescript-eslint/utils'
 import { isNodeOfTypes } from '@typescript-eslint/utils/ast-utils'
-import {
-  isCallExpression,
-  isIdentifier,
-  isJSXExpressionContainer,
-  isLiteral,
-  isMemberExpression,
-  isTemplateLiteral,
-  type Node,
-} from '../utils/nodes'
+import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
 
 export const RULE_NAME = 'no-invalid-token-paths'
 
@@ -78,51 +70,35 @@ const rule: Rule = createRule({
       },
 
       TaggedTemplateExpression(node) {
-        const handleExpression = (caller: string) => {
-          if (!isPandaIsh(caller, context)) return
+        const caller = getTaggedTemplateCaller(node)
+        if (!caller) return
 
-          const quasis = node.quasi.quasis[0]
-          const styles = quasis.value.raw
-          const tokens = getInvalidTokens(styles, context)
+        if (!isPandaIsh(caller, context)) return
 
-          tokens.forEach((token, i, arr) => {
-            // Avoid duplicate reports on the same token
-            if (arr.indexOf(token) < i) return
+        const quasis = node.quasi.quasis[0]
+        const styles = quasis.value.raw
+        const tokens = getInvalidTokens(styles, context)
 
-            let index = styles.indexOf(token)
+        tokens.forEach((token, i, arr) => {
+          // Avoid duplicate reports on the same token
+          if (arr.indexOf(token) < i) return
 
-            while (index !== -1) {
-              const start = quasis.range[0] + 1 + index
-              const end = start + token.length
+          let index = styles.indexOf(token)
 
-              context.report({
-                loc: { start: context.sourceCode.getLocFromIndex(start), end: context.sourceCode.getLocFromIndex(end) },
-                messageId: 'noInvalidTokenPaths',
-                data: { token },
-              })
+          while (index !== -1) {
+            const start = quasis.range[0] + 1 + index
+            const end = start + token.length
 
-              // Check for other occurences of the invalid token
-              index = styles.indexOf(token, index + 1)
-            }
-          })
-        }
+            context.report({
+              loc: { start: context.sourceCode.getLocFromIndex(start), end: context.sourceCode.getLocFromIndex(end) },
+              messageId: 'noInvalidTokenPaths',
+              data: { token },
+            })
 
-        // css``
-        if (isIdentifier(node.tag)) {
-          handleExpression(node.tag.name)
-        }
-
-        // styled.h1``
-        if (isMemberExpression(node.tag)) {
-          if (!isIdentifier(node.tag.object)) return
-          handleExpression(node.tag.object.name)
-        }
-
-        // styled(Comp)``
-        if (isCallExpression(node.tag)) {
-          if (!isIdentifier(node.tag.callee)) return
-          handleExpression(node.tag.callee.name)
-        }
+            // Check for other occurences of the invalid token
+            index = styles.indexOf(token, index + 1)
+          }
+        })
       },
     }
   },

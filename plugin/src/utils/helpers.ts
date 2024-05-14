@@ -266,3 +266,22 @@ export const getTokenImport = (context: RuleContext<any, any>) => {
   const imports = _getImports(context)
   return imports.find((imp) => imp.name === 'token')
 }
+
+export const getTaggedTemplateCaller = (node: TSESTree.TaggedTemplateExpression) => {
+  // css``
+  if (isIdentifier(node.tag)) {
+    return node.tag.name
+  }
+
+  // styled.h1``
+  if (isMemberExpression(node.tag)) {
+    if (!isIdentifier(node.tag.object)) return
+    return node.tag.object.name
+  }
+
+  // styled(Comp)``
+  if (isCallExpression(node.tag)) {
+    if (!isIdentifier(node.tag.callee)) return
+    return node.tag.callee.name
+  }
+}
