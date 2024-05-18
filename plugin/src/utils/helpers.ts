@@ -39,7 +39,7 @@ const getSyncOpts = (context: RuleContext<any, any>) => {
 export const getImportSpecifiers = (context: RuleContext<any, any>) => {
   const specifiers: { specifier: TSESTree.ImportSpecifier; mod: string }[] = []
 
-  context.sourceCode.ast.body.forEach((node) => {
+  context.sourceCode?.ast.body.forEach((node) => {
     if (!isImportDeclaration(node)) return
 
     const mod = node.source.value
