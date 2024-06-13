@@ -31,32 +31,6 @@ export async function getContext(opts: Opts) {
   }
 }
 
-async function getExtendWarnings(): Promise<string[]> {
-  if (!configPath) return []
-
-  const cwd = path.dirname(configPath)
-  const { config } = await bundleConfig({ cwd, file: configPath! })
-
-  if (!config.presets || config.presets.length === 0) return []
-  if (config.eject) return []
-
-  const warnings = new Set<string>()
-
-  if (config.theme && !config.theme.extend) {
-    warnings.add('theme')
-  }
-
-  if (config.conditions && !config.conditions.extend) {
-    warnings.add('conditions')
-  }
-
-  if (config.patterns && !config.patterns.extend) {
-    warnings.add('patterns')
-  }
-
-  return Array.from(warnings)
-}
-
 async function filterInvalidTokens(ctx: PandaContext, paths: string[]): Promise<string[]> {
   return paths.filter((path) => !ctx.utility.tokens.view.get(path))
 }
@@ -137,7 +111,6 @@ type Opts = {
   configPath?: string
 }
 
-export function runAsync(action: 'getExtendWarnings', opts: Opts): Promise<string[]>
 export function runAsync(action: 'filterInvalidTokens', opts: Opts, paths: string[]): Promise<string[]>
 export function runAsync(action: 'isColorToken', opts: Opts, value: string): Promise<boolean>
 export function runAsync(action: 'isColorAttribute', opts: Opts, attr: string): Promise<boolean>
@@ -180,12 +153,9 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'filterInvalidTokens':
       // @ts-expect-error cast
       return filterInvalidTokens(ctx, ...args)
-    case 'getExtendWarnings':
-      return getExtendWarnings()
   }
 }
 
-export function run(action: 'getExtendWarnings', opts: Opts): string[]
 export function run(action: 'filterInvalidTokens', opts: Opts, paths: string[]): string[]
 export function run(action: 'isColorToken', opts: Opts, value: string): boolean
 export function run(action: 'isColorAttribute', opts: Opts, attr: string): boolean

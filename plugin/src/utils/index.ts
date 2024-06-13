@@ -13,7 +13,16 @@ export type Rule<A extends readonly unknown[] = any, B extends string = any> = R
 const isBase = process.env.NODE_ENV !== 'test' || import.meta.url.endsWith('dist/index.js')
 export const distDir = fileURLToPath(new URL(isBase ? './' : '../../dist', import.meta.url))
 
-export const syncAction = createSyncFn(join(distDir, 'utils/worker.mjs')) as typeof run
+export const _syncAction = createSyncFn(join(distDir, 'utils/worker.mjs'))
+// export const _syncAction = createSyncFn(join(distDir, 'utils/worker.mjs')) as typeof run
+
+export const syncAction = ((...args: any) => {
+  try {
+    return _syncAction(...args)
+  } catch (error) {
+    return
+  }
+}) as typeof run | ((...args: any) => undefined)
 
 export interface ImportResult {
   name: string
