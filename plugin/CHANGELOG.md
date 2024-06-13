@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.6
+
+### Patch Changes
+
+- 3551e7d: Fix messagePort error
+
 ## 0.1.5
 
 ### Patch Changes
