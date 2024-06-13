@@ -2,7 +2,7 @@ import { PandaContext, loadConfigAndCreateContext } from '@pandacss/node'
 import { runAsWorker } from 'synckit'
 import { createContext } from 'fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
-import { findConfig, bundleConfig } from '@pandacss/config'
+import { findConfig } from '@pandacss/config'
 import path from 'path'
 import type { ImportResult } from '.'
 
