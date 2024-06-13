@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.7
+
+### Patch Changes
+
+- 4e6f95d: Try catch syncs
+
 ## 0.1.6
 
 ### Patch Changes
