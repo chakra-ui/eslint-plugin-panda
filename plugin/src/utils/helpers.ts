@@ -79,8 +79,11 @@ const _getImports = (context: RuleContext<any, any>) => {
 
 const getImports = (context: RuleContext<any, any>) => {
   const imports = _getImports(context)
-
-  return imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
+  try {
+    return imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
+  } catch (error) {
+    return []
+  }
 }
 
 const isValidStyledProp = <T extends Node | string>(node: T, context: RuleContext<any, any>) => {
@@ -153,7 +156,7 @@ export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<an
   return true
 }
 
-export const isStyledProperty = (node: TSESTree.Property, context: RuleContext<any, any>, calleeName?: string) => {
+export const isStyledNode = (node: TSESTree.Property, context: RuleContext<any, any>, calleeName?: string) => {
   if (!isIdentifier(node.key) && !isLiteral(node.key) && !isTemplateLiteral(node.key)) return
 
   if (isIdentifier(node.key) && !isValidProperty(node.key.name, context, calleeName)) return
@@ -166,6 +169,16 @@ export const isStyledProperty = (node: TSESTree.Property, context: RuleContext<a
   if (isTemplateLiteral(node.key) && !isValidProperty(node.key.quasis[0].value.raw, context, calleeName)) return
 
   return true
+}
+
+export const isStyledProperty = (node: TSESTree.Property, context: RuleContext<any, any>, calleeName?: string) => {
+  const ancestor = node.parent.parent
+
+  const isValidFuncAncestor =
+    isCallExpression(ancestor) && isIdentifier(ancestor.callee) && isPandaIsh(ancestor.callee.name, context)
+  if (isValidFuncAncestor) return isStyledNode(node, context, calleeName)
+
+  return isStyledNode(ancestor as any, context, calleeName) && isStyledNode(node, context, calleeName)
 }
 
 export const isInPandaFunction = (node: TSESTree.Property, context: RuleContext<any, any>) => {
