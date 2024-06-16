@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.8
+
+### Patch Changes
+
+- 979d8c9: Fix false positive in @pandacss/no-invalid-nesting
+
 ## 0.1.7
 
 ### Patch Changes
