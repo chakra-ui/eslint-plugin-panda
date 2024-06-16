@@ -77,7 +77,7 @@ const _getImports = (context: RuleContext<any, any>) => {
   return imports
 }
 
-const getImports = (context: RuleContext<any, any>) => {
+export const getImports = (context: RuleContext<any, any>) => {
   const imports = _getImports(context)
   return imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
 }
