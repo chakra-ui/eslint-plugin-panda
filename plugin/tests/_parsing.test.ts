@@ -3,6 +3,7 @@ import rule2, { RULE_NAME as RULE_NAME2 } from '../src/rules/no-dynamic-styling'
 import rule3, { RULE_NAME as RULE_NAME3 } from '../src/rules/no-escape-hatch'
 import rule4, { RULE_NAME as RULE_NAME4 } from '../src/rules/no-unsafe-token-fn-usage'
 import rule5, { RULE_NAME as RULE_NAME5 } from '../src/rules/no-invalid-token-paths'
+import rule6, { RULE_NAME as RULE_NAME6 } from '../src/rules/no-invalid-nesting'
 import { eslintTester } from '../test-utils'
 import { getArbitraryValue } from '@pandacss/shared'
 
@@ -193,5 +194,95 @@ eslintTester.run(RULE_NAME5, rule5 as any, {
   invalid: invalids5.map(({ code, errors = 1 }) => ({
     code: imports5 + code,
     errors,
+  })),
+})
+
+//? Testing nesting in sva and cva
+
+const imports6 = `import { cva, sva } from './panda/css';`
+
+const valids6 = [
+  `const heading = cva({
+  base: {
+    color: 'red.400',
+  },
+  variants: {
+    size: {
+      'large-bold': {
+        color: 'red.800',
+      },
+    },
+  },
+})`,
+  `const heading2 = sva({
+  slots: ['sm-ca'],
+  base: {
+    'sm-ca': {
+      color: 'red.600',
+    },
+  },
+  variants: {
+    size: {
+      'va-riant': {
+        'sm-ca': {
+          color: 'red.600',
+        },
+      },
+    },
+  },
+})`,
+]
+
+const invalids6 = [
+  {
+    code: `const heading = cva({
+  base: {
+    '> div': {
+      color: 'red.500',
+    },
+  },
+  variants: {
+    size: {
+      'large-bold': {
+        '> div': {
+          color: 'red.500',
+        },
+      },
+    },
+  },
+})`,
+  },
+  {
+    code: `const heading2 = sva({
+  slots: ['sm-ca'],
+  base: {
+    'sm-ca': {
+      '> div': {
+        color: 'red.600',
+      },
+    },
+  },
+  variants: {
+    size: {
+      'va-riant': {
+        'sm-ca': {
+          '> div': {
+            color: 'red.600',
+          },
+        },
+      },
+    },
+  },
+})`,
+  },
+]
+
+eslintTester.run(RULE_NAME6, rule6 as any, {
+  valid: valids6.map((code) => ({
+    code: imports6 + code,
+  })),
+  invalid: invalids6.map(({ code }) => ({
+    code: imports6 + code,
+    errors: 2,
   })),
 })
