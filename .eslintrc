@@ -39,10 +39,10 @@
         "ignoreRestSiblings": true
       }
     ],
-    /**	    /**
-     * This rules is set up to use the same rules as "@typescript-eslint/recommended" in v5.	       * This rules is set up to use the same rules as "@typescript-eslint/recommended" in v5.
-     * @see https://typescript-eslint.io/blog/announcing-typescript-eslint-v6/	       * @see https://typescript-eslint.io/blog/announcing-typescript-eslint-v6/
-     */
+    /**
+     * This rules is set up to use the same rules as "@typescript-eslint/recommended" in v5.
+     * @see https://typescript-eslint.io/blog/announcing-typescript-eslint-v6/
+       */
     // This rules removed from recommended in v6.
     "no-extra-semi": "off",
     "@typescript-eslint/no-extra-semi": "error",
