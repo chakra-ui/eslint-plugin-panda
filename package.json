@@ -11,7 +11,7 @@
     "docs": "rm -rf docs/rules && DOCGEN=1 vitest run && pnpm readme",
     "readme": "node tools/build-readme.js && pnpm prettier-fix",
     "deps": "pnpm -r --parallel deps",
-    "lint": "eslint .",
+    "lint": "eslint . --ext .ts",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
     "release": "changeset publish",
@@ -30,7 +30,6 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@eslint/js": "^9.5.0",
     "@pandacss/dev": "^0.40.0",
     "@types/eslint": "^8.56.2",
     "@types/node": "^20.11.5",
@@ -39,11 +38,9 @@
     "eslint": "^8.56.0",
     "eslint-docgen": "^0.7.1",
     "eslint-plugin-eslint-plugin": "^5.2.1",
-    "globals": "^15.6.0",
     "husky": "^9.0.6",
     "lint-staged": "^15.2.0",
     "prettier": "^3.2.4",
-    "typescript-eslint": "^7.13.1",
     "vitest": "^1.2.1"
   },
   "lint-staged": {
