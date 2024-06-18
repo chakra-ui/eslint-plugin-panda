@@ -6,8 +6,7 @@
         "*.cjs",
         "node_modules/**/*",
         "dist/**/*",
-        "coverage/**/*",
-        "sandbox/**/*"
+        "coverage/**/*"
     ],
     "parser": "@typescript-eslint/parser",
     "plugins": [
