@@ -35,6 +35,7 @@ const rule: Rule = createRule({
     const sendReport = (node: any, _value?: string) => {
       const value = _value ?? node.value?.toString()
       const tokens = getInvalidTokens(value, context)
+      if (!tokens) return
 
       if (tokens.length > 0) {
         tokens.forEach((token) => {
@@ -78,6 +79,7 @@ const rule: Rule = createRule({
         const quasis = node.quasi.quasis[0]
         const styles = quasis.value.raw
         const tokens = getInvalidTokens(styles, context)
+        if (!tokens) return
 
         tokens.forEach((token, i, arr) => {
           // Avoid duplicate reports on the same token

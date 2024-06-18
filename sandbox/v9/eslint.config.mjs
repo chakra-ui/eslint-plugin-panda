@@ -15,7 +15,7 @@ export default tseslint.config({
     '**/*.d.ts',
     'styled-system',
     // Ignore panda errors cause that's what we're here for
-    'src/App.tsx',
+    // 'src/App.tsx',
   ],
   extends: [
     eslint.configs.recommended,

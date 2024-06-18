@@ -17,7 +17,6 @@ function Test() {
       className={stack({
         color: 'red.400',
         background: 'bg',
-        debug: true,
       })}
     >
       <panda.div bg="bg" borderYColor="red.400">

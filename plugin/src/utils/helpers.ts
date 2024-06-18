@@ -39,7 +39,7 @@ const getSyncOpts = (context: RuleContext<any, any>) => {
 export const getImportSpecifiers = (context: RuleContext<any, any>) => {
   const specifiers: { specifier: TSESTree.ImportSpecifier; mod: string }[] = []
 
-  context.sourceCode.ast.body.forEach((node) => {
+  context.sourceCode?.ast.body.forEach((node) => {
     if (!isImportDeclaration(node)) return
 
     const mod = node.source.value
@@ -77,9 +77,8 @@ const _getImports = (context: RuleContext<any, any>) => {
   return imports
 }
 
-const getImports = (context: RuleContext<any, any>) => {
+export const getImports = (context: RuleContext<any, any>) => {
   const imports = _getImports(context)
-
   return imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
 }
 
@@ -164,7 +163,6 @@ export const isStyledProperty = (node: TSESTree.Property, context: RuleContext<a
   )
     return
   if (isTemplateLiteral(node.key) && !isValidProperty(node.key.quasis[0].value.raw, context, calleeName)) return
-
   return true
 }
 
@@ -256,10 +254,6 @@ export const getInvalidTokens = (value: string, context: RuleContext<any, any>) 
   const tokens = extractTokens(value)
   if (!tokens.length) return []
   return syncAction('filterInvalidTokens', getSyncOpts(context), tokens)
-}
-
-export const getExtendWarnings = (context: RuleContext<any, any>) => {
-  return syncAction('getExtendWarnings', getSyncOpts(context))
 }
 
 export const getTokenImport = (context: RuleContext<any, any>) => {

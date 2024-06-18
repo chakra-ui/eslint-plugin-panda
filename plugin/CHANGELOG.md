@@ -1,5 +1,29 @@
 # @pandacss/eslint-plugin
 
+## 0.1.8
+
+### Patch Changes
+
+- 979d8c9: Fix false positive in @pandacss/no-invalid-nesting
+
+## 0.1.7
+
+### Patch Changes
+
+- 4e6f95d: Try catch syncs
+
+## 0.1.6
+
+### Patch Changes
+
+- 3551e7d: Fix messagePort error
+
+## 0.1.5
+
+### Patch Changes
+
+- 0a065fe: Fix empty imports
+
 ## 0.1.4
 
 ### Patch Changes
