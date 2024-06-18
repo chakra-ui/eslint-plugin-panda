@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.9
+
+### Patch Changes
+
+- 15a4f9c: Fix scope manager
+
 ## 0.1.8
 
 ### Patch Changes
