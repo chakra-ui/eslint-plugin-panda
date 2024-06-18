@@ -12,5 +12,5 @@ const baseTesterConfig = {
   },
 }
 
-export const tester = new RuleTester({ languageOptions: baseTesterConfig })
+export const tester = new RuleTester(baseTesterConfig)
 export const eslintTester = new ERuleTester(baseTesterConfig)
