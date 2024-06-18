@@ -94,13 +94,17 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
 }
 
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
-  const scope = analyze(context.sourceCode.ast, {
-    sourceType: 'module',
-  })
-  const decl = scope.variables
-    .find((v) => v.name === name)
-    ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
-  if (isVariableDeclarator(decl)) return decl
+  try {
+    const scope = analyze(context.sourceCode.ast, {
+      sourceType: 'module',
+    })
+    const decl = scope.variables
+      .find((v) => v.name === name)
+      ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
+    if (isVariableDeclarator(decl)) return decl
+  } catch (error) {
+    return
+  }
 }
 
 const isLocalStyledFactory = (node: TSESTree.JSXOpeningElement, context: RuleContext<any, any>) => {
