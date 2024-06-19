@@ -93,7 +93,12 @@ export default [
       parser: typescriptParser,
     },
     rules: {
+      // Configure rules here
+      '@pandacss/no-debug': 'error',
+      // You can also use the recommended rules
       ...panda.configs.recommended.rules,
+      // Or all rules
+      ...panda.configs.all.rules,
     },
   },
 ]
