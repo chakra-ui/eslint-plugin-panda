@@ -73,6 +73,36 @@ Or enable all rules in extends:
 > [!WARNING]  
 > This is not recommended. You should only enable the rules you need.
 
+### Flat Config
+
+If you use [the flat config format](https://eslint.org/docs/latest/use/configure/configuration-files), you can import
+the plugin and rules from `@pandacss/eslint-plugin` and put it into your config.
+
+```js filename="eslint.config.mjs"
+import typescriptParser from '@typescript-eslint/parser'
+import panda from '@pandacss/eslint-plugin'
+
+export default [
+  {
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
+    ignores: ['**/*.d.ts', 'styled-system'],
+    plugins: {
+      '@pandacss': panda,
+    },
+    languageOptions: {
+      parser: typescriptParser,
+    },
+    rules: {
+      ...panda.configs.recommended.rules,
+      // or
+      // ...panda.configs.recommended.rules,
+    },
+  },
+]
+```
+
+You can see an example using `typescript-eslint` at [sandbox/v9/eslint.config.mjs](./sandbox/v9/eslint.config.mjs).
+
 ## Rules
 
 Rules with ⚙️ have options. Click on the rule to see the options.
@@ -117,4 +147,22 @@ module.exports = {
     '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
   },
 }
+```
+
+#### Flat Config
+
+```js filename="eslint.config.mjs"
+import panda from '@pandacss/eslint-plugin'
+import path from 'node:path'
+
+export default [
+  {
+    plugins: {
+      '@pandacss': panda,
+    },
+    settings: {
+      '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
+    },
+  },
+]
 ```
