@@ -78,4 +78,4 @@ jobs:
         uses: ./.github/composite-actions/install
 
       - name: Build docs
-        run: pnpm docs
+        run: pnpm build:docs
