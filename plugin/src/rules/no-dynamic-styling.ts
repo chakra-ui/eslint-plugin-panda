@@ -1,6 +1,7 @@
 import { type Rule, createRule } from '../utils'
 import { isPandaAttribute, isPandaProp } from '../utils/helpers'
 import {
+  isConditionalExpression,
   isIdentifier,
   isJSXExpressionContainer,
   isLiteral,
@@ -39,6 +40,14 @@ const rule: Rule = createRule({
         )
           return
 
+        // Conditional case: <Circle property={condition ? 'value1' : 'value2' } />
+        if (
+          isConditionalExpression(node.value.expression) &&
+          isLiteral(node.value.expression.consequent) &&
+          isLiteral(node.value.expression.alternate)
+        )
+          return
+
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value.expression)) return
 
@@ -56,6 +65,10 @@ const rule: Rule = createRule({
 
         // For syntax like: { property: `value that could be multiline` }
         if (isTemplateLiteral(node.value) && node.value.expressions.length === 0) return
+
+        // Conditional case: { property: condition ? 'value1' : 'value2' }
+        if (isConditionalExpression(node.value) && isLiteral(node.value.consequent) && isLiteral(node.value.alternate))
+          return
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value)) return
