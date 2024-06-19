@@ -94,7 +94,6 @@ export default [
     },
     rules: {
       ...panda.configs.recommended.rules,
-      // or
     },
   },
 ]
