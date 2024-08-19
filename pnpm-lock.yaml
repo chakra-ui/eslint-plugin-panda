@@ -97,7 +97,7 @@ importers:
         version: 0.40.1
       postcss:
         specifier: ^8.4.33
-        version: 8.4.39
+        version: 8.4.41
 
   plugin:
     dependencies:
@@ -2377,7 +2377,7 @@ packages:
       '@vue/shared': 3.4.19
       estree-walker: 2.0.2
       magic-string: 0.30.10
-      postcss: 8.4.39
+      postcss: 8.4.41
       source-map-js: 1.2.0
 
   /@vue/compiler-ssr@3.4.19:
@@ -4387,8 +4387,8 @@ packages:
       picocolors: 1.0.0
       source-map-js: 1.2.0
 
-  /postcss@8.4.39:
-    resolution: {integrity: sha512-0vzE+lAiG7hZl1/9I8yzKLx3aR9Xbof3fBHKunvMfOCYAtMhrsnccJY2iTURb9EZd5+pLuiNV9/c/GZJOHsgIw==}
+  /postcss@8.4.41:
+    resolution: {integrity: sha512-TesUflQ0WKZqAvg52PWL6kHgLKP6xB6heTOdoYM0Wt2UHyxNa4K25EZZMgKns3BH1RLVbZCREPpLY0rhnNoHVQ==}
     engines: {node: ^10 || ^12 || >=14}
     dependencies:
       nanoid: 3.3.7
@@ -5192,7 +5192,7 @@ packages:
     dependencies:
       '@types/node': 20.14.15
       esbuild: 0.20.2
-      postcss: 8.4.39
+      postcss: 8.4.41
       rollup: 4.17.2
     optionalDependencies:
       fsevents: 2.3.3
