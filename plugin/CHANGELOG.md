@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.10
+
+### Patch Changes
+
+- 4914e3d: Fix false positives in recipe variants
+
 ## 0.1.9
 
 ### Patch Changes
