@@ -295,22 +295,22 @@ export function isRecipeVariant(node: TSESTree.Property, context: RuleContext<an
   //* Nesting is different here because of slots and variants. We don't want to warn about those.
   let currentNode: any = node
   let length = 0
-  let styleObjectParent = null
+  let styleObjectParent: string | null = null
 
   // Traverse up the AST
   while (currentNode) {
-    if (currentNode.key && ['base', 'variants'].includes(currentNode.key.name)) {
-      styleObjectParent = currentNode.key.name
+    const keyName = currentNode?.key?.name
+    if (keyName && ['base', 'variants'].includes(keyName)) {
+      styleObjectParent = keyName
     }
     currentNode = currentNode.parent
     if (!styleObjectParent) length++
   }
 
   // Determine the required length based on caller and styleObjectParent
-  const requiredLength = caller === 'cva' ? 2 : 4
+  const isCvaCaller = caller === 'cva'
+  const requiredLength = isCvaCaller ? 2 : 4
   const extraLength = styleObjectParent === 'base' ? 0 : 4
 
-  if (length >= requiredLength + extraLength) return
-
-  return true
+  if (length < requiredLength + extraLength) return true
 }
