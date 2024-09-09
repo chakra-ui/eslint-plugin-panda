@@ -1,4 +1,4 @@
-import { isPandaAttribute, isPandaProp, isValidProperty, resolveLonghand } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, isRecipeVariant, isValidProperty, resolveLonghand } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { compositeProperties } from '../utils/composite-properties'
 import { isIdentifier, isJSXIdentifier, isJSXOpeningElement, isObjectExpression } from '../utils/nodes'
@@ -66,6 +66,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         const cmp = resolveCompositeProperty(node.key.name)
         if (!cmp) return

@@ -1,4 +1,4 @@
-import { isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { getArbitraryValue } from '@pandacss/shared'
 import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
@@ -78,6 +78,7 @@ const rule: Rule = createRule({
         if (!isIdentifier(node.key)) return
         if (!isLiteral(node.value) && !isTemplateLiteral(node.value)) return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         handleLiteral(node.value)
         handleTemplateLiteral(node.value)

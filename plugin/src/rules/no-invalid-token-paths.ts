@@ -1,4 +1,11 @@
-import { getInvalidTokens, getTaggedTemplateCaller, isPandaAttribute, isPandaIsh, isPandaProp } from '../utils/helpers'
+import {
+  getInvalidTokens,
+  getTaggedTemplateCaller,
+  isPandaAttribute,
+  isPandaIsh,
+  isPandaProp,
+  isRecipeVariant,
+} from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { AST_NODE_TYPES } from '@typescript-eslint/utils'
 import { isNodeOfTypes } from '@typescript-eslint/utils/ast-utils'
@@ -65,6 +72,7 @@ const rule: Rule = createRule({
         if (!isIdentifier(node.key)) return
         if (!isNodeOfTypes([AST_NODE_TYPES.Literal, AST_NODE_TYPES.TemplateLiteral])(node.value)) return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         handleLiteral(node.value)
         handleTemplateLiteral(node.value)

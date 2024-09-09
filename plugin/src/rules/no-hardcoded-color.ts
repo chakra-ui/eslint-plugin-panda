@@ -1,4 +1,11 @@
-import { extractTokens, isColorAttribute, isColorToken, isPandaAttribute, isPandaProp } from '../utils/helpers'
+import {
+  extractTokens,
+  isColorAttribute,
+  isColorToken,
+  isPandaAttribute,
+  isPandaProp,
+  isRecipeVariant,
+} from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { isIdentifier, isJSXExpressionContainer, isJSXIdentifier, isLiteral } from '../utils/nodes'
 
@@ -90,6 +97,7 @@ const rule: Rule = createRule({
         if (!isLiteral(node.value)) return
 
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
         if (!isColorAttribute(node.key.name, context)) return
         if (isTokenFn(node.value.value?.toString())) return
         if (testColorToken(node.value.value?.toString())) return
