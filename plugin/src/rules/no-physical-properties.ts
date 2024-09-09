@@ -1,4 +1,4 @@
-import { isPandaAttribute, isPandaProp, resolveLonghand } from '../utils/helpers'
+import { isRecipeVariant, isPandaAttribute, isPandaProp, resolveLonghand } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 import { physicalProperties } from '../utils/physical-properties'
@@ -64,6 +64,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key)) return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         sendReport(node.key)
       },

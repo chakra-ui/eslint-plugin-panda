@@ -1,4 +1,4 @@
-import { extractTokens, getTokenImport, isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { extractTokens, getTokenImport, isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { TSESTree } from '@typescript-eslint/utils'
 import {
@@ -110,6 +110,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isCallExpression(node.value) && !isLiteral(node.value) && !isTemplateLiteral(node.value)) return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         handleRuntimeFm(node.value)
         handleLiteral(node.value)

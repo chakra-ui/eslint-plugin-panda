@@ -1,6 +1,6 @@
 import type { TSESTree } from '@typescript-eslint/utils'
 import { type Rule, createRule } from '../utils'
-import { isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import { isIdentifier, isJSXExpressionContainer, isMemberExpression } from '../utils/nodes'
 
 export const RULE_NAME = 'no-property-renaming'
@@ -57,6 +57,7 @@ const rule: Rule = createRule({
         if (!isIdentifier(node.key)) return
         if (!isIdentifier(node.value) && !isMemberExpression(node.value)) return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         const attr = node.key.name.toString()
         const value = node.value

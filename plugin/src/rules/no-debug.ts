@@ -1,6 +1,6 @@
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 import { type Rule, createRule } from '../utils'
-import { isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 
 export const RULE_NAME = 'no-debug'
 
@@ -41,6 +41,7 @@ const rule: Rule = createRule({
       Property(node) {
         if (!isIdentifier(node.key) || node.key.name !== 'debug') return
         if (!isPandaAttribute(node, context)) return
+        if (isRecipeVariant(node, context)) return
 
         context.report({
           node: node.key,
