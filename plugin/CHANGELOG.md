@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.11
+
+### Patch Changes
+
+- ac21839: Let `no-dynamic-styling` rule, report dynamic properties.
+
 ## 0.1.10
 
 ### Patch Changes

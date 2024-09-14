@@ -1,6 +1,6 @@
 {
   "name": "@pandacss/eslint-plugin",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "Eslint plugin for Panda CSS",
   "author": "Abraham Aremu <anubra266@gmail.com>",
   "main": "dist/index.js",
