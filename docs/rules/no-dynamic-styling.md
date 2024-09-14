@@ -50,14 +50,28 @@ import { cva,sva } from './panda/css';
 
 function App(){
   const computedValue = "value";
+  const styles = css({
+    [computedValue]: 'red.100',
+  });
+};
+```
+
+```js
+
+import { cva,sva } from './panda/css';
+
+function App(){
+  const computedValue = "value";
   const heading = cva({
     variants: {
-      [computedValue]: {
-        color: "red.100",
+      visual: {
+        [computedValue]: {
+          color: "red.100",
+        }
       }
     }
   });
-}`,
+};
 ```
 
 ✔️ Examples of **correct** code:

@@ -31,11 +31,12 @@ function App(){
 
   {
     code: javascript`
-import { cva,sva } from './panda/css';
+import { cva, sva } from './panda/css';
 
 function App(){
   const heading = cva({
-    variants: {
+    base: { },
+    visual: {
       value: {
         color: "red.100",
       }
@@ -84,16 +85,31 @@ function App(){
 
   {
     code: javascript`
-import { cva,sva } from './panda/css';
+import { cva, sva } from './panda/css';
 
 function App(){
   const computedValue = "value"
   const heading = cva({
+    base: { },
     variants: {
-      [computedValue]: {
-        color: "red.100",
+      visual: {
+        [computedValue]: {
+          color: "red.100",
+        }
       }
     }
+  });
+}`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  const computedValue = "value"
+  const styles = css({
+    [computedValue]: 'red.100',
   });
 }`,
   },
