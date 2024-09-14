@@ -1,5 +1,6 @@
+import type { TSESTree } from '@typescript-eslint/utils'
 import { type Rule, createRule } from '../utils'
-import { isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import {
   isIdentifier,
   isJSXExpressionContainer,
@@ -44,6 +45,14 @@ const rule: Rule = createRule({
 
         if (!isPandaProp(node, context)) return
 
+        context.report({
+          node: node.value,
+          messageId: 'dynamic',
+        })
+      },
+
+      'Property[computed=true]'(node: TSESTree.Property) {
+        if (!isRecipeVariant(node, context)) return
         context.report({
           node: node.value,
           messageId: 'dynamic',

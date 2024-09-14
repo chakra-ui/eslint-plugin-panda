@@ -66,6 +66,23 @@ function App(){
   return <styled.div color={color} />;
 }`,
   },
+  {
+    code: javascript`
+import { cva,sva } from './panda/css';
+
+function App(){
+  const computedValue = "value"
+  const heading = cva({
+    variants: {
+      visual: {
+        [computedValue]: {
+          color: "red.100",
+        }
+      }
+    }
+  });
+}`,
+  },
 ]
 
 tester.run(RULE_NAME, rule, {
