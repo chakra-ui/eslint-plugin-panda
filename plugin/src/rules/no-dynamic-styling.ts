@@ -1,6 +1,6 @@
 import type { TSESTree } from '@typescript-eslint/utils'
 import { type Rule, createRule } from '../utils'
-import { isInPandaFunction, isPandaAttribute, isPandaProp } from '../utils/helpers'
+import { isInPandaFunction, isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import {
   isIdentifier,
   isJSXExpressionContainer,
@@ -20,6 +20,8 @@ const rule: Rule = createRule({
     },
     messages: {
       dynamic: 'Remove dynamic value. Prefer static styles',
+      dynamicProperty: 'Remove dynamic property. Prefer static style property',
+      dynamicRecipeVariant: 'Remove dynamic variant. Prefer static variant definition',
     },
     type: 'suggestion',
     schema: [],
@@ -53,9 +55,10 @@ const rule: Rule = createRule({
 
       'Property[computed=true]'(node: TSESTree.Property) {
         if (!isInPandaFunction(node, context)) return
+
         context.report({
-          node: node.value,
-          messageId: 'dynamic',
+          node: node.key,
+          messageId: isRecipeVariant(node, context) ? 'dynamicRecipeVariant' : 'dynamicProperty',
         })
       },
 
