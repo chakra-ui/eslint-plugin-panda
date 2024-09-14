@@ -41,37 +41,29 @@ import { styled } from './panda/jsx';
 function App(){
   const color = 'red.100';
   return <styled.div color={color} />;
-}
-```
-
-```js
-
-import { cva,sva } from './panda/css';
-
-function App(){
-  const computedValue = "value";
-  const styles = css({
-    [computedValue]: 'red.100',
-  });
 };
 ```
+```js
 
+import { css } from './panda/css';
+
+const property = 'background';
+const styles = css({ [property]: 'red.100' });
+```
 ```js
 
 import { cva,sva } from './panda/css';
 
 function App(){
-  const computedValue = "value";
+  const computedValue = "value"
   const heading = cva({
     variants: {
-      visual: {
-        [computedValue]: {
-          color: "red.100",
-        }
+      [computedValue]: {
+        color: "red.100",
       }
     }
   });
-};
+}
 ```
 
 ✔️ Examples of **correct** code:

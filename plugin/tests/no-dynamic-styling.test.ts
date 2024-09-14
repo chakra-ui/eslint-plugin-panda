@@ -28,21 +28,6 @@ function App(){
   return <styled.div color='red.100' />;
 }`,
   },
-
-  {
-    code: javascript`
-import { cva,sva } from './panda/css';
-
-function App(){
-  const heading = cva({
-    variants: {
-      value: {
-        color: "red.100",
-      }
-    }
-  });
-}`,
-  },
 ]
 
 const invalids = [
@@ -80,6 +65,14 @@ function App(){
   const color = 'red.100';
   return <styled.div color={color} />;
 }`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const property = 'background';
+const styles = css({ [property]: 'red.100' })`,
   },
 
   {
