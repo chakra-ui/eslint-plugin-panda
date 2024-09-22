@@ -24,6 +24,7 @@ console.log(keyframes, literal)
 
 const LocalFactoryComp = panda('button')
 
+const pbe = '4'
 function App() {
   const className = css({
     bg: 'red.100',
@@ -33,6 +34,7 @@ function App() {
     marginTop: '{spacings.4} token(spacing.600)',
     margin: '4',
     pt: token('sizes.4'),
+    paddingBlockEnd: ['4', pbe],
   })
 
   const color = 'red'
@@ -69,6 +71,7 @@ function App() {
           bg="red.200"
           borderColor="red.500"
           borderTopColor={'#111'}
+          paddingBlockEnd={['4', color]}
         >
           Element 2
         </panda.div>

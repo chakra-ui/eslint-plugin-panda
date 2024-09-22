@@ -13,6 +13,13 @@ const styles = css({ bg: 'gray.900' })`,
 
   {
     code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ padding: ['4', '8'] })`,
+  },
+
+  {
+    code: javascript`
 import { Circle } from './panda/jsx';
 
 function App(){
@@ -37,6 +44,14 @@ import { css } from './panda/css';
 
 const color = 'red.100';
 const styles = css({ bg: color })`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const size = '8';
+const styles = css({ padding: ['4', size] })`,
   },
 
   {
