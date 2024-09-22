@@ -20,6 +20,13 @@ const styles = css({ bg: color });
 ```
 ```js
 
+import { css } from './panda/css';
+
+const size = '8';
+const styles = css({ padding: ['4', size] });
+```
+```js
+
 import { stack } from './panda/patterns';
 
 const align = 'center';
@@ -71,6 +78,12 @@ function App(){
 import { css } from './panda/css';
 
 const styles = css({ bg: 'gray.900' });
+```
+```js
+
+import { css } from './panda/css';
+
+const styles = css({ padding: ['4', '8'] });
 ```
 ```js
 

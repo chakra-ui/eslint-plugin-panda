@@ -2,6 +2,7 @@ import type { TSESTree } from '@typescript-eslint/utils'
 import { type Rule, createRule } from '../utils'
 import { isInPandaFunction, isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import {
+  isArrayExpression,
   isIdentifier,
   isJSXExpressionContainer,
   isLiteral,
@@ -44,6 +45,9 @@ const rule: Rule = createRule({
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value.expression)) return
+        if (isArrayExpression(node.value.expression)) {
+          return checkElements(node.value.expression, context)
+        }
 
         if (!isPandaProp(node, context)) return
 
@@ -53,6 +57,7 @@ const rule: Rule = createRule({
         })
       },
 
+      // Dynamic properties
       'Property[computed=true]'(node: TSESTree.Property) {
         if (!isInPandaFunction(node, context)) return
 
@@ -71,6 +76,9 @@ const rule: Rule = createRule({
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value)) return
+        if (isArrayExpression(node.value)) {
+          return checkElements(node.value, context)
+        }
 
         if (!isPandaAttribute(node, context)) return
 
@@ -82,5 +90,18 @@ const rule: Rule = createRule({
     }
   },
 })
+
+function checkElements(array: TSESTree.ArrayExpression, context: Parameters<(typeof rule)['create']>[0]) {
+  array.elements.forEach((node) => {
+    if (!node) return
+    if (isLiteral(node)) return
+    if (isTemplateLiteral(node) && node.expressions.length === 0) return
+
+    context.report({
+      node: node,
+      messageId: 'dynamic',
+    })
+  })
+}
 
 export default rule
