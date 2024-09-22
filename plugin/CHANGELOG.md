@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.12
+
+### Patch Changes
+
+- 7dbd78e: Fix array syntax in `no-dynamic-styling`
+
 ## 0.1.11
 
 ### Patch Changes
