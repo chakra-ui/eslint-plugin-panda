@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.13
+
+### Patch Changes
+
+- b004285: Ignore non panda files
+
 ## 0.1.12
 
 ### Patch Changes
