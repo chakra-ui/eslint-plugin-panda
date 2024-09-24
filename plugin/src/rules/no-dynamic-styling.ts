@@ -45,11 +45,11 @@ const rule: Rule = createRule({
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value.expression)) return
+
+        if (!isPandaProp(node, context)) return
         if (isArrayExpression(node.value.expression)) {
           return checkElements(node.value.expression, context)
         }
-
-        if (!isPandaProp(node, context)) return
 
         context.report({
           node: node.value,
@@ -76,11 +76,12 @@ const rule: Rule = createRule({
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value)) return
+
+        if (!isPandaAttribute(node, context)) return
+
         if (isArrayExpression(node.value)) {
           return checkElements(node.value, context)
         }
-
-        if (!isPandaAttribute(node, context)) return
 
         context.report({
           node: node.value,
