@@ -50,6 +50,9 @@ const rule: Rule = createRule({
         }
 
         if (!isPandaProp(node, context)) return
+        if (isArrayExpression(node.value.expression)) {
+          return checkElements(node.value.expression, context)
+        }
 
         context.report({
           node: node.value,
@@ -81,6 +84,10 @@ const rule: Rule = createRule({
         }
 
         if (!isPandaAttribute(node, context)) return
+
+        if (isArrayExpression(node.value)) {
+          return checkElements(node.value, context)
+        }
 
         context.report({
           node: node.value,
