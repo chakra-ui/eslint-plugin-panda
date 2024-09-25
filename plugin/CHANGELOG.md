@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.1.14
+
+### Patch Changes
+
+- 73492df: Fix false positive in array syntax
+
 ## 0.1.13
 
 ### Patch Changes
