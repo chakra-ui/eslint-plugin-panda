@@ -35,6 +35,12 @@ function App(){
   return <styled.div color='red.100' />;
 }`,
   },
+  {
+    code: javascript`
+const foo = 'foo'
+const nonStyles = {bar: [foo]}
+`,
+  },
 ]
 
 const invalids = [

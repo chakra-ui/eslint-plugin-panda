@@ -79,9 +79,6 @@ const rule: Rule = createRule({
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value)) return
-        if (isArrayExpression(node.value)) {
-          return checkElements(node.value, context)
-        }
 
         if (!isPandaAttribute(node, context)) return
 
