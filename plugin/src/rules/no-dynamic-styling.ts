@@ -45,13 +45,10 @@ const rule: Rule = createRule({
 
         // Don't warn for objects. Those are conditions
         if (isObjectExpression(node.value.expression)) return
-        if (isArrayExpression(node.value.expression)) {
-          return checkElements(node.value.expression, context)
-        }
-
         if (!isPandaProp(node, context)) return
+
         if (isArrayExpression(node.value.expression)) {
-          return checkElements(node.value.expression, context)
+          return checkArrayElements(node.value.expression, context)
         }
 
         context.report({
@@ -83,7 +80,7 @@ const rule: Rule = createRule({
         if (!isPandaAttribute(node, context)) return
 
         if (isArrayExpression(node.value)) {
-          return checkElements(node.value, context)
+          return checkArrayElements(node.value, context)
         }
 
         context.report({
@@ -95,7 +92,7 @@ const rule: Rule = createRule({
   },
 })
 
-function checkElements(array: TSESTree.ArrayExpression, context: Parameters<(typeof rule)['create']>[0]) {
+function checkArrayElements(array: TSESTree.ArrayExpression, context: Parameters<(typeof rule)['create']>[0]) {
   array.elements.forEach((node) => {
     if (!node) return
     if (isLiteral(node)) return
