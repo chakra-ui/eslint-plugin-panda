@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.0
+
+### Minor Changes
+
+- 121ad0f: Use memoization in rules
+
 ## 0.1.15
 
 ### Patch Changes
