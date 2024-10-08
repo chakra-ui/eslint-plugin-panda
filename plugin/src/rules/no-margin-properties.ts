@@ -21,29 +21,77 @@ const rule: Rule = createRule({
   },
   defaultOptions: [],
   create(context) {
-    const getLonghand = (name: string) => resolveLonghand(name, context) ?? name
+    // Cache for resolved longhand properties
+    const longhandCache = new Map<string, string>()
+
+    const getLonghand = (name: string): string => {
+      if (longhandCache.has(name)) {
+        return longhandCache.get(name)!
+      }
+      const longhand = resolveLonghand(name, context) ?? name
+      longhandCache.set(name, longhand)
+      return longhand
+    }
+
+    const marginRegex = /margin/i
+
+    const isMarginProperty = (name: string): boolean => {
+      const longhand = getLonghand(name).toLowerCase()
+      return marginRegex.test(longhand)
+    }
 
     const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
-      if (!getLonghand(node.name).toLowerCase().includes('margin')) return
+      if (!isMarginProperty(node.name)) return
 
-      return context.report({
+      context.report({
         node,
         messageId: 'noMargin',
       })
     }
 
+    // Cache for helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
+
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
+    }
+
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
         sendReport(node.name)
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
         sendReport(node.key)
       },

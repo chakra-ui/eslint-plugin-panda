@@ -1,11 +1,11 @@
 import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
-import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
+import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral } from '../utils/nodes'
 import { getArbitraryValue } from '@pandacss/shared'
+import { TSESTree } from '@typescript-eslint/utils'
 
-// Check if the string ends with '!' with optional whitespace before it
+// Regular expressions to detect '!important' and '!' at the end of a value
 const exclamationRegex = /\s*!$/
-// Check if the string ends with '!important' with optional whitespace before it and after, but not within '!important'
 const importantRegex = /\s*!important\s*$/
 
 export const RULE_NAME = 'no-important'
@@ -15,68 +15,97 @@ const rule: Rule = createRule({
   meta: {
     docs: {
       description:
-        'Disallow usage of important keyword. Prioroitize specificity for a maintainable and predictable styling structure.',
+        'Disallow usage of !important keyword. Prioritize specificity for a maintainable and predictable styling structure.',
     },
     messages: {
       important:
-        'Avoid using the !important keyword. Refactor your code to prioritize specificity for predictable styling.',
+        'Avoid using the {{keyword}} keyword. Refactor your code to prioritize specificity for predictable styling.',
       remove: 'Remove the `{{keyword}}` keyword.',
     },
-    type: 'suggestion',
+    type: 'problem',
     hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
   create(context) {
-    const removeQuotes = ([start, end]: readonly [number, number]) => [start + 1, end - 1] as const
-
-    const hasImportantKeyword = (_value?: string) => {
-      if (!_value) return false
-      const value = getArbitraryValue(_value)
-      return exclamationRegex.test(value) || importantRegex.test(value)
+    // Helper function to adjust the range for fixing (removing quotes)
+    const removeQuotes = (range: readonly [number, number]) => {
+      const [start, end] = range
+      return [start + 1, end - 1] as const
     }
 
-    const removeImportantKeyword = (input: string) => {
-      if (exclamationRegex.test(input)) {
-        // Remove trailing '!'
-        return { fixed: input.replace(exclamationRegex, ''), keyword: '!' }
-      } else if (importantRegex.test(input)) {
+    // Caches for helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+
+    // Cached version of isPandaProp
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
+
+    // Cached version of isPandaAttribute
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    // Cached version of isRecipeVariant
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
+    }
+
+    // Function to check if a value contains '!important' or '!'
+    const hasImportantKeyword = (value: string | undefined): boolean => {
+      if (!value) return false
+      const arbitraryValue = getArbitraryValue(value)
+      return exclamationRegex.test(arbitraryValue) || importantRegex.test(arbitraryValue)
+    }
+
+    // Function to remove '!important' or '!' from a string
+    const removeImportantKeyword = (input: string): { fixed: string; keyword: string | null } => {
+      if (importantRegex.test(input)) {
         // Remove '!important' with optional whitespace
-        return { fixed: input.replace(importantRegex, ''), keyword: '!important' }
+        return { fixed: input.replace(importantRegex, '').trimEnd(), keyword: '!important' }
+      } else if (exclamationRegex.test(input)) {
+        // Remove trailing '!'
+        return { fixed: input.replace(exclamationRegex, '').trimEnd(), keyword: '!' }
       } else {
         // No match, return the original string
         return { fixed: input, keyword: null }
       }
     }
 
-    const handleLiteral = (node: Node) => {
-      if (!isLiteral(node)) return
-      if (!hasImportantKeyword(node.value?.toString())) return
+    // Unified function to handle reporting
+    const handleNodeValue = (node: TSESTree.Node, value: string) => {
+      if (!hasImportantKeyword(value)) return
 
-      sendReport(node)
-    }
+      const { fixed, keyword } = removeImportantKeyword(value)
 
-    const handleTemplateLiteral = (node: Node) => {
-      if (!isTemplateLiteral(node)) return
-      if (node.expressions.length > 0) return
-      if (!hasImportantKeyword(node.quasis[0].value.raw)) return
-
-      sendReport(node.quasis[0], node.quasis[0].value.raw)
-    }
-
-    const sendReport = (node: any, _value?: string) => {
-      const value = _value ?? node.value?.toString()
-      const { keyword, fixed } = removeImportantKeyword(value)
-
-      return context.report({
+      context.report({
         node,
         messageId: 'important',
+        data: { keyword },
         suggest: [
           {
             messageId: 'remove',
             data: { keyword },
             fix: (fixer) => {
-              return fixer.replaceTextRange(removeQuotes(node.range), fixed)
+              return fixer.replaceTextRange(removeQuotes(node.range as [number, number]), fixed)
             },
           },
         ],
@@ -84,26 +113,44 @@ const rule: Rule = createRule({
     }
 
     return {
-      JSXAttribute(node) {
+      // JSX Attributes
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!node.value) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
-        handleLiteral(node.value)
+        const valueNode = node.value
 
-        if (!isJSXExpressionContainer(node.value)) return
+        if (isLiteral(valueNode)) {
+          const val = valueNode.value?.toString() ?? ''
+          handleNodeValue(valueNode, val)
+        } else if (isJSXExpressionContainer(valueNode)) {
+          const expr = valueNode.expression
 
-        handleLiteral(node.value.expression)
-        handleTemplateLiteral(node.value.expression)
+          if (isLiteral(expr)) {
+            const val = expr.value?.toString() ?? ''
+            handleNodeValue(expr, val)
+          } else if (isTemplateLiteral(expr) && expr.expressions.length === 0) {
+            const val = expr.quasis[0].value.raw
+            handleNodeValue(expr.quasis[0], val)
+          }
+        }
       },
 
-      Property(node) {
+      // Object Properties
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isLiteral(node.value) && !isTemplateLiteral(node.value)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
-        handleLiteral(node.value)
-        handleTemplateLiteral(node.value)
+        const valueNode = node.value
+
+        if (isLiteral(valueNode)) {
+          const val = valueNode.value?.toString() ?? ''
+          handleNodeValue(valueNode, val)
+        } else if (isTemplateLiteral(valueNode) && valueNode.expressions.length === 0) {
+          const val = valueNode.quasis[0].value.raw
+          handleNodeValue(valueNode.quasis[0], val)
+        }
       },
     }
   },

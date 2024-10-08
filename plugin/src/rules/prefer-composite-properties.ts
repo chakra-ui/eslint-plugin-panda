@@ -13,48 +13,108 @@ const rule: Rule = createRule({
       description: 'Encourage the use of composite properties instead of atomic properties in the codebase.',
     },
     messages: {
-      composite: 'Use composite property of `{{atomic}}` instead. \nPrefer: {{composite}}',
+      composite: 'Use composite property instead of `{{atomic}}`. Prefer: `{{composite}}`.',
     },
     type: 'suggestion',
     schema: [],
   },
   defaultOptions: [],
   create(context) {
-    const resolveCompositeProperty = (name: string) => {
-      const longhand = resolveLonghand(name, context) ?? name
+    // Cache for resolved longhand properties
+    const longhandCache = new Map<string, string>()
 
-      if (!isValidProperty(longhand, context)) return
-      return Object.keys(compositeProperties).find((cpd) => compositeProperties[cpd].includes(longhand))
+    const getLonghand = (name: string): string => {
+      if (longhandCache.has(name)) {
+        return longhandCache.get(name)!
+      }
+      const longhand = resolveLonghand(name, context) ?? name
+      longhandCache.set(name, longhand)
+      return longhand
     }
 
-    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
-      const cmp = resolveCompositeProperty(node.name)
-      if (!cmp) return
+    // Cache for composite property resolution
+    const compositePropertyCache = new Map<string, string | undefined>()
 
-      return context.report({
+    const resolveCompositeProperty = (name: string): string | undefined => {
+      if (compositePropertyCache.has(name)) {
+        return compositePropertyCache.get(name)
+      }
+
+      const longhand = getLonghand(name)
+
+      if (!isValidProperty(longhand, context)) {
+        compositePropertyCache.set(name, undefined)
+        return undefined
+      }
+
+      const composite = Object.keys(compositeProperties).find((cpd) => compositeProperties[cpd].includes(longhand))
+
+      compositePropertyCache.set(name, composite)
+      return composite
+    }
+
+    // Caches for helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
+
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
+    }
+
+    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier, composite: string) => {
+      context.report({
         node,
         messageId: 'composite',
         data: {
-          composite: cmp,
+          composite,
           atomic: node.name,
         },
       })
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
-        sendReport(node.name)
+        const composite = resolveCompositeProperty(node.name.name)
+        if (!composite) return
+
+        sendReport(node.name, composite)
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
-        sendReport(node.key)
+        const composite = resolveCompositeProperty(node.key.name)
+        if (!composite) return
+
+        sendReport(node.key, composite)
       },
     }
   },

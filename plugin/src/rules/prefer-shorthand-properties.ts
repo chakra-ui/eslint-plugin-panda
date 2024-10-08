@@ -13,8 +13,8 @@ const rule: Rule = createRule({
         'Discourage the use of longhand properties and promote the preference for shorthand properties in the codebase.',
     },
     messages: {
-      shorthand: 'Use shorthand property of `{{longhand}}` instead. Prefer {{shorthand}}',
-      replace: 'Replace `{{longhand}}` with `{{shorthand}}`',
+      shorthand: 'Use shorthand property instead of `{{longhand}}`. Prefer `{{shorthand}}`.',
+      replace: 'Replace `{{longhand}}` with `{{shorthand}}`.',
     },
     type: 'suggestion',
     hasSuggestions: true,
@@ -22,21 +22,76 @@ const rule: Rule = createRule({
   },
   defaultOptions: [],
   create(context) {
+    // Cache for resolved longhand properties
+    const longhandCache = new Map<string, string | undefined>()
+
+    const getLonghand = (name: string): string | undefined => {
+      if (longhandCache.has(name)) {
+        return longhandCache.get(name)!
+      }
+      const longhand = resolveLonghand(name, context)
+      longhandCache.set(name, longhand)
+      return longhand
+    }
+
+    // Cache for resolved shorthands
+    const shorthandsCache = new Map<string, string[] | undefined>()
+
+    const getShorthands = (name: string): string[] | undefined => {
+      if (shorthandsCache.has(name)) {
+        return shorthandsCache.get(name)!
+      }
+      const shorthands = resolveShorthands(name, context)
+      shorthandsCache.set(name, shorthands)
+      return shorthands
+    }
+
+    // Caches for helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
+
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
+    }
+
     const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
-      const longhand = resolveLonghand(node.name, context)
-      if (longhand) return
+      const longhand = getLonghand(node.name)
+      if (longhand) return // If it's already shorthand, no need to report
 
-      const shorthands = resolveShorthands(node.name, context)
-      if (!shorthands) return
+      const shorthands = getShorthands(node.name)
+      if (!shorthands || shorthands.length === 0) return
 
-      const shorthand = shorthands.map((s) => `\`${s}\``)?.join(', ')
+      const shorthandList = shorthands.map((s) => `\`${s}\``).join(', ')
 
       const data = {
         longhand: node.name,
-        shorthand,
+        shorthand: shorthandList,
       }
 
-      return context.report({
+      context.report({
         node,
         messageId: 'shorthand',
         data,
@@ -44,26 +99,24 @@ const rule: Rule = createRule({
           {
             messageId: 'replace',
             data,
-            fix: (fixer) => {
-              return fixer.replaceTextRange(node.range, shorthands[0])
-            },
+            fix: (fixer) => fixer.replaceText(node, shorthands[0]),
           },
         ],
       })
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
         sendReport(node.name)
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
         sendReport(node.key)
       },

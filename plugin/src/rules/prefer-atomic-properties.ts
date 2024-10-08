@@ -1,8 +1,8 @@
-import { isPandaAttribute, isPandaProp, isRecipeVariant, isValidProperty, resolveLonghand } from '../utils/helpers'
+import type { TSESTree } from '@typescript-eslint/utils'
 import { type Rule, createRule } from '../utils'
+import { isPandaAttribute, isPandaProp, isRecipeVariant, isValidProperty, resolveLonghand } from '../utils/helpers'
 import { compositeProperties } from '../utils/composite-properties'
 import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
-import type { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'prefer-atomic-properties'
 
@@ -13,27 +13,83 @@ const rule: Rule = createRule({
       description: 'Encourage the use of atomic properties instead of composite properties in the codebase.',
     },
     messages: {
-      atomic: 'Use atomic properties of `{{composite}}` instead. Prefer: \n{{atomics}}',
+      atomic: 'Use atomic properties instead of `{{composite}}`. Prefer: \n{{atomics}}',
     },
     type: 'suggestion',
     schema: [],
   },
   defaultOptions: [],
   create(context) {
-    const resolveCompositeProperty = (name: string) => {
-      if (Object.hasOwn(compositeProperties, name)) return name
+    // Cache for resolved longhand properties
+    const longhandCache = new Map<string, string>()
 
+    const getLonghand = (name: string): string => {
+      if (longhandCache.has(name)) {
+        return longhandCache.get(name)!
+      }
       const longhand = resolveLonghand(name, context) ?? name
-      if (isValidProperty(longhand, context) && Object.hasOwn(compositeProperties, longhand)) return longhand
+      longhandCache.set(name, longhand)
+      return longhand
     }
 
-    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
-      const cmp = resolveCompositeProperty(node.name)
-      if (!cmp) return
+    // Cache for composite property resolution
+    const compositePropertyCache = new Map<string, string | undefined>()
 
-      const atomics = compositeProperties[cmp].map((name) => `\`${name}\``).join(',\n')
+    const resolveCompositeProperty = (name: string): string | undefined => {
+      if (compositePropertyCache.has(name)) {
+        return compositePropertyCache.get(name)
+      }
 
-      return context.report({
+      if (Object.hasOwn(compositeProperties, name)) {
+        compositePropertyCache.set(name, name)
+        return name
+      }
+
+      const longhand = getLonghand(name)
+      if (isValidProperty(longhand, context) && Object.hasOwn(compositeProperties, longhand)) {
+        compositePropertyCache.set(name, longhand)
+        return longhand
+      }
+
+      compositePropertyCache.set(name, undefined)
+      return undefined
+    }
+
+    // Caches for helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
+
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
+    }
+
+    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier, composite: string) => {
+      const atomics = compositeProperties[composite].map((name) => `\`${name}\``).join(',\n')
+
+      context.report({
         node,
         messageId: 'atomic',
         data: {
@@ -44,19 +100,25 @@ const rule: Rule = createRule({
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
-        sendReport(node.name)
+        const composite = resolveCompositeProperty(node.name.name)
+        if (!composite) return
+
+        sendReport(node.name, composite)
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
-        sendReport(node.key)
+        const composite = resolveCompositeProperty(node.key.name)
+        if (!composite) return
+
+        sendReport(node.key, composite)
       },
     }
   },

@@ -11,11 +11,11 @@ const rule: Rule = createRule({
   meta: {
     docs: {
       description:
-        'Encourage the use of [logical properties](https://mdn.io/logical-properties-basic-concepts) over physical proeprties, to foster a responsive and adaptable user interface.',
+        'Encourage the use of logical properties over physical properties to foster a responsive and adaptable user interface.',
     },
     messages: {
-      physical: 'Use logical property of {{physical}} instead. Prefer `{{logical}}`',
-      replace: 'Replace `{{physical}}` with `{{logical}}`',
+      physical: 'Use logical property instead of {{physical}}. Prefer `{{logical}}`.',
+      replace: 'Replace `{{physical}}` with `{{logical}}`.',
     },
     type: 'suggestion',
     hasSuggestions: true,
@@ -23,19 +23,62 @@ const rule: Rule = createRule({
   },
   defaultOptions: [],
   create(context) {
-    const getLonghand = (name: string) => resolveLonghand(name, context) ?? name
+    // Cache for resolved longhand properties
+    const longhandCache = new Map<string, string>()
+
+    // Cache for helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+
+    const getLonghand = (name: string): string => {
+      if (longhandCache.has(name)) {
+        return longhandCache.get(name)!
+      }
+      const longhand = resolveLonghand(name, context) ?? name
+      longhandCache.set(name, longhand)
+      return longhand
+    }
+
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
+
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
+    }
 
     const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
-      if (!(getLonghand(node.name) in physicalProperties)) return
+      const longhandName = getLonghand(node.name)
+      if (!(longhandName in physicalProperties)) return
 
-      const logical = physicalProperties[getLonghand(node.name)]
-      const longhand = resolveLonghand(node.name, context)
+      const logical = physicalProperties[longhandName]
+      const physicalName = `\`${node.name}\`${longhandName !== node.name ? ` (resolved to \`${longhandName}\`)` : ''}`
 
-      return context.report({
+      context.report({
         node,
         messageId: 'physical',
         data: {
-          physical: `\`${node.name}\`${longhand ? ` - \`${longhand}\`` : ''}`,
+          physical: physicalName,
           logical,
         },
         suggest: [
@@ -46,7 +89,7 @@ const rule: Rule = createRule({
               logical,
             },
             fix: (fixer) => {
-              return fixer.replaceTextRange(node.range, logical)
+              return fixer.replaceText(node, logical)
             },
           },
         ],
@@ -54,17 +97,17 @@ const rule: Rule = createRule({
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
         sendReport(node.name)
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
         sendReport(node.key)
       },

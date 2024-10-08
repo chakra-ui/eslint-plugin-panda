@@ -1,7 +1,8 @@
 import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
 import { getArbitraryValue } from '@pandacss/shared'
-import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
+import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral } from '../utils/nodes'
+import { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'no-escape-hatch'
 
@@ -13,48 +14,41 @@ const rule: Rule = createRule({
     },
     messages: {
       escapeHatch:
-        'Avoid using the escape hatch [value] for undefined tokens. \nDefine a corresponding token in your design system for better consistency and maintainability.',
+        'Avoid using the escape hatch [value] for undefined tokens. Define a corresponding token in your design system for better consistency and maintainability.',
       remove: 'Remove the square brackets (`[]`).',
     },
-    type: 'suggestion',
+    type: 'problem',
     hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
   create(context) {
-    const removeQuotes = ([start, end]: readonly [number, number]) => [start + 1, end - 1] as const
+    // Helper function to adjust the range for fixing (removing brackets)
+    const removeBrackets = (range: readonly [number, number]) => {
+      const [start, end] = range
+      return [start + 1, end - 1] as const
+    }
 
-    const hasEscapeHatch = (value?: string) => {
+    // Function to check if a value contains escape hatch syntax
+    const hasEscapeHatch = (value: string | undefined): boolean => {
       if (!value) return false
+      // Early return if the value doesn't contain brackets
+      if (!value.includes('[')) return false
       return getArbitraryValue(value) !== value.trim()
     }
 
-    const handleLiteral = (node: Node) => {
-      if (!isLiteral(node)) return
-      if (!hasEscapeHatch(node.value?.toString())) return
+    // Unified function to handle reporting
+    const handleNodeValue = (node: TSESTree.Node, value: string) => {
+      if (!hasEscapeHatch(value)) return
 
-      sendReport(node)
-    }
-
-    const handleTemplateLiteral = (node: Node) => {
-      if (!isTemplateLiteral(node)) return
-      if (node.expressions.length > 0) return
-      if (!hasEscapeHatch(node.quasis[0].value.raw)) return
-
-      sendReport(node.quasis[0], node.quasis[0].value.raw)
-    }
-
-    const sendReport = (node: any, _value?: string) => {
-      const value = _value ?? node.value?.toString()
-
-      return context.report({
+      context.report({
         node,
         messageId: 'escapeHatch',
         suggest: [
           {
             messageId: 'remove',
             fix: (fixer) => {
-              return fixer.replaceTextRange(removeQuotes(node.range), getArbitraryValue(value))
+              return fixer.replaceTextRange(removeBrackets(node.range as [number, number]), getArbitraryValue(value))
             },
           },
         ],
@@ -62,26 +56,43 @@ const rule: Rule = createRule({
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!node.value) return
+        // Ensure the attribute is a Panda prop
         if (!isPandaProp(node, context)) return
 
-        handleLiteral(node.value)
+        const { value } = node
 
-        if (!isJSXExpressionContainer(node.value)) return
-
-        handleLiteral(node.value.expression)
-        handleTemplateLiteral(node.value.expression)
+        if (isLiteral(value)) {
+          const val = value.value?.toString() ?? ''
+          handleNodeValue(value, val)
+        } else if (isJSXExpressionContainer(value)) {
+          const expr = value.expression
+          if (isLiteral(expr)) {
+            const val = expr.value?.toString() ?? ''
+            handleNodeValue(expr, val)
+          } else if (isTemplateLiteral(expr) && expr.expressions.length === 0) {
+            const val = expr.quasis[0].value.raw
+            handleNodeValue(expr.quasis[0], val)
+          }
+        }
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isLiteral(node.value) && !isTemplateLiteral(node.value)) return
+        // Ensure the property is a Panda attribute
         if (!isPandaAttribute(node, context)) return
+        // Exclude recipe variants
         if (isRecipeVariant(node, context)) return
 
-        handleLiteral(node.value)
-        handleTemplateLiteral(node.value)
+        const value = node.value
+        if (isLiteral(value)) {
+          const val = value.value?.toString() ?? ''
+          handleNodeValue(value, val)
+        } else if (isTemplateLiteral(value) && value.expressions.length === 0) {
+          const val = value.quasis[0].value.raw
+          handleNodeValue(value.quasis[0], val)
+        }
       },
     }
   },
