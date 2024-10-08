@@ -1,13 +1,14 @@
 import {
   extractTokens,
-  isColorAttribute,
-  isColorToken,
+  isColorAttribute as originalIsColorAttribute,
+  isColorToken as originalIsColorToken,
   isPandaAttribute,
   isPandaProp,
   isRecipeVariant,
 } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
-import { isIdentifier, isJSXExpressionContainer, isJSXIdentifier, isLiteral } from '../utils/nodes'
+import { isIdentifier, isJSXExpressionContainer, isJSXIdentifier, isLiteral, isTemplateLiteral } from '../utils/nodes'
+import { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'no-hardcoded-color'
 
@@ -20,7 +21,7 @@ const rule: Rule = createRule({
     messages: {
       invalidColor: '`{{color}}` is not a valid color token.',
     },
-    type: 'suggestion',
+    type: 'problem',
     schema: [
       {
         type: 'object',
@@ -29,6 +30,7 @@ const rule: Rule = createRule({
             type: 'boolean',
           },
         },
+        additionalProperties: false,
       },
     ],
   },
@@ -40,75 +42,101 @@ const rule: Rule = createRule({
   create(context) {
     const noOpacity = context.options[0]?.noOpacity
 
-    const isTokenFn = (value?: string) => {
+    // Caches for isColorToken and isColorAttribute results
+    const colorTokenCache = new Map<string, boolean | undefined>()
+    const colorAttributeCache = new Map<string, boolean>()
+
+    // Cached version of isColorToken
+    const isColorToken = (token: string): boolean => {
+      if (colorTokenCache.has(token)) {
+        return colorTokenCache.get(token)!
+      }
+      const result = originalIsColorToken(token, context)
+      colorTokenCache.set(token, result)
+      return !!result
+    }
+
+    // Cached version of isColorAttribute
+    const isColorAttribute = (attribute: string): boolean => {
+      if (colorAttributeCache.has(attribute)) {
+        return colorAttributeCache.get(attribute)!
+      }
+      const result = originalIsColorAttribute(attribute, context)
+      colorAttributeCache.set(attribute, result)
+      return result
+    }
+
+    const isTokenFunctionUsed = (value: string): boolean => {
       if (!value) return false
       const tokens = extractTokens(value)
       return tokens.length > 0
     }
 
-    const testColorToken = (value?: string) => {
+    const isValidColorToken = (value: string): boolean => {
       if (!value) return false
-      const color = value?.split('/')
-      const isOpacityToken = !!color[1]?.length
-      const isValidToken = isColorToken(color[0], context)
-      return noOpacity ? isValidToken && !isOpacityToken : isValidToken
+      const [colorToken, opacity] = value.split('/')
+      const hasOpacity = opacity !== undefined && opacity.length > 0
+      const isValidToken = isColorToken(colorToken)
+
+      return noOpacity ? isValidToken && !hasOpacity : isValidToken
+    }
+
+    const reportInvalidColor = (node: TSESTree.Node, color: string) => {
+      context.report({
+        node,
+        messageId: 'invalidColor',
+        data: {
+          color,
+        },
+      })
+    }
+
+    const checkColorValue = (node: TSESTree.Node, value: string, attributeName: string) => {
+      if (!isColorAttribute(attributeName)) return
+      if (isTokenFunctionUsed(value)) return
+      if (isValidColorToken(value)) return
+
+      reportInvalidColor(node, value)
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
         if (!isPandaProp(node, context) || !node.value) return
 
-        if (
-          isLiteral(node.value) &&
-          isColorAttribute(node.name.name, context) &&
-          !isTokenFn(node.value.value?.toString()) &&
-          !testColorToken(node.value.value?.toString())
-        ) {
-          context.report({
-            node: node.value,
-            messageId: 'invalidColor',
-            data: {
-              color: node.value.value?.toString(),
-            },
-          })
-        }
+        const attributeName = node.name.name
+        const valueNode = node.value
 
-        if (!isJSXExpressionContainer(node.value)) return
-
-        if (
-          isLiteral(node.value.expression) &&
-          isColorAttribute(node.name.name, context) &&
-          !isTokenFn(node.value.expression.value?.toString()) &&
-          !testColorToken(node.value.expression.value?.toString())
-        ) {
-          context.report({
-            node: node.value.expression,
-            messageId: 'invalidColor',
-            data: {
-              color: node.value.expression.value?.toString(),
-            },
-          })
+        if (isLiteral(valueNode)) {
+          const value = valueNode.value?.toString() || ''
+          checkColorValue(valueNode, value, attributeName)
+        } else if (isJSXExpressionContainer(valueNode)) {
+          const expression = valueNode.expression
+          if (isLiteral(expression)) {
+            const value = expression.value?.toString() || ''
+            checkColorValue(expression, value, attributeName)
+          } else if (isTemplateLiteral(expression) && expression.expressions.length === 0) {
+            const value = expression.quasis[0].value.raw
+            checkColorValue(expression.quasis[0], value, attributeName)
+          }
         }
       },
 
-      Property(node) {
+      Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isLiteral(node.value)) return
-
         if (!isPandaAttribute(node, context)) return
         if (isRecipeVariant(node, context)) return
-        if (!isColorAttribute(node.key.name, context)) return
-        if (isTokenFn(node.value.value?.toString())) return
-        if (testColorToken(node.value.value?.toString())) return
 
-        context.report({
-          node: node.value,
-          messageId: 'invalidColor',
-          data: {
-            color: node.value.value?.toString(),
-          },
-        })
+        const attributeName = node.key.name
+        const valueNode = node.value
+
+        if (isLiteral(valueNode)) {
+          const value = valueNode.value?.toString() || ''
+          checkColorValue(valueNode, value, attributeName)
+        } else if (isTemplateLiteral(valueNode) && valueNode.expressions.length === 0) {
+          const value = valueNode.quasis[0].value.raw
+          checkColorValue(valueNode.quasis[0], value, attributeName)
+        }
       },
     }
   },

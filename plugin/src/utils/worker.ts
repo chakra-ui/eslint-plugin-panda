@@ -6,8 +6,13 @@ import { findConfig } from '@pandacss/config'
 import path from 'path'
 import type { ImportResult } from '.'
 
-let promise: Promise<PandaContext> | undefined
+type Opts = {
+  currentFile: string
+  configPath?: string
+}
+
 let configPath: string | undefined
+let contextCache: { [configPath: string]: Promise<PandaContext> } = {}
 
 async function _getContext(configPath: string | undefined) {
   if (!configPath) throw new Error('Invalid config path')
@@ -26,8 +31,13 @@ export async function getContext(opts: Opts) {
     return ctx
   } else {
     configPath = configPath || findConfig({ cwd: opts.configPath ?? opts.currentFile })
-    promise = promise || _getContext(configPath)
-    return await promise
+
+    // Ensure that the context is refreshed when the configPath changes.
+    if (!contextCache[configPath]) {
+      contextCache[configPath] = _getContext(configPath)
+    }
+
+    return await contextCache[configPath]
   }
 }
 
@@ -51,10 +61,6 @@ const arePathsEqual = (path1: string, path2: string) => {
   const normalizedPath2 = path.resolve(path2)
 
   return normalizedPath1 === normalizedPath2
-}
-
-async function isConfigFile(fileName: string): Promise<boolean> {
-  return arePathsEqual(configPath!, fileName)
 }
 
 async function isValidFile(ctx: PandaContext, fileName: string): Promise<boolean> {
@@ -106,15 +112,9 @@ async function matchImports(ctx: PandaContext, result: MatchImportResult) {
   })
 }
 
-type Opts = {
-  currentFile: string
-  configPath?: string
-}
-
 export function runAsync(action: 'filterInvalidTokens', opts: Opts, paths: string[]): Promise<string[]>
 export function runAsync(action: 'isColorToken', opts: Opts, value: string): Promise<boolean>
 export function runAsync(action: 'isColorAttribute', opts: Opts, attr: string): Promise<boolean>
-export function runAsync(action: 'isConfigFile', opts: Opts, fileName: string): Promise<string>
 export function runAsync(action: 'isValidFile', opts: Opts, fileName: string): Promise<string>
 export function runAsync(action: 'resolveShorthands', opts: Opts, name: string): Promise<string[] | undefined>
 export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): Promise<string | undefined>
@@ -140,8 +140,6 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'resolveShorthands':
       // @ts-expect-error cast
       return resolveShorthands(ctx, ...args)
-    case 'isConfigFile':
-      return isConfigFile(opts.currentFile)
     case 'isValidFile':
       return isValidFile(ctx, opts.currentFile)
     case 'isColorAttribute':
@@ -159,7 +157,6 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
 export function run(action: 'filterInvalidTokens', opts: Opts, paths: string[]): string[]
 export function run(action: 'isColorToken', opts: Opts, value: string): boolean
 export function run(action: 'isColorAttribute', opts: Opts, attr: string): boolean
-export function run(action: 'isConfigFile', opts: Opts): boolean
 export function run(action: 'isValidFile', opts: Opts): boolean
 export function run(action: 'resolveShorthands', opts: Opts, name: string): string[] | undefined
 export function run(action: 'resolveLongHand', opts: Opts, name: string): string | undefined

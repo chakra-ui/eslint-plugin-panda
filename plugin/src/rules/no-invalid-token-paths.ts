@@ -7,9 +7,9 @@ import {
   isRecipeVariant,
 } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
-import { AST_NODE_TYPES } from '@typescript-eslint/utils'
+import { AST_NODE_TYPES, TSESTree } from '@typescript-eslint/utils'
 import { isNodeOfTypes } from '@typescript-eslint/utils/ast-utils'
-import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral, type Node } from '../utils/nodes'
+import { isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral } from '../utils/nodes'
 
 export const RULE_NAME = 'no-invalid-token-paths'
 
@@ -22,92 +22,107 @@ const rule: Rule = createRule({
     messages: {
       noInvalidTokenPaths: '`{{token}}` is an invalid token path.',
     },
-    type: 'suggestion',
+    type: 'problem',
     schema: [],
   },
   defaultOptions: [],
   create(context) {
-    const handleLiteral = (node: Node) => {
-      if (!isLiteral(node)) return
+    // Cache for invalid tokens to avoid redundant computations
+    const invalidTokensCache = new Map<string, string[]>()
 
-      sendReport(node)
-    }
+    const sendReport = (node: TSESTree.Node, value: string | undefined) => {
+      if (!value) return
 
-    const handleTemplateLiteral = (node: Node) => {
-      if (!isTemplateLiteral(node)) return
-      if (node.expressions.length > 0) return
-      sendReport(node.quasis[0], node.quasis[0].value.raw)
-    }
+      let tokens: string[] | undefined = invalidTokensCache.get(value)
+      if (!tokens) {
+        tokens = getInvalidTokens(value, context)
+        invalidTokensCache.set(value, tokens)
+      }
 
-    const sendReport = (node: any, _value?: string) => {
-      const value = _value ?? node.value?.toString()
-      const tokens = getInvalidTokens(value, context)
-      if (!tokens) return
+      if (tokens.length === 0) return
 
-      if (tokens.length > 0) {
-        tokens.forEach((token) => {
-          context.report({
-            node,
-            messageId: 'noInvalidTokenPaths',
-            data: { token },
-          })
+      tokens.forEach((token) => {
+        context.report({
+          node,
+          messageId: 'noInvalidTokenPaths',
+          data: { token },
         })
+      })
+    }
+
+    const handleLiteralOrTemplate = (node: TSESTree.Node | undefined) => {
+      if (!node) return
+
+      if (isLiteral(node)) {
+        const value = node.value?.toString()
+        sendReport(node, value)
+      } else if (isTemplateLiteral(node) && node.expressions.length === 0) {
+        const value = node.quasis[0].value.raw
+        sendReport(node.quasis[0], value)
       }
     }
 
     return {
-      JSXAttribute(node) {
-        if (!node.value) return
-        if (!isPandaProp(node, context)) return
+      JSXAttribute(node: TSESTree.JSXAttribute) {
+        if (!node.value || !isPandaProp(node, context)) return
 
-        handleLiteral(node.value)
-
-        if (!isJSXExpressionContainer(node.value)) return
-
-        handleLiteral(node.value.expression)
-        handleTemplateLiteral(node.value.expression)
+        if (isLiteral(node.value)) {
+          handleLiteralOrTemplate(node.value)
+        } else if (isJSXExpressionContainer(node.value)) {
+          handleLiteralOrTemplate(node.value.expression)
+        }
       },
 
-      Property(node) {
-        if (!isIdentifier(node.key)) return
-        if (!isNodeOfTypes([AST_NODE_TYPES.Literal, AST_NODE_TYPES.TemplateLiteral])(node.value)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+      Property(node: TSESTree.Property) {
+        if (
+          !isIdentifier(node.key) ||
+          !isNodeOfTypes([AST_NODE_TYPES.Literal, AST_NODE_TYPES.TemplateLiteral])(node.value) ||
+          !isPandaAttribute(node, context) ||
+          isRecipeVariant(node, context)
+        ) {
+          return
+        }
 
-        handleLiteral(node.value)
-        handleTemplateLiteral(node.value)
+        handleLiteralOrTemplate(node.value)
       },
 
-      TaggedTemplateExpression(node) {
+      TaggedTemplateExpression(node: TSESTree.TaggedTemplateExpression) {
         const caller = getTaggedTemplateCaller(node)
-        if (!caller) return
+        if (!caller || !isPandaIsh(caller, context)) return
 
-        if (!isPandaIsh(caller, context)) return
+        const quasis = node.quasi.quasis
+        quasis.forEach((quasi) => {
+          const styles = quasi.value.raw
+          if (!styles) return
 
-        const quasis = node.quasi.quasis[0]
-        const styles = quasis.value.raw
-        const tokens = getInvalidTokens(styles, context)
-        if (!tokens) return
-
-        tokens.forEach((token, i, arr) => {
-          // Avoid duplicate reports on the same token
-          if (arr.indexOf(token) < i) return
-
-          let index = styles.indexOf(token)
-
-          while (index !== -1) {
-            const start = quasis.range[0] + 1 + index
-            const end = start + token.length
-
-            context.report({
-              loc: { start: context.sourceCode.getLocFromIndex(start), end: context.sourceCode.getLocFromIndex(end) },
-              messageId: 'noInvalidTokenPaths',
-              data: { token },
-            })
-
-            // Check for other occurences of the invalid token
-            index = styles.indexOf(token, index + 1)
+          let tokens: string[] | undefined = invalidTokensCache.get(styles)
+          if (!tokens) {
+            tokens = getInvalidTokens(styles, context)
+            invalidTokensCache.set(styles, tokens)
           }
+
+          if (tokens.length === 0) return
+
+          tokens.forEach((token) => {
+            let index = styles.indexOf(token)
+
+            while (index !== -1) {
+              const start = quasi.range[0] + index + 1 // +1 for the backtick
+              const end = start + token.length
+
+              context.report({
+                loc: {
+                  start: context.sourceCode.getLocFromIndex(start),
+                  end: context.sourceCode.getLocFromIndex(end),
+                },
+                messageId: 'noInvalidTokenPaths',
+                data: { token },
+              })
+
+              // Check for other occurences of the invalid token
+              index = styles.indexOf(token, index + token.length)
+            }
+          })
         })
       },
     }

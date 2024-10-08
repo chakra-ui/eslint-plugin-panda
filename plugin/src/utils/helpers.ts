@@ -47,7 +47,6 @@ export const getImportSpecifiers = (context: RuleContext<any, any>) => {
 
     node.specifiers.forEach((specifier) => {
       if (!isImportSpecifier(specifier)) return
-
       specifiers.push({ specifier, mod })
     })
   })
@@ -77,13 +76,20 @@ const _getImports = (context: RuleContext<any, any>) => {
   return imports
 }
 
+// Caching imports per context to avoid redundant computations
+const importsCache = new WeakMap<RuleContext<any, any>, ImportResult[]>()
+
 export const getImports = (context: RuleContext<any, any>) => {
+  if (importsCache.has(context)) {
+    return importsCache.get(context)!
+  }
   const imports = _getImports(context)
-  return imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
+  const filteredImports = imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
+  importsCache.set(context, filteredImports)
+  return filteredImports
 }
 
-const isValidStyledProp = <T extends Node | string>(node: T, context: RuleContext<any, any>) => {
-  if (typeof node === 'string') return
+const isValidStyledProp = <T extends Node>(node: T, context: RuleContext<any, any>) => {
   return isJSXIdentifier(node) && isValidProperty(node.name, context)
 }
 
@@ -103,7 +109,8 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
     if (isVariableDeclarator(decl)) return decl
   } catch (error) {
-    return
+    console.error('Error in findDeclaration:', error)
+    return undefined
   }
 }
 
@@ -121,10 +128,6 @@ const isLocalStyledFactory = (node: TSESTree.JSXOpeningElement, context: RuleCon
 
 export const isValidFile = (context: RuleContext<any, any>) => {
   return syncAction('isValidFile', getSyncOpts(context))
-}
-
-export const isConfigFile = (context: RuleContext<any, any>) => {
-  return syncAction('isConfigFile', getSyncOpts(context))
 }
 
 export const isValidProperty = (name: string, context: RuleContext<any, any>, calleName?: string) => {
@@ -198,6 +201,7 @@ export const isInJSXProp = (node: TSESTree.Property, context: RuleContext<any, a
 
   if (!jsxExprAncestor || !jsxAttrAncestor) return
   if (!isPandaProp(jsxAttrAncestor, context)) return
+  if (typeof jsxAttrAncestor.name === 'string') return
   if (!isValidStyledProp(jsxAttrAncestor.name, context)) return
 
   return true
@@ -233,6 +237,9 @@ export const isColorToken = (value: string | undefined, context: RuleContext<any
   return syncAction('isColorToken', getSyncOpts(context), value)
 }
 
+// Caching invalid tokens to avoid redundant computations
+const invalidTokensCache = new Map<string, string[]>()
+
 export const extractTokens = (value: string) => {
   const regex = /token\(([^"'(),]+)(?:,\s*([^"'(),]+))?\)|\{([^{}]+)\}/g
   const matches = []
@@ -255,9 +262,16 @@ export const extractTokens = (value: string) => {
 }
 
 export const getInvalidTokens = (value: string, context: RuleContext<any, any>) => {
+  if (invalidTokensCache.has(value)) {
+    return invalidTokensCache.get(value)!
+  }
+
   const tokens = extractTokens(value)
   if (!tokens.length) return []
-  return syncAction('filterInvalidTokens', getSyncOpts(context), tokens)
+
+  const invalidTokens = syncAction('filterInvalidTokens', getSyncOpts(context), tokens)
+  invalidTokensCache.set(value, invalidTokens)
+  return invalidTokens
 }
 
 export const getTokenImport = (context: RuleContext<any, any>) => {

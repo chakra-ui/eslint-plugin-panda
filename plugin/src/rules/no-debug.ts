@@ -1,6 +1,6 @@
-import { isIdentifier, isJSXIdentifier } from '../utils/nodes'
 import { type Rule, createRule } from '../utils'
-import { isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
+import { isPandaProp, isPandaAttribute, isRecipeVariant } from '../utils/helpers'
+import { TSESTree } from '@typescript-eslint/utils'
 
 export const RULE_NAME = 'no-debug'
 
@@ -15,15 +15,15 @@ const rule: Rule = createRule({
       prop: 'Remove the debug prop.',
       property: 'Remove the debug property.',
     },
-    type: 'suggestion',
+    type: 'problem',
     hasSuggestions: true,
     schema: [],
   },
   defaultOptions: [],
   create(context) {
     return {
-      JSXAttribute(node) {
-        if (!isJSXIdentifier(node.name) || node.name.name !== 'debug') return
+      'JSXAttribute[name.name="debug"]'(node: TSESTree.JSXAttribute) {
+        // Ensure the attribute is a Panda prop
         if (!isPandaProp(node, context)) return
 
         context.report({
@@ -38,9 +38,10 @@ const rule: Rule = createRule({
         })
       },
 
-      Property(node) {
-        if (!isIdentifier(node.key) || node.key.name !== 'debug') return
+      'Property[key.name="debug"]'(node: TSESTree.Property) {
+        // Ensure the property is a Panda attribute
         if (!isPandaAttribute(node, context)) return
+        // Exclude recipe variants
         if (isRecipeVariant(node, context)) return
 
         context.report({

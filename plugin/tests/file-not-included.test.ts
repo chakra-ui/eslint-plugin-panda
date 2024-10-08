@@ -28,7 +28,7 @@ tester.run(RULE_NAME, rule, {
     {
       code: invalidCode,
       filename: 'Invalid.tsx',
-      errors: 2,
+      errors: 1,
     },
   ],
 })

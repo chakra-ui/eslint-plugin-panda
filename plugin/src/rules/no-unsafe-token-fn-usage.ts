@@ -1,14 +1,7 @@
 import { extractTokens, getTokenImport, isPandaAttribute, isPandaProp, isRecipeVariant } from '../utils/helpers'
 import { type Rule, createRule } from '../utils'
-import { TSESTree } from '@typescript-eslint/utils'
-import {
-  isCallExpression,
-  isIdentifier,
-  isJSXExpressionContainer,
-  isLiteral,
-  isTemplateLiteral,
-  type Node,
-} from '../utils/nodes'
+import { isCallExpression, isIdentifier, isJSXExpressionContainer, isLiteral, isTemplateLiteral } from '../utils/nodes'
+import { type TSESTree } from '@typescript-eslint/utils'
 import { getArbitraryValue } from '@pandacss/shared'
 
 export const RULE_NAME = 'no-unsafe-token-fn-usage'
@@ -21,8 +14,8 @@ const rule: Rule = createRule({
         'Prevent users from using the token function in situations where they could simply use the raw design token.',
     },
     messages: {
-      noUnsafeTokenFnUsage: 'Unneccessary token function usage. Prefer design token',
-      replace: 'Replace token function with `{{safe}}`',
+      noUnsafeTokenFnUsage: 'Unnecessary token function usage. Prefer design token.',
+      replace: 'Replace token function with `{{safe}}`.',
     },
     type: 'suggestion',
     hasSuggestions: true,
@@ -30,35 +23,65 @@ const rule: Rule = createRule({
   },
   defaultOptions: [],
   create(context) {
-    const isUnsafeCallExpression = (node: TSESTree.CallExpression) => {
-      const tkImport = getTokenImport(context)
+    // Cache for getTokenImport result
+    let tokenImportCache: { alias: string } | null | undefined
+
+    const getCachedTokenImport = (): { alias: string } | null | undefined => {
+      if (tokenImportCache !== undefined) {
+        return tokenImportCache
+      }
+      tokenImportCache = getTokenImport(context)
+      return tokenImportCache
+    }
+
+    const isUnsafeCallExpression = (node: TSESTree.CallExpression): boolean => {
+      const tkImport = getCachedTokenImport()
       return isIdentifier(node.callee) && node.callee.name === tkImport?.alias
     }
 
-    const tokenWrap = (value?: string) => (value ? `token(${value})` : '')
+    const tokenWrap = (value?: string): string => (value ? `token(${value})` : '')
 
-    const handleRuntimeFm = (node: Node) => {
+    const isCompositeValue = (input?: string): boolean => {
+      if (!input) return false
+      // Regular expression to match token-only values, e.g., token('space.2') or {space.2}
+      const tokenRegex = /^(?:token\([^)]*\)|\{[^}]*\})$/
+      return !tokenRegex.test(input)
+    }
+
+    const sendReport = (node: TSESTree.Node, value: string) => {
+      const tkImports = extractTokens(value)
+      if (!tkImports.length) return
+      const token = tkImports[0].replace(/^[^.]*\./, '')
+
+      context.report({
+        node,
+        messageId: 'noUnsafeTokenFnUsage',
+        suggest: [
+          {
+            messageId: 'replace',
+            data: { safe: token },
+            fix: (fixer) => fixer.replaceText(node, `'${token}'`),
+          },
+        ],
+      })
+    }
+
+    const handleRuntimeFm = (node: TSESTree.Node) => {
       if (!isCallExpression(node)) return
       if (!isUnsafeCallExpression(node)) return
 
       const value = node.arguments[0]
 
       if (isLiteral(value)) {
-        sendReport(node, tokenWrap(getArbitraryValue(value.value?.toString() ?? '')))
-      }
-      if (isTemplateLiteral(value)) {
-        sendReport(node, tokenWrap(getArbitraryValue(value.quasis[0].value.raw)))
+        const val = getArbitraryValue(value.value?.toString() ?? '')
+        sendReport(node, tokenWrap(val))
+      } else if (isTemplateLiteral(value) && value.expressions.length === 0) {
+        const val = getArbitraryValue(value.quasis[0].value.raw)
+        sendReport(node, tokenWrap(val))
       }
     }
 
-    const isCompositeValue = (input?: string) => {
-      if (!input) return
-      // Regular expression to match token only values. i.e. token('space.2') or {space.2}
-      const tokenRegex = /^(?:token\([^)]*\)|\{[^}]*\})$/
-      return !tokenRegex.test(input)
-    }
-
-    const handleLiteral = (node: Node) => {
+    const handleLiteral = (node: TSESTree.Node) => {
       if (!isLiteral(node)) return
       const value = getArbitraryValue(node.value?.toString() ?? '')
       if (isCompositeValue(value)) return
@@ -66,55 +89,69 @@ const rule: Rule = createRule({
       sendReport(node, value)
     }
 
-    const handleTemplateLiteral = (node: Node) => {
-      if (!isTemplateLiteral(node)) return
-      if (node.expressions.length > 0) return
+    const handleTemplateLiteral = (node: TSESTree.Node) => {
+      if (!isTemplateLiteral(node) || node.expressions.length > 0) return
 
-      sendReport(node, getArbitraryValue(node.quasis[0].value.raw))
+      const value = getArbitraryValue(node.quasis[0].value.raw)
+      sendReport(node, value)
     }
 
-    const sendReport = (node: any, value: string) => {
-      const tkImports = extractTokens(value)
-      if (!tkImports.length) return
-      const token = tkImports[0].replace(/^[^.]*\./, '')
+    // Cached versions of helper functions
+    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
+    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
+      if (pandaPropCache.has(node)) {
+        return pandaPropCache.get(node)!
+      }
+      const result = isPandaProp(node, context)
+      pandaPropCache.set(node, result)
+      return !!result
+    }
 
-      return context.report({
-        node,
-        messageId: 'noUnsafeTokenFnUsage',
-        suggest: [
-          {
-            messageId: 'replace',
-            data: { safe: token },
-            fix: (fixer) => {
-              return fixer.replaceTextRange(node.range, `'${token}'`)
-            },
-          },
-        ],
-      })
+    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
+      if (pandaAttributeCache.has(node)) {
+        return pandaAttributeCache.get(node)!
+      }
+      const result = isPandaAttribute(node, context)
+      pandaAttributeCache.set(node, result)
+      return !!result
+    }
+
+    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
+    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
+      if (recipeVariantCache.has(node)) {
+        return recipeVariantCache.get(node)!
+      }
+      const result = isRecipeVariant(node, context)
+      recipeVariantCache.set(node, result)
+      return !!result
     }
 
     return {
-      JSXAttribute(node) {
+      JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!node.value) return
-        if (!isPandaProp(node, context)) return
+        if (!isCachedPandaProp(node)) return
 
         handleLiteral(node.value)
 
-        if (!isJSXExpressionContainer(node.value)) return
-
-        handleLiteral(node.value.expression)
-        handleTemplateLiteral(node.value.expression)
-        handleRuntimeFm(node.value.expression)
+        if (isJSXExpressionContainer(node.value)) {
+          const expression = node.value.expression
+          handleLiteral(expression)
+          handleTemplateLiteral(expression)
+          handleRuntimeFm(expression)
+        }
       },
 
-      Property(node) {
-        if (!isCallExpression(node.value) && !isLiteral(node.value) && !isTemplateLiteral(node.value)) return
-        if (!isPandaAttribute(node, context)) return
-        if (isRecipeVariant(node, context)) return
+      Property(node: TSESTree.Property) {
+        if (!isCachedPandaAttribute(node)) return
+        if (isCachedRecipeVariant(node)) return
 
-        handleRuntimeFm(node.value)
-        handleLiteral(node.value)
-        handleTemplateLiteral(node.value)
+        const valueNode = node.value
+        if (isCallExpression(valueNode) || isLiteral(valueNode) || isTemplateLiteral(valueNode)) {
+          handleRuntimeFm(valueNode)
+          handleLiteral(valueNode)
+          handleTemplateLiteral(valueNode)
+        }
       },
     }
   },

@@ -4,25 +4,30 @@ import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { run } from './worker'
 
-export const createRule: ReturnType<(typeof ESLintUtils)['RuleCreator']> = ESLintUtils.RuleCreator(
+// Rule creator
+export const createRule = ESLintUtils.RuleCreator(
   (name) => `https://github.com/chakra-ui/eslint-plugin-panda/blob/main/docs/rules/${name}.md`,
 )
 
-export type Rule<A extends readonly unknown[] = any, B extends string = any> = ReturnType<typeof createRule<A, B>>
+// Define Rule type explicitly
+export type Rule = ReturnType<typeof createRule>
 
+// Determine the distribution directory
 const isBase = process.env.NODE_ENV !== 'test' || import.meta.url.endsWith('dist/index.js')
 export const distDir = fileURLToPath(new URL(isBase ? './' : '../../dist', import.meta.url))
 
+// Create synchronous function using synckit
 export const _syncAction = createSyncFn(join(distDir, 'utils/worker.mjs'))
-// export const _syncAction = createSyncFn(join(distDir, 'utils/worker.mjs')) as typeof run
 
-export const syncAction = ((...args: any) => {
+// Define syncAction with proper typing and error handling
+export const syncAction = ((...args: Parameters<typeof run>) => {
   try {
     return _syncAction(...args)
   } catch (error) {
-    return
+    console.error('syncAction error:', error)
+    return undefined
   }
-}) as typeof run | ((...args: any) => undefined)
+}) as typeof run
 
 export interface ImportResult {
   name: string
