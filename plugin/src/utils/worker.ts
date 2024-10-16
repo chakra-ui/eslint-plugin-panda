@@ -12,7 +12,7 @@ type Opts = {
 }
 
 let configPath: string | undefined
-let contextCache: { [configPath: string]: Promise<PandaContext> } = {}
+const contextCache: { [configPath: string]: Promise<PandaContext> } = {}
 
 async function _getContext(configPath: string | undefined) {
   if (!configPath) throw new Error('Invalid config path')
