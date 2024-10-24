@@ -2,7 +2,7 @@
 
 # no-invalid-nesting
 
-Warn against invalid nesting. i.e. nested styles that don't contain the `&` character.
+Warn against invalid nesting. Nested styles must contain the `&` character.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -87,4 +87,4 @@ function App() {
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-invalid-nesting.ts)
-* [Test source](/tests/no-invalid-nesting.test.ts)
+* [Test source](/plugin/tests/no-invalid-nesting.test.ts)

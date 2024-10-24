@@ -2,7 +2,7 @@
 
 # prefer-unified-property-style
 
-Discourage against mixing atomic and composite forms of the same property in a style declaration. Atomic styles give more consistent results
+Discourage mixing atomic and composite forms of the same property in a style declaration. Atomic styles give more consistent results.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -41,4 +41,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/prefer-unified-property-style.ts)
-* [Test source](/tests/prefer-unified-property-style.test.ts)
+* [Test source](/plugin/tests/prefer-unified-property-style.test.ts)

@@ -2,7 +2,7 @@
 
 # no-config-function-in-source
 
-Prohibit the use of config functions outside the Panda config.
+Prohibit the use of config functions outside the Panda config file.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -48,4 +48,4 @@ export default defineConfig({
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-config-function-in-source.ts)
-* [Test source](/tests/no-config-function-in-source.test.ts)
+* [Test source](/plugin/tests/no-config-function-in-source.test.ts)

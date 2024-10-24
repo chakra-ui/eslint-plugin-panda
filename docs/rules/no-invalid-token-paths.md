@@ -78,4 +78,4 @@ const className = css`
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-invalid-token-paths.ts)
-* [Test source](/tests/no-invalid-token-paths.test.ts)
+* [Test source](/plugin/tests/no-invalid-token-paths.test.ts)

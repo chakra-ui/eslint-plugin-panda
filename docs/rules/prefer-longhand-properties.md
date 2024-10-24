@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/prefer-longhand-properties.ts)
-* [Test source](/tests/prefer-longhand-properties.test.ts)
+* [Test source](/plugin/tests/prefer-longhand-properties.test.ts)

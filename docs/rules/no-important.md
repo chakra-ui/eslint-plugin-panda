@@ -2,7 +2,7 @@
 
 # no-important
 
-Disallow usage of important keyword. Prioroitize specificity for a maintainable and predictable styling structure.
+Disallow usage of !important keyword. Prioritize specificity for a maintainable and predictable styling structure.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-important.ts)
-* [Test source](/tests/no-important.test.ts)
+* [Test source](/plugin/tests/no-important.test.ts)

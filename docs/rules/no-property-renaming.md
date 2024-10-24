@@ -2,8 +2,7 @@
 
 # no-property-renaming
 
-Ensure user does not rename a property for a pattern or style prop. 
-It doesn't get tracked.
+Ensure that properties for patterns or style props are not renamed, as it prevents proper tracking.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -73,4 +72,4 @@ function CustomCircle(props){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-property-renaming.ts)
-* [Test source](/tests/no-property-renaming.test.ts)
+* [Test source](/plugin/tests/no-property-renaming.test.ts)

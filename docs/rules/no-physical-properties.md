@@ -2,7 +2,7 @@
 
 # no-physical-properties
 
-Encourage the use of [logical properties](https://mdn.io/logical-properties-basic-concepts) over physical proeprties, to foster a responsive and adaptable user interface.
+Encourage the use of logical properties over physical properties to foster a responsive and adaptable user interface.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -57,4 +57,4 @@ function App(){
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-physical-properties.ts)
-* [Test source](/tests/no-physical-properties.test.ts)
+* [Test source](/plugin/tests/no-physical-properties.test.ts)

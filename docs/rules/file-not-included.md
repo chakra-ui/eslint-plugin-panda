@@ -2,7 +2,7 @@
 
 # file-not-included
 
-Disallow the use of panda css in files that are not included in the specified panda `include` config.
+Disallow the use of Panda CSS in files that are not included in the specified Panda CSS `include` config.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -29,4 +29,4 @@ import { Circle } from './panda/jsx';
 ## Resources
 
 * [Rule source](/plugin/src/rules/file-not-included.ts)
-* [Test source](/tests/file-not-included.test.ts)
+* [Test source](/plugin/tests/file-not-included.test.ts)

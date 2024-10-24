@@ -2,8 +2,7 @@
 
 # no-dynamic-styling
 
-Ensure user doesn't use dynamic styling at any point. 
-Prefer to use static styles, leverage css variables or recipes for known dynamic styles.
+Ensure users don't use dynamic styling. Prefer static styles, leverage CSS variables, or recipes for known dynamic styles.
 
 📋 This rule is enabled in `plugin:@pandacss/all`.
 
@@ -99,10 +98,15 @@ import { styled } from './panda/jsx';
 
 function App(){
   return <styled.div color='red.100' />;
-}
+};
+```
+```js
+
+const foo = 'foo'
+const nonStyles = {bar: [foo]}
 ```
 
 ## Resources
 
 * [Rule source](/plugin/src/rules/no-dynamic-styling.ts)
-* [Test source](/tests/no-dynamic-styling.test.ts)
+* [Test source](/plugin/tests/no-dynamic-styling.test.ts)
