@@ -216,7 +216,7 @@ importers:
         version: 0.4.14(eslint@9.5.0)
       globals:
         specifier: ^15.6.0
-        version: 15.8.0
+        version: 15.11.0
       typescript:
         specifier: ^5.2.2
         version: 5.4.5
@@ -3633,8 +3633,8 @@ packages:
     engines: {node: '>=18'}
     dev: true
 
-  /globals@15.8.0:
-    resolution: {integrity: sha512-VZAJ4cewHTExBWDHR6yptdIBlx9YSSZuwojj9Nt5mBRXQzrKakDsVKQ1J63sklLvzAJm0X5+RpO4i3Y2hcOnFw==}
+  /globals@15.11.0:
+    resolution: {integrity: sha512-yeyNSjdbyVaWurlwCpcA6XNBrHTMIeDdj0/hnvX/OLJ9ekOXYbLsLinH/MucQyGvNnXhidTdNhTtJaffL2sMfw==}
     engines: {node: '>=18'}
     dev: true
 
