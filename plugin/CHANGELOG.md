@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.1
+
+### Patch Changes
+
+- 9b43b55: Warn when sourceCode is not detected
+
 ## 0.2.0
 
 ### Minor Changes
