@@ -101,7 +101,14 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
 
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   try {
-    const scope = analyze(context.sourceCode.ast, {
+    const src = context.sourceCode
+
+    if (!src) {
+      console.warn("⚠️ ESLint's sourceCode is not available. Ensure that the rule is invoked with valid code.")
+      return undefined
+    }
+
+    const scope = analyze(src.ast, {
       sourceType: 'module',
     })
     const decl = scope.variables
