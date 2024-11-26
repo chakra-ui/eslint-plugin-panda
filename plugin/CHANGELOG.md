@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.2
+
+### Patch Changes
+
+- ea9b523: Fix token extraction
+
 ## 0.2.1
 
 ### Patch Changes
