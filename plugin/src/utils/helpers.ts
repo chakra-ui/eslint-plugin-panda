@@ -248,7 +248,7 @@ export const isColorToken = (value: string | undefined, context: RuleContext<any
 const invalidTokensCache = new Map<string, string[]>()
 
 export const extractTokens = (value: string) => {
-  const regex = /token\(([^"'(),]+)(?:,\s*([^"'(),]+))?\)|\{([^{}]+)\}/g
+  const regex = /token\(([^"'(),]+)(?:,\s*([^"'(),]+))?\)|\{([^{\r\n}]+)\}/g
   const matches = []
   let match
 
