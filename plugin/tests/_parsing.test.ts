@@ -178,6 +178,11 @@ const valids5 = [
   'const className = css`\n  font-size: {fontSizes.md};`',
   'const className = styled.h1`\n  font-size: {fontSizes.md};`',
   'const className = styled(Circle)`\n  font-size: {fontSizes.md};`',
+  `const className = css\`\n  
+    @media (min-width: token(breakpoints.lg)) {
+      grid-template-columns: auto 450px;
+    }
+  \``,
 ]
 
 const invalids5 = [
