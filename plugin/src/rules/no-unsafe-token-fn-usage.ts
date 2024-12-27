@@ -66,7 +66,7 @@ const rule: Rule = createRule({
       })
     }
 
-    const handleRuntimeFm = (node: TSESTree.Node) => {
+    const handleRuntimeFn = (node: TSESTree.Node) => {
       if (!isCallExpression(node)) return
       if (!isUnsafeCallExpression(node)) return
 
@@ -91,8 +91,9 @@ const rule: Rule = createRule({
 
     const handleTemplateLiteral = (node: TSESTree.Node) => {
       if (!isTemplateLiteral(node) || node.expressions.length > 0) return
-
       const value = getArbitraryValue(node.quasis[0].value.raw)
+      if (isCompositeValue(value)) return
+
       sendReport(node, value)
     }
 
@@ -138,7 +139,7 @@ const rule: Rule = createRule({
           const expression = node.value.expression
           handleLiteral(expression)
           handleTemplateLiteral(expression)
-          handleRuntimeFm(expression)
+          handleRuntimeFn(expression)
         }
       },
 
@@ -147,8 +148,9 @@ const rule: Rule = createRule({
         if (isCachedRecipeVariant(node)) return
 
         const valueNode = node.value
+
         if (isCallExpression(valueNode) || isLiteral(valueNode) || isTemplateLiteral(valueNode)) {
-          handleRuntimeFm(valueNode)
+          handleRuntimeFn(valueNode)
           handleLiteral(valueNode)
           handleTemplateLiteral(valueNode)
         }
