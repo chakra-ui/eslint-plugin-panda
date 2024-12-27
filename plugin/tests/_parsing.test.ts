@@ -146,7 +146,10 @@ const imports4 = `import { css } from './panda/css';
 import { token as tk } from './panda/tokens'
 import { Circle } from './panda/jsx';\n\n`
 
-const valids4 = ['const styles = css({ bg: "token(colors.red.300) 50%" })']
+const valids4 = [
+  'const styles = css({ bg: "token(colors.red.300) 50%" })',
+  'const styles = css({ border: "solid 1px {colors.red.300}" })',
+]
 
 const invalids4 = [
   {
