@@ -3,7 +3,7 @@
   "include": ["src/**/*", "tests", "test-utils.ts"],
   "compilerOptions": {
     "paths": {
-      "fixture": ["../fixture/src/index.ts"],
-    },
-  },
+      "fixture": ["../fixture/src/index.ts"]
+    }
+  }
 }
