@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.3
+
+### Patch Changes
+
+- aed180b: Fix false positive in no-unsafe-token-usage rule
+
 ## 0.2.2
 
 ### Patch Changes
