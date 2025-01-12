@@ -36,7 +36,7 @@ export default tseslint.config({
     ...panda.configs.recommended.rules,
     '@pandacss/no-margin-properties': 'warn',
     '@pandacss/no-physical-properties': 'error',
-    '@pandacss/no-hardcoded-color': ['error', { noOpacity: true }],
+    '@pandacss/no-hardcoded-color': ['error', { noOpacity: true, whitelist: ['inherit'] }],
     'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
   },
 })

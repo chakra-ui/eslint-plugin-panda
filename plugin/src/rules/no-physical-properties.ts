@@ -19,10 +19,31 @@ const rule: Rule = createRule({
     },
     type: 'suggestion',
     hasSuggestions: true,
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          whitelist: {
+            type: 'array',
+            items: {
+              type: 'string',
+              minLength: 0,
+            },
+            uniqueItems: true,
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
-  defaultOptions: [],
+  defaultOptions: [
+    {
+      whitelist: [],
+    },
+  ],
   create(context) {
+    const whitelist: string[] = context.options[0]?.whitelist ?? []
+
     // Cache for resolved longhand properties
     const longhandCache = new Map<string, string>()
 
@@ -68,6 +89,7 @@ const rule: Rule = createRule({
     }
 
     const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
+      if (whitelist.includes(node.name)) return
       const longhandName = getLonghand(node.name)
       if (!(longhandName in physicalProperties)) return
 

@@ -29,6 +29,14 @@ const rule: Rule = createRule({
           noOpacity: {
             type: 'boolean',
           },
+          whitelist: {
+            type: 'array',
+            items: {
+              type: 'string',
+              minLength: 0,
+            },
+            uniqueItems: true,
+          },
         },
         additionalProperties: false,
       },
@@ -37,13 +45,15 @@ const rule: Rule = createRule({
   defaultOptions: [
     {
       noOpacity: false,
+      whitelist: [],
     },
   ],
   create(context) {
     const noOpacity = context.options[0]?.noOpacity
+    const whitelist: string[] = context.options[0]?.whitelist ?? []
 
     // Caches for isColorToken and isColorAttribute results
-    const colorTokenCache = new Map<string, boolean | undefined>()
+    const colorTokenCache = new Map<string, boolean | undefined>(whitelist?.map((item) => [item, true]))
     const colorAttributeCache = new Map<string, boolean>()
 
     // Cached version of isColorToken

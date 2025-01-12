@@ -17,10 +17,31 @@ const rule: Rule = createRule({
         'Use flex or grid with the `gap` property to define spacing in parent elements for a more resilient layout.',
     },
     type: 'suggestion',
-    schema: [],
+    schema: [
+      {
+        type: 'object',
+        properties: {
+          whitelist: {
+            type: 'array',
+            items: {
+              type: 'string',
+              minLength: 0,
+            },
+            uniqueItems: true,
+          },
+        },
+        additionalProperties: false,
+      },
+    ],
   },
-  defaultOptions: [],
+  defaultOptions: [
+    {
+      whitelist: [],
+    },
+  ],
   create(context) {
+    const whitelist: string[] = context.options[0]?.whitelist ?? []
+
     // Cache for resolved longhand properties
     const longhandCache = new Map<string, string>()
 
@@ -41,6 +62,7 @@ const rule: Rule = createRule({
     }
 
     const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
+      if (whitelist.includes(node.name)) return
       if (!isMarginProperty(node.name)) return
 
       context.report({

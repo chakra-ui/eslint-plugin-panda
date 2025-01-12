@@ -35,6 +35,7 @@ function App() {
     margin: '4',
     pt: token('sizes.4'),
     paddingBlockEnd: ['4', pbe],
+    borderColor: 'inherit',
   })
 
   const color = 'red'
