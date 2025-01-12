@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.4
+
+### Patch Changes
+
+- 8c928df: Add whitelist option to rules
+
 ## 0.2.3
 
 ### Patch Changes
