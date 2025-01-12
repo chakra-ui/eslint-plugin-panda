@@ -149,7 +149,7 @@ All the rules that prevent you from using certain properties can be whitelisted 
     "@pandacss/no-margin-properties": [
       "error",
       {
-        "whitelist": ["margin-top", "margin-bottom"]
+        "whitelist": ["marginTop", "marginBottom"]
       }
     ]
   }
