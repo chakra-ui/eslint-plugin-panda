@@ -133,29 +133,6 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 | [`@pandacss/prefer-composite-properties`](docs/rules/prefer-composite-properties.md) ⚙️  |               |
 | [`@pandacss/prefer-unified-property-style`](docs/rules/prefer-unified-property-style.md) |               |
 
-### Whitelisting rules
-
-All the rules that prevent you from using certain properties can be whitelisted using the `whitelist` option.
-
-```json
-{
-  "rules": {
-     "@pandacss/no-hardcoded-color": [
-      "error",
-      {
-        "whitelist": ["inherit", "currentColor"]
-      }
-    ]
-    "@pandacss/no-margin-properties": [
-      "error",
-      {
-        "whitelist": ["marginTop", "marginBottom"]
-      }
-    ]
-  }
-}
-```
-
 ## Settings
 
 ### `configPath`
