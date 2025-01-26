@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.5
+
+### Patch Changes
+
+- 7876614: Upgrade dependencies
+
 ## 0.2.4
 
 ### Patch Changes
