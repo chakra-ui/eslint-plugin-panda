@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.6
+
+### Patch Changes
+
+- 13b2312: Fix peer deps issue
+
 ## 0.2.5
 
 ### Patch Changes
