@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.7
+
+### Patch Changes
+
+- 2f64f0b: Fix security
+
 ## 0.2.6
 
 ### Patch Changes
