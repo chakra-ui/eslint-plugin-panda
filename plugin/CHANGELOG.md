@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.8
+
+### Patch Changes
+
+- 5aa9600: Bump @pandacss/\* packages to v0.53.2
+
 ## 0.2.7
 
 ### Patch Changes
