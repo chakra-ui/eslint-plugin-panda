@@ -2,9 +2,129 @@ import { isRecipeVariant, isPandaAttribute, isPandaProp, resolveLonghand } from 
 import { type Rule, createRule } from '../utils'
 import { isIdentifier, isJSXIdentifier, isLiteral, isJSXExpressionContainer } from '../utils/nodes'
 import { physicalProperties, physicalPropertyValues } from '../utils/physical-properties'
-import type { TSESTree } from '@typescript-eslint/utils'
+import type { TSESTree, TSESLint } from '@typescript-eslint/utils'
+
+type CacheMap<K extends object, V> = WeakMap<K, V | undefined>
+type ValueNode = TSESTree.Property['value'] | TSESTree.JSXAttribute['value']
+type IdentifierNode = TSESTree.Identifier | TSESTree.JSXIdentifier
+type RuleContextType = TSESLint.RuleContext<keyof typeof MESSAGES, [{ whitelist: string[] }]>
 
 export const RULE_NAME = 'no-physical-properties'
+
+const MESSAGES = {
+  physical: 'Use logical property instead of {{physical}}. Prefer `{{logical}}`.',
+  physicalValue: 'Use logical value instead of {{physical}}. Prefer `{{logical}}`.',
+  replace: 'Replace `{{physical}}` with `{{logical}}`.',
+} as const
+
+class PropertyCache {
+  private longhandCache = new Map<string, string>()
+  private pandaPropCache: CacheMap<TSESTree.JSXAttribute, boolean> = new WeakMap()
+  private pandaAttributeCache: CacheMap<TSESTree.Property, boolean> = new WeakMap()
+  private recipeVariantCache: CacheMap<TSESTree.Property, boolean> = new WeakMap()
+
+  getLonghand(name: string, context: RuleContextType): string {
+    if (this.longhandCache.has(name)) {
+      return this.longhandCache.get(name)!
+    }
+    const longhand = resolveLonghand(name, context) ?? name
+    this.longhandCache.set(name, longhand)
+    return longhand
+  }
+
+  isPandaProp(node: TSESTree.JSXAttribute, context: RuleContextType): boolean {
+    if (this.pandaPropCache.has(node)) {
+      return this.pandaPropCache.get(node)!
+    }
+    const result = isPandaProp(node, context)
+    this.pandaPropCache.set(node, result)
+    return !!result
+  }
+
+  isPandaAttribute(node: TSESTree.Property, context: RuleContextType): boolean {
+    if (this.pandaAttributeCache.has(node)) {
+      return this.pandaAttributeCache.get(node)!
+    }
+    const result = isPandaAttribute(node, context)
+    this.pandaAttributeCache.set(node, result)
+    return !!result
+  }
+
+  isRecipeVariant(node: TSESTree.Property, context: RuleContextType): boolean {
+    if (this.recipeVariantCache.has(node)) {
+      return this.recipeVariantCache.get(node)!
+    }
+    const result = isRecipeVariant(node, context)
+    this.recipeVariantCache.set(node, result)
+    return !!result
+  }
+}
+
+const extractStringLiteralValue = (valueNode: ValueNode): string | null => {
+  if (isLiteral(valueNode) && typeof valueNode.value === 'string') {
+    return valueNode.value
+  }
+
+  if (
+    isJSXExpressionContainer(valueNode) &&
+    isLiteral(valueNode.expression) &&
+    typeof valueNode.expression.value === 'string'
+  ) {
+    return valueNode.expression.value
+  }
+
+  return null
+}
+
+const createPropertyReport = (
+  node: IdentifierNode,
+  longhandName: string,
+  logical: string,
+  context: RuleContextType,
+) => {
+  const physicalName = `\`${node.name}\`${longhandName !== node.name ? ` (resolved to \`${longhandName}\`)` : ''}`
+
+  context.report({
+    node,
+    messageId: 'physical',
+    data: { physical: physicalName, logical },
+    suggest: [
+      {
+        messageId: 'replace',
+        data: { physical: node.name, logical },
+        fix: (fixer: TSESLint.RuleFixer) => fixer.replaceText(node, logical),
+      },
+    ],
+  })
+}
+
+const createValueReport = (
+  valueNode: NonNullable<ValueNode>,
+  valueText: string,
+  logical: string,
+  context: RuleContextType,
+) => {
+  context.report({
+    node: valueNode,
+    messageId: 'physicalValue',
+    data: { physical: `"${valueText}"`, logical: `"${logical}"` },
+    suggest: [
+      {
+        messageId: 'replace',
+        data: { physical: `"${valueText}"`, logical: `"${logical}"` },
+        fix: (fixer: TSESLint.RuleFixer) => {
+          if (isLiteral(valueNode)) {
+            return fixer.replaceText(valueNode, `"${logical}"`)
+          }
+          if (isJSXExpressionContainer(valueNode) && isLiteral(valueNode.expression)) {
+            return fixer.replaceText(valueNode.expression, `"${logical}"`)
+          }
+          return null
+        },
+      },
+    ],
+  })
+}
 
 const rule: Rule = createRule({
   name: RULE_NAME,
@@ -13,11 +133,7 @@ const rule: Rule = createRule({
       description:
         'Encourage the use of logical properties over physical properties to foster a responsive and adaptable user interface.',
     },
-    messages: {
-      physical: 'Use logical property instead of {{physical}}. Prefer `{{logical}}`.',
-      physicalValue: 'Use logical value instead of {{physical}}. Prefer `{{logical}}`.',
-      replace: 'Replace `{{physical}}` with `{{logical}}`.',
-    },
+    messages: MESSAGES,
     type: 'suggestion',
     hasSuggestions: true,
     schema: [
@@ -37,174 +153,40 @@ const rule: Rule = createRule({
       },
     ],
   },
-  defaultOptions: [
-    {
-      whitelist: [],
-    },
-  ],
+  defaultOptions: [{ whitelist: [] }],
   create(context) {
     const whitelist: string[] = context.options[0]?.whitelist ?? []
+    const cache = new PropertyCache()
 
-    // Cache for resolved longhand properties
-    const longhandCache = new Map<string, string>()
-
-    // Cache for helper functions
-    const pandaPropCache = new WeakMap<TSESTree.JSXAttribute, boolean | undefined>()
-    const pandaAttributeCache = new WeakMap<TSESTree.Property, boolean | undefined>()
-    const recipeVariantCache = new WeakMap<TSESTree.Property, boolean | undefined>()
-
-    /**
-     * Extract string literal value from node
-     * @param valueNode The value node
-     * @returns String literal value, or null if not found
-     */
-    const extractStringLiteralValue = (
-      valueNode: TSESTree.Property['value'] | TSESTree.JSXAttribute['value'],
-    ): string | null => {
-      // Regular literal value (e.g., "left")
-      if (isLiteral(valueNode) && typeof valueNode.value === 'string') {
-        return valueNode.value
-      }
-
-      // Literal value in JSX expression container (e.g., {"left"})
-      if (
-        isJSXExpressionContainer(valueNode) &&
-        isLiteral(valueNode.expression) &&
-        typeof valueNode.expression.value === 'string'
-      ) {
-        return valueNode.expression.value
-      }
-
-      // Not a string literal
-      return null
-    }
-
-    const getLonghand = (name: string): string => {
-      if (longhandCache.has(name)) {
-        return longhandCache.get(name)!
-      }
-      const longhand = resolveLonghand(name, context) ?? name
-      longhandCache.set(name, longhand)
-      return longhand
-    }
-
-    const isCachedPandaProp = (node: TSESTree.JSXAttribute): boolean => {
-      if (pandaPropCache.has(node)) {
-        return pandaPropCache.get(node)!
-      }
-      const result = isPandaProp(node, context)
-      pandaPropCache.set(node, result)
-      return !!result
-    }
-
-    const isCachedPandaAttribute = (node: TSESTree.Property): boolean => {
-      if (pandaAttributeCache.has(node)) {
-        return pandaAttributeCache.get(node)!
-      }
-      const result = isPandaAttribute(node, context)
-      pandaAttributeCache.set(node, result)
-      return !!result
-    }
-
-    const isCachedRecipeVariant = (node: TSESTree.Property): boolean => {
-      if (recipeVariantCache.has(node)) {
-        return recipeVariantCache.get(node)!
-      }
-      const result = isRecipeVariant(node, context)
-      recipeVariantCache.set(node, result)
-      return !!result
-    }
-
-    const sendReport = (node: TSESTree.Identifier | TSESTree.JSXIdentifier) => {
+    const checkPropertyName = (node: IdentifierNode) => {
       if (whitelist.includes(node.name)) return
-      const longhandName = getLonghand(node.name)
+      const longhandName = cache.getLonghand(node.name, context)
       if (!(longhandName in physicalProperties)) return
 
       const logical = physicalProperties[longhandName]
-      const physicalName = `\`${node.name}\`${longhandName !== node.name ? ` (resolved to \`${longhandName}\`)` : ''}`
-
-      context.report({
-        node,
-        messageId: 'physical',
-        data: {
-          physical: physicalName,
-          logical,
-        },
-        suggest: [
-          {
-            messageId: 'replace',
-            data: {
-              physical: node.name,
-              logical,
-            },
-            fix: (fixer) => {
-              return fixer.replaceText(node, logical)
-            },
-          },
-        ],
-      })
+      createPropertyReport(node, longhandName, logical, context)
     }
 
-    // Check property values for physical values that should use logical values
-    const checkPropertyValue = (
-      keyNode: TSESTree.Identifier | TSESTree.JSXIdentifier,
-      valueNode: NonNullable<TSESTree.Property['value'] | TSESTree.JSXAttribute['value']>,
-    ) => {
-      // Skip if property name doesn't have physical values mapping
+    const checkPropertyValue = (keyNode: IdentifierNode, valueNode: NonNullable<ValueNode>): boolean => {
       const propName = keyNode.name
       if (!(propName in physicalPropertyValues)) return false
 
-      // Extract string literal value
       const valueText = extractStringLiteralValue(valueNode)
-      if (valueText === null) {
-        // Skip if not a string literal
-        return false
-      }
+      if (valueText === null) return false
 
-      // Check if value is a physical value
       const valueMap = physicalPropertyValues[propName]
       if (!valueMap[valueText]) return false
 
-      const logical = valueMap[valueText]
-
-      context.report({
-        node: valueNode,
-        messageId: 'physicalValue',
-        data: {
-          physical: `"${valueText}"`,
-          logical: `"${logical}"`,
-        },
-        suggest: [
-          {
-            messageId: 'replace',
-            data: {
-              physical: `"${valueText}"`,
-              logical: `"${logical}"`,
-            },
-            fix: (fixer) => {
-              if (isLiteral(valueNode)) {
-                return fixer.replaceText(valueNode, `"${logical}"`)
-              } else if (isJSXExpressionContainer(valueNode) && isLiteral(valueNode.expression)) {
-                return fixer.replaceText(valueNode.expression, `"${logical}"`)
-              }
-              return null
-            },
-          },
-        ],
-      })
-
+      createValueReport(valueNode, valueText, valueMap[valueText], context)
       return true
     }
 
     return {
       JSXAttribute(node: TSESTree.JSXAttribute) {
         if (!isJSXIdentifier(node.name)) return
-        if (!isCachedPandaProp(node)) return
+        if (!cache.isPandaProp(node, context)) return
 
-        // Check property name
-        sendReport(node.name)
-
-        // Check property value if needed
+        checkPropertyName(node.name)
         if (node.value) {
           checkPropertyValue(node.name, node.value)
         }
@@ -212,13 +194,10 @@ const rule: Rule = createRule({
 
       Property(node: TSESTree.Property) {
         if (!isIdentifier(node.key)) return
-        if (!isCachedPandaAttribute(node)) return
-        if (isCachedRecipeVariant(node)) return
+        if (!cache.isPandaAttribute(node, context)) return
+        if (cache.isRecipeVariant(node, context)) return
 
-        // Check property name
-        sendReport(node.key)
-
-        // Check property value if needed
+        checkPropertyName(node.key)
         if (node.value) {
           checkPropertyValue(node.key, node.value)
         }
