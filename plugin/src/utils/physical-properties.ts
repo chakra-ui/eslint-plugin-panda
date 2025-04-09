@@ -32,3 +32,12 @@ export const physicalProperties: Record<string, string> = {
   top: 'insetBlockStart',
   bottom: 'insetBlockEnd',
 }
+
+// Map of property names to their physical values and corresponding logical values
+export const physicalPropertyValues: Record<string, Record<string, string>> = {
+  // text-align physical values mapped to logical values
+  textAlign: {
+    left: 'start',
+    right: 'end',
+  },
+}
