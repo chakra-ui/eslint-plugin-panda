@@ -28,13 +28,29 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle _hover={{  borderBottom: 'solid 1px' }} />;
-}
+};
 ```
 ```js
 
 import { css } from './panda/css';
 
 const styles = css({ textAlign: 'left' });
+```
+```js
+
+import { css } from './panda/css';
+
+function App(){
+  return <div className={css({ textAlign: 'right' })} />;
+};
+```
+```js
+
+import { Box } from './panda/jsx';
+
+function App(){
+  return <Box textAlign={"left"} />;
+};
 ```
 ```js
 
@@ -65,13 +81,29 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle _hover={{  borderBlockEnd: 'solid 1px' }} />;
-}
+};
 ```
 ```js
 
 import { css } from './panda/css';
 
 const styles = css({ textAlign: 'start' });
+```
+```js
+
+import { css } from './panda/css';
+
+function App(){
+  return <div className={css({ textAlign: 'end' })} />;
+};
+```
+```js
+
+import { Box } from './panda/jsx';
+
+function App(){
+  return <Box textAlign={"start"} />;
+};
 ```
 ```js
 
