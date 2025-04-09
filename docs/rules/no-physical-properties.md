@@ -30,6 +30,20 @@ function App(){
   return <Circle _hover={{  borderBottom: 'solid 1px' }} />;
 }
 ```
+```js
+
+import { css } from './panda/css';
+
+const styles = css({ textAlign: 'left' });
+```
+```js
+
+import { Box } from './panda/jsx';
+
+function App(){
+  return <Box textAlign={"right"} />;
+}
+```
 
 ✔️ Examples of **correct** code:
 ```js
@@ -51,6 +65,20 @@ import { Circle } from './panda/jsx';
 
 function App(){
   return <Circle _hover={{  borderBlockEnd: 'solid 1px' }} />;
+}
+```
+```js
+
+import { css } from './panda/css';
+
+const styles = css({ textAlign: 'start' });
+```
+```js
+
+import { Box } from './panda/jsx';
+
+function App(){
+  return <Box textAlign={"end"} />;
 }
 ```
 
