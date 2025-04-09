@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.9
+
+### Patch Changes
+
+- 1f2fce3: detect textAlign physical values like "left"/"right"
+
 ## 0.2.8
 
 ### Patch Changes
