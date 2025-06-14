@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.11
+
+### Patch Changes
+
+- 7c7a7bd: Add `no-deprecated-tokens` rule
+
 ## 0.2.9
 
 ### Patch Changes
