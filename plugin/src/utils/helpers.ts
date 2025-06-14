@@ -18,6 +18,7 @@ import {
   isVariableDeclarator,
   type Node,
 } from './nodes'
+import type { DeprecatedToken } from './worker'
 
 export const getAncestor = <N extends Node>(ofType: (node: Node) => node is N, for_: Node): N | undefined => {
   let current: Node | undefined = for_.parent
@@ -68,7 +69,7 @@ const _getImports = (context: RuleContext<any, any>) => {
   const specifiers = getImportSpecifiers(context)
 
   const imports: ImportResult[] = specifiers.map(({ specifier, mod }) => ({
-    name: specifier.imported.name,
+    name: (specifier.imported as any).name,
     alias: specifier.local.name,
     mod,
   }))
@@ -244,9 +245,6 @@ export const isColorToken = (value: string | undefined, context: RuleContext<any
   return syncAction('isColorToken', getSyncOpts(context), value)
 }
 
-// Caching invalid tokens to avoid redundant computations
-const invalidTokensCache = new Map<string, string[]>()
-
 export const extractTokens = (value: string) => {
   const regex = /token\(([^"'(),]+)(?:,\s*([^"'(),]+))?\)|\{([^{\r\n}]+)\}/g
   const matches = []
@@ -268,6 +266,9 @@ export const extractTokens = (value: string) => {
   return matches.filter(Boolean)
 }
 
+// Caching invalid tokens to avoid redundant computations
+const invalidTokensCache = new Map<string, string[]>()
+
 export const getInvalidTokens = (value: string, context: RuleContext<any, any>) => {
   if (invalidTokensCache.has(value)) {
     return invalidTokensCache.get(value)!
@@ -279,6 +280,28 @@ export const getInvalidTokens = (value: string, context: RuleContext<any, any>) 
   const invalidTokens = syncAction('filterInvalidTokens', getSyncOpts(context), tokens)
   invalidTokensCache.set(value, invalidTokens)
   return invalidTokens
+}
+
+// Caching deprecated tokens to avoid redundant computations
+const deprecatedTokensCache = new Map<string, DeprecatedToken[]>()
+
+export const getDeprecatedTokens = (prop: string, value: string, context: RuleContext<any, any>) => {
+  const propCategory = syncAction('getPropCategory', getSyncOpts(context), prop)
+
+  const tokens = extractTokens(value)
+
+  if (!propCategory && !tokens.length) return []
+
+  const values = tokens.length ? tokens : [{ category: propCategory, value: value.split('/')[0] }]
+
+  if (deprecatedTokensCache.has(value)) {
+    return deprecatedTokensCache.get(value)!
+  }
+
+  const deprecatedTokens = syncAction('filterDeprecatedTokens', getSyncOpts(context), values)
+  deprecatedTokensCache.set(value, deprecatedTokens)
+
+  return deprecatedTokens
 }
 
 export const getTokenImport = (context: RuleContext<any, any>) => {

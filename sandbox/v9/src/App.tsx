@@ -15,6 +15,7 @@ const keyframes = defineKeyframes({
 
 //@ts-expect-error noidea
 const literal = css`
+  color: {colors.red.400};
   margin-right: {sizess.4};
   padding-left: {sizess.4};
   font-weight: token(fontWeightss.bold, 700);

@@ -4,6 +4,7 @@ import { PandaContext } from '@pandacss/node'
 import { stringifyJson, parseJson } from '@pandacss/shared'
 import type { Config, LoadConfigResult, UserConfig } from '@pandacss/types'
 import { fixturePreset } from './config'
+import v9Config from '../../sandbox/v9/panda.config'
 
 const config: UserConfig = {
   ...fixturePreset,
@@ -34,9 +35,7 @@ export const createGeneratorContext = (userConfig?: Config) => {
 }
 
 export const createContext = (userConfig?: Config) => {
-  const resolvedConfig = (
-    userConfig ? mergeConfigs([fixtureDefaults.config, userConfig]) : fixtureDefaults.config
-  ) as UserConfig
+  const resolvedConfig = mergeConfigs([fixtureDefaults.config, v9Config, { importMap: './panda' }]) as UserConfig
 
   return new PandaContext({
     ...fixtureDefaults,

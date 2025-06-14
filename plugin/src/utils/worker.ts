@@ -26,7 +26,7 @@ async function _getContext(configPath: string | undefined) {
 export async function getContext(opts: Opts) {
   if (process.env.NODE_ENV === 'test') {
     configPath = opts.configPath
-    const ctx = createContext({ importMap: './panda' }) as unknown as PandaContext
+    const ctx = createContext() as unknown as PandaContext
     ctx.getFiles = () => ['App.tsx']
     return ctx
   } else {
@@ -45,15 +45,34 @@ async function filterInvalidTokens(ctx: PandaContext, paths: string[]): Promise<
   return paths.filter((path) => !ctx.utility.tokens.view.get(path))
 }
 
+export type DeprecatedToken =
+  | string
+  | {
+      category: string
+      value: string
+    }
+
+async function filterDeprecatedTokens(ctx: PandaContext, tokens: DeprecatedToken[]): Promise<DeprecatedToken[]> {
+  return tokens.filter((token) => {
+    const value = typeof token === 'string' ? token : token.category + '.' + token.value
+    return ctx.utility.tokens.isDeprecated(value)
+  })
+}
+
 async function isColorToken(ctx: PandaContext, value: string): Promise<boolean> {
   return !!ctx.utility.tokens.view.categoryMap.get('colors')?.get(value)
 }
 
-async function isColorAttribute(ctx: PandaContext, _attr: string): Promise<boolean> {
+async function getPropCategory(ctx: PandaContext, _attr: string) {
   const longhand = await resolveLongHand(ctx, _attr)
   const attr = longhand || _attr
   const attrConfig = ctx.utility.config[attr]
-  return attrConfig?.values === 'colors'
+  return typeof attrConfig?.values === 'string' ? attrConfig.values : undefined
+}
+
+async function isColorAttribute(ctx: PandaContext, _attr: string): Promise<boolean> {
+  const category = await getPropCategory(ctx, _attr)
+  return category === 'colors'
 }
 
 const arePathsEqual = (path1: string, path2: string) => {
@@ -121,6 +140,12 @@ export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): P
 export function runAsync(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): Promise<boolean>
 export function runAsync(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): Promise<boolean>
 export function runAsync(action: 'matchImports', opts: Opts, result: MatchImportResult): Promise<boolean>
+export function runAsync(action: 'getPropCategory', opts: Opts, prop: string): Promise<string>
+export function runAsync(
+  action: 'filterDeprecatedTokens',
+  opts: Opts,
+  tokens: DeprecatedToken[],
+): Promise<DeprecatedToken[]>
 export async function runAsync(action: string, opts: Opts, ...args: any): Promise<any> {
   const ctx = await getContext(opts)
 
@@ -151,6 +176,12 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'filterInvalidTokens':
       // @ts-expect-error cast
       return filterInvalidTokens(ctx, ...args)
+    case 'getPropCategory':
+      // @ts-expect-error cast
+      return getPropCategory(ctx, ...args)
+    case 'filterDeprecatedTokens':
+      // @ts-expect-error cast
+      return filterDeprecatedTokens(ctx, ...args)
   }
 }
 
@@ -163,6 +194,8 @@ export function run(action: 'resolveLongHand', opts: Opts, name: string): string
 export function run(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): boolean
 export function run(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): boolean
 export function run(action: 'matchImports', opts: Opts, result: MatchImportResult): boolean
+export function run(action: 'getPropCategory', opts: Opts, prop: string): string
+export function run(action: 'filterDeprecatedTokens', opts: Opts, tokens: DeprecatedToken[]): DeprecatedToken[]
 export function run(action: string, opts: Opts, ...args: any[]): any {
   // @ts-expect-error cast
   return runAsync(action, opts, ...args)

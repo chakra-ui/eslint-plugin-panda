@@ -12,5 +12,6 @@ export default {
     '@pandacss/no-invalid-token-paths': 'error',
     '@pandacss/no-property-renaming': 'warn',
     '@pandacss/no-unsafe-token-fn-usage': 'warn',
+    '@pandacss/no-deprecated-tokens': 'warn',
   },
 }

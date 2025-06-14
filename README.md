@@ -117,6 +117,7 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 | [`@pandacss/file-not-included`](docs/rules/file-not-included.md)                         | ✔️            |
 | [`@pandacss/no-config-function-in-source`](docs/rules/no-config-function-in-source.md)   | ✔️            |
 | [`@pandacss/no-debug`](docs/rules/no-debug.md)                                           | ✔️            |
+| [`@pandacss/no-deprecated-tokens`](docs/rules/no-deprecated-tokens.md)                   | ✔️            |
 | [`@pandacss/no-dynamic-styling`](docs/rules/no-dynamic-styling.md)                       | ✔️            |
 | [`@pandacss/no-escape-hatch`](docs/rules/no-escape-hatch.md)                             |               |
 | [`@pandacss/no-hardcoded-color`](docs/rules/no-hardcoded-color.md) ⚙️                    | ✔️            |

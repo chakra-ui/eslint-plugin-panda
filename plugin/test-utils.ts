@@ -12,4 +12,4 @@ const baseTesterConfig = {
 }
 
 export const tester = new RuleTester(baseTesterConfig)
-export const eslintTester = new ERuleTester(baseTesterConfig)
+export const eslintTester = new ERuleTester(baseTesterConfig as any)
