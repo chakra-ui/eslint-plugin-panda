@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.12
+
+### Patch Changes
+
+- 4005b4c: Fix global configPath
+
 ## 0.2.11
 
 ### Patch Changes
