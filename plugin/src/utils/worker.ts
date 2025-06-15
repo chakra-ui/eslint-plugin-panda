@@ -11,7 +11,6 @@ type Opts = {
   configPath?: string
 }
 
-let configPath: string | undefined
 const contextCache: { [configPath: string]: Promise<PandaContext> } = {}
 
 async function _getContext(configPath: string | undefined) {
@@ -25,14 +24,13 @@ async function _getContext(configPath: string | undefined) {
 
 export async function getContext(opts: Opts) {
   if (process.env.NODE_ENV === 'test') {
-    configPath = opts.configPath
     const ctx = createContext() as unknown as PandaContext
     ctx.getFiles = () => ['App.tsx']
     return ctx
   } else {
-    configPath = configPath || findConfig({ cwd: opts.configPath ?? opts.currentFile })
+    const configPath = findConfig({ cwd: opts.configPath ?? opts.currentFile })
 
-    // Ensure that the context is refreshed when the configPath changes.
+    // The context cache ensures we don't reload the same config multiple times
     if (!contextCache[configPath]) {
       contextCache[configPath] = _getContext(configPath)
     }
