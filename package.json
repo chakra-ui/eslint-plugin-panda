@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "description": "Eslint plugin for Panda CSS",
   "author": "Abraham Aremu <anubra266@gmail.com>",
+  "license": "MIT",
   "scripts": {
     "prepare": "husky",
     "dev": "pnpm -r --parallel dev",
