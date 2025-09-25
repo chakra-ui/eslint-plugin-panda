@@ -39,7 +39,7 @@
     "@pandacss/shared": "^0.53.2",
     "@typescript-eslint/utils": "^8.21.0",
     "hookable": "^5.5.3",
-    "synckit": "^0.9.0"
+    "synckit": "^0.11.0"
   },
   "peerDependencies": {
     "eslint": "*"
