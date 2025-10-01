@@ -13,7 +13,7 @@ export const createRule = ESLintUtils.RuleCreator(
 export type Rule = ReturnType<typeof createRule>
 
 // Determine the distribution directory
-const isBase = process.env.NODE_ENV !== 'test' || import.meta.url.endsWith('dist/index.js')
+const isBase = process.env.NODE_ENV !== 'test' || import.meta.url.includes('/dist/index')
 export const distDir = fileURLToPath(new URL(isBase ? './' : '../../dist', import.meta.url))
 
 // Create synchronous function using synckit
