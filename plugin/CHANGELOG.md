@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.2.13
+
+### Patch Changes
+
+- 65efe6e: Fix dist/index check to support all build output formats (ESM and CJS)
+
 ## 0.2.12
 
 ### Patch Changes
