@@ -82,6 +82,11 @@ const rule: Rule = createRule({
       return tokens.length > 0
     }
 
+    const isCssVariable = (value: string): boolean => {
+      if (!value) return false
+      return value.trim().startsWith('var(')
+    }
+
     const isValidColorToken = (value: string): boolean => {
       if (!value) return false
       const [colorToken, opacity] = value.split('/')
@@ -104,6 +109,7 @@ const rule: Rule = createRule({
     const checkColorValue = (node: TSESTree.Node, value: string, attributeName: string) => {
       if (!isColorAttribute(attributeName)) return
       if (isTokenFunctionUsed(value)) return
+      if (isCssVariable(value)) return
       if (isValidColorToken(value)) return
 
       reportInvalidColor(node, value)
