@@ -1,5 +1,12 @@
 # @pandacss/eslint-plugin
 
+## 0.2.14
+
+### Patch Changes
+
+- 376fd83: Allow CSS variables in no-hardcoded-color rule. CSS variables like `var(--something-here)` are now recognized
+  as valid color values and will not trigger the no-hardcoded-color rule error.
+
 ## 0.2.13
 
 ### Patch Changes
