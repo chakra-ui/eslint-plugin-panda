@@ -35,6 +35,38 @@ function App(){
   return <Circle _hover={{  borderColor: 'gray.100' }} />;
 }`,
   },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ color: 'var(--my-color)' })`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+const styles = css({ backgroundColor: 'var(--bg-color)' })`,
+  },
+
+  {
+    code: javascript`
+import { Circle } from './panda/jsx';
+
+function App(){
+  return <Circle borderColor='var(--border-color)' />;
+}`,
+  },
+
+  {
+    code: javascript`
+import { css } from './panda/css';
+
+function App(){
+  return <div className={css({ color: 'var(--text-primary)' })} />;
+}`,
+  },
 ]
 
 const invalids = [
