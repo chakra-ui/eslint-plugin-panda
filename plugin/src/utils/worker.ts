@@ -1,9 +1,10 @@
-import { PandaContext, loadConfigAndCreateContext } from '@pandacss/node'
+import { Generator } from '@pandacss/generator'
 import { runAsWorker } from 'synckit'
 import { createContext } from 'fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
-import { findConfig } from '@pandacss/config'
+import { findConfig, loadConfig } from '@pandacss/config'
 import path from 'path'
+import micromatch from 'micromatch'
 import type { ImportResult } from '.'
 
 type Opts = {
@@ -11,21 +12,25 @@ type Opts = {
   configPath?: string
 }
 
-const contextCache: { [configPath: string]: Promise<PandaContext> } = {}
+const contextCache: { [configPath: string]: Promise<Generator> } = {}
 
 async function _getContext(configPath: string | undefined) {
   if (!configPath) throw new Error('Invalid config path')
 
   const cwd = path.dirname(configPath)
 
-  const ctx = await loadConfigAndCreateContext({ configPath, cwd })
+  const conf = await loadConfig({ file: configPath, cwd })
+  const ctx = new Generator(conf)
   return ctx
 }
 
 export async function getContext(opts: Opts) {
   if (process.env.NODE_ENV === 'test') {
-    const ctx = createContext() as unknown as PandaContext
-    ctx.getFiles = () => ['App.tsx']
+    const ctx = createContext() as unknown as Generator
+
+    // Store cwd on the context for use in isValidFile
+    // @ts-expect-error - adding custom property
+    ctx._cwd = cwd
     return ctx
   } else {
     const configPath = findConfig({ cwd: opts.configPath ?? opts.currentFile })
@@ -39,7 +44,7 @@ export async function getContext(opts: Opts) {
   }
 }
 
-async function filterInvalidTokens(ctx: PandaContext, paths: string[]): Promise<string[]> {
+async function filterInvalidTokens(ctx: Generator, paths: string[]): Promise<string[]> {
   return paths.filter((path) => !ctx.utility.tokens.view.get(path))
 }
 
@@ -50,45 +55,44 @@ export type DeprecatedToken =
       value: string
     }
 
-async function filterDeprecatedTokens(ctx: PandaContext, tokens: DeprecatedToken[]): Promise<DeprecatedToken[]> {
+async function filterDeprecatedTokens(ctx: Generator, tokens: DeprecatedToken[]): Promise<DeprecatedToken[]> {
   return tokens.filter((token) => {
     const value = typeof token === 'string' ? token : token.category + '.' + token.value
     return ctx.utility.tokens.isDeprecated(value)
   })
 }
 
-async function isColorToken(ctx: PandaContext, value: string): Promise<boolean> {
+async function isColorToken(ctx: Generator, value: string): Promise<boolean> {
   return !!ctx.utility.tokens.view.categoryMap.get('colors')?.get(value)
 }
 
-async function getPropCategory(ctx: PandaContext, _attr: string) {
+async function getPropCategory(ctx: Generator, _attr: string) {
   const longhand = await resolveLongHand(ctx, _attr)
   const attr = longhand || _attr
   const attrConfig = ctx.utility.config[attr]
   return typeof attrConfig?.values === 'string' ? attrConfig.values : undefined
 }
 
-async function isColorAttribute(ctx: PandaContext, _attr: string): Promise<boolean> {
+async function isColorAttribute(ctx: Generator, _attr: string): Promise<boolean> {
   const category = await getPropCategory(ctx, _attr)
   return category === 'colors'
 }
 
-const arePathsEqual = (path1: string, path2: string) => {
-  const normalizedPath1 = path.resolve(path1)
-  const normalizedPath2 = path.resolve(path2)
+async function isValidFile(ctx: Generator, fileName: string): Promise<boolean> {
+  const { include, exclude } = ctx.config
+  // @ts-expect-error - using custom property
+  const cwd = ctx._cwd || ctx.config.cwd || process.cwd()
 
-  return normalizedPath1 === normalizedPath2
+  const relativePath = path.isAbsolute(fileName) ? path.relative(cwd, fileName) : fileName
+
+  return micromatch.isMatch(relativePath, include, { ignore: exclude, dot: true })
 }
 
-async function isValidFile(ctx: PandaContext, fileName: string): Promise<boolean> {
-  return ctx.getFiles().some((file) => arePathsEqual(file, fileName))
-}
-
-async function resolveShorthands(ctx: PandaContext, name: string): Promise<string[] | undefined> {
+async function resolveShorthands(ctx: Generator, name: string): Promise<string[] | undefined> {
   return ctx.utility.getPropShorthandsMap().get(name)
 }
 
-async function resolveLongHand(ctx: PandaContext, name: string): Promise<string | undefined> {
+async function resolveLongHand(ctx: Generator, name: string): Promise<string | undefined> {
   const reverseShorthandsMap = new Map()
 
   for (const [key, values] of ctx.utility.getPropShorthandsMap()) {
@@ -100,7 +104,7 @@ async function resolveLongHand(ctx: PandaContext, name: string): Promise<string 
   return reverseShorthandsMap.get(name)
 }
 
-async function isValidProperty(ctx: PandaContext, name: string, patternName?: string) {
+async function isValidProperty(ctx: Generator, name: string, patternName?: string) {
   if (ctx.isValidProperty(name)) return true
   if (!patternName) return
 
@@ -110,7 +114,7 @@ async function isValidProperty(ctx: PandaContext, name: string, patternName?: st
   return Object.keys(pattern).includes(name)
 }
 
-async function matchFile(ctx: PandaContext, name: string, imports: ImportResult[]) {
+async function matchFile(ctx: Generator, name: string, imports: ImportResult[]) {
   const file = ctx.imports.file(imports)
 
   return file.match(name)
@@ -121,7 +125,7 @@ type MatchImportResult = {
   alias: string
   mod: string
 }
-async function matchImports(ctx: PandaContext, result: MatchImportResult) {
+async function matchImports(ctx: Generator, result: MatchImportResult) {
   return ctx.imports.match(result, (mod) => {
     const { tsOptions } = ctx.parserOptions
     if (!tsOptions?.pathMappings) return
