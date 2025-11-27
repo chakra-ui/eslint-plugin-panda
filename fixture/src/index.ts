@@ -1,5 +1,6 @@
 export * from './config'
 export * from './create-context'
+export { v9Config } from './create-context'
 export * from './layers'
 export * from './recipes'
 export * from './semantic-tokens'

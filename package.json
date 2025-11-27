@@ -27,8 +27,10 @@
   "dependencies": {
     "@changesets/changelog-github": "^0.5.0",
     "@changesets/cli": "^2.27.1",
+    "@types/micromatch": "^4.0.10",
     "@typescript-eslint/utils": "^8.21.0",
     "esbuild": "0.25.0",
+    "micromatch": "^4.0.8",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
