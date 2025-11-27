@@ -1,5 +1,11 @@
 # @pandacss/eslint-plugin
 
+## 0.3.0
+
+### Minor Changes
+
+- 4ad93d1: Improve performance
+
 ## 0.2.14
 
 ### Patch Changes
