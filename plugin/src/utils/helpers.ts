@@ -97,6 +97,12 @@ const isValidStyledProp = <T extends Node>(node: T, context: RuleContext<any, an
 export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   const imports = getImports(context)
   if (imports.length === 0) return false
+  // Check if the name is the jsx factory
+  const jsxFactory = syncAction('getJsxFactory', getSyncOpts(context))
+  if (jsxFactory && name === jsxFactory) {
+    // Check if the jsx factory is imported
+    return imports.some((imp) => imp.name === name || imp.alias === name)
+  }
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
@@ -159,10 +165,14 @@ export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<an
   const prop = node.name.name
 
   // Ensure component is a panda component
-  if (!isPandaIsh(name, context) && !isLocalStyledFactory(jsxAncestor, context)) return
+  const isPandaComponent = isPandaIsh(name, context) || isLocalStyledFactory(jsxAncestor, context)
+  if (!isPandaComponent) return
 
   // Ensure prop is a styled prop
-  if (typeof prop !== 'string' || !isValidProperty(prop, context, name)) return
+  // For jsx factory components (e.g., styled.div), pass undefined as the pattern name
+  // so that only global property validation is performed
+  const patternName = isJSXMemberExpression(jsxAncestor.name) ? undefined : name
+  if (typeof prop !== 'string' || !isValidProperty(prop, context, patternName)) return
 
   return true
 }

@@ -114,11 +114,19 @@ async function resolveLongHand(ctx: Generator, name: string): Promise<string | u
 async function isValidProperty(ctx: Generator, name: string, patternName?: string) {
   const isValid = ctx.isValidProperty(name)
   if (isValid) return true
-  if (!patternName) return
+  if (!patternName) return false
+
+  // If the pattern name is the jsxFactory (e.g., 'styled'), we should accept
+  // any property that is valid according to the global property check
+  // Since styled components are generic wrappers, we don't need pattern-specific checks
+  if (patternName === ctx.config.jsxFactory) {
+    // Already checked globally above, so return false if we got here
+    return false
+  }
 
   const pattern = ctx.patterns.details.find((p) => p.baseName === patternName || p.jsx.includes(patternName))?.config
     .properties
-  if (!pattern) return
+  if (!pattern) return false
   return Object.keys(pattern).includes(name)
 }
 
@@ -142,6 +150,10 @@ async function matchImports(ctx: Generator, result: MatchImportResult) {
   return isMatch
 }
 
+async function getJsxFactory(ctx: Generator) {
+  return ctx.config.jsxFactory
+}
+
 export function runAsync(action: 'filterInvalidTokens', opts: Opts, paths: string[]): Promise<string[]>
 export function runAsync(action: 'isColorToken', opts: Opts, value: string): Promise<boolean>
 export function runAsync(action: 'isColorAttribute', opts: Opts, attr: string): Promise<boolean>
@@ -152,6 +164,7 @@ export function runAsync(action: 'isValidProperty', opts: Opts, name: string, pa
 export function runAsync(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): Promise<boolean>
 export function runAsync(action: 'matchImports', opts: Opts, result: MatchImportResult): Promise<boolean>
 export function runAsync(action: 'getPropCategory', opts: Opts, prop: string): Promise<string>
+export function runAsync(action: 'getJsxFactory', opts: Opts): Promise<string | undefined>
 export function runAsync(
   action: 'filterDeprecatedTokens',
   opts: Opts,
@@ -190,6 +203,8 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'getPropCategory':
       // @ts-expect-error cast
       return getPropCategory(ctx, ...args)
+    case 'getJsxFactory':
+      return getJsxFactory(ctx)
     case 'filterDeprecatedTokens':
       // @ts-expect-error cast
       return filterDeprecatedTokens(ctx, ...args)
@@ -206,6 +221,7 @@ export function run(action: 'isValidProperty', opts: Opts, name: string, pattern
 export function run(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): boolean
 export function run(action: 'matchImports', opts: Opts, result: MatchImportResult): boolean
 export function run(action: 'getPropCategory', opts: Opts, prop: string): string
+export function run(action: 'getJsxFactory', opts: Opts): string | undefined
 export function run(action: 'filterDeprecatedTokens', opts: Opts, tokens: DeprecatedToken[]): DeprecatedToken[]
 export function run(action: string, opts: Opts, ...args: any[]): any {
   // @ts-expect-error cast
