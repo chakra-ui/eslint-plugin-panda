@@ -1,6 +1,6 @@
 import { Generator } from '@pandacss/generator'
 import { runAsWorker } from 'synckit'
-import { createContext } from 'fixture'
+import { createGeneratorContext, v9Config } from 'fixture'
 import { resolveTsPathPattern } from '@pandacss/config/ts-path'
 import { findConfig, loadConfig } from '@pandacss/config'
 import path from 'path'
@@ -26,26 +26,31 @@ async function _getContext(configPath: string | undefined) {
 
 export async function getContext(opts: Opts) {
   if (process.env.NODE_ENV === 'test') {
-    const ctx = createContext() as unknown as Generator
-
-    // Store cwd on the context for use in isValidFile
-    // @ts-expect-error - adding custom property
-    ctx._cwd = cwd
+    const ctx = createGeneratorContext({
+      ...v9Config,
+      include: ['**/*'],
+      exclude: ['**/Invalid.tsx', '**/panda.config.ts'],
+      importMap: './panda',
+      jsxFactory: 'styled',
+    })
     return ctx
   } else {
     const configPath = findConfig({ cwd: opts.configPath ?? opts.currentFile })
+    const cwd = path.dirname(configPath)
 
     // The context cache ensures we don't reload the same config multiple times
     if (!contextCache[configPath]) {
       contextCache[configPath] = _getContext(configPath)
     }
 
-    return await contextCache[configPath]
+    return contextCache[configPath]
   }
 }
 
 async function filterInvalidTokens(ctx: Generator, paths: string[]): Promise<string[]> {
-  return paths.filter((path) => !ctx.utility.tokens.view.get(path))
+  const invalid = paths.filter((path) => !ctx.utility.tokens.view.get(path))
+  console.error('filterInvalidTokens', { paths, invalid })
+  return invalid
 }
 
 export type DeprecatedToken =
@@ -80,8 +85,7 @@ async function isColorAttribute(ctx: Generator, _attr: string): Promise<boolean>
 
 async function isValidFile(ctx: Generator, fileName: string): Promise<boolean> {
   const { include, exclude } = ctx.config
-  // @ts-expect-error - using custom property
-  const cwd = ctx._cwd || ctx.config.cwd || process.cwd()
+  const cwd = ctx.config.cwd || process.cwd()
 
   const relativePath = path.isAbsolute(fileName) ? path.relative(cwd, fileName) : fileName
 
@@ -95,17 +99,21 @@ async function resolveShorthands(ctx: Generator, name: string): Promise<string[]
 async function resolveLongHand(ctx: Generator, name: string): Promise<string | undefined> {
   const reverseShorthandsMap = new Map()
 
-  for (const [key, values] of ctx.utility.getPropShorthandsMap()) {
+  const shorthands = ctx.utility.getPropShorthandsMap()
+
+  for (const [key, values] of shorthands) {
     for (const value of values) {
       reverseShorthandsMap.set(value, key)
     }
   }
 
-  return reverseShorthandsMap.get(name)
+  const result = reverseShorthandsMap.get(name)
+  return result
 }
 
 async function isValidProperty(ctx: Generator, name: string, patternName?: string) {
-  if (ctx.isValidProperty(name)) return true
+  const isValid = ctx.isValidProperty(name)
+  if (isValid) return true
   if (!patternName) return
 
   const pattern = ctx.patterns.details.find((p) => p.baseName === patternName || p.jsx.includes(patternName))?.config
@@ -126,11 +134,12 @@ type MatchImportResult = {
   mod: string
 }
 async function matchImports(ctx: Generator, result: MatchImportResult) {
-  return ctx.imports.match(result, (mod) => {
+  const isMatch = ctx.imports.match(result, (mod) => {
     const { tsOptions } = ctx.parserOptions
     if (!tsOptions?.pathMappings) return
     return resolveTsPathPattern(tsOptions.pathMappings, mod)
   })
+  return isMatch
 }
 
 export function runAsync(action: 'filterInvalidTokens', opts: Opts, paths: string[]): Promise<string[]>
