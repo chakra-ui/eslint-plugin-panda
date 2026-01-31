@@ -5,3 +5,6 @@ package-lock.json
 dist
 styled-system
 coverage
+
+# Local settings
+.claude/settings.local.json
