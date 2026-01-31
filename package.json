@@ -9,11 +9,9 @@
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
-    "docs": "rm -rf docs/rules && pnpm build:docs",
-    "build:docs": "rm -rf docs/rules && DOCGEN=1 vitest run && pnpm readme",
     "readme": "node tools/build-readme.js && pnpm prettier-fix",
     "deps": "pnpm -r --parallel deps",
-    "lint": "eslint . --ext .ts",
+    "lint": "eslint .",
     "prettier": "prettier --check .",
     "prettier-fix": "prettier --write .",
     "release": "changeset publish",
@@ -29,34 +27,31 @@
     "@changesets/cli": "^2.27.1",
     "@types/micromatch": "^4.0.10",
     "@typescript-eslint/utils": "^8.21.0",
-    "esbuild": "0.25.0",
+    "esbuild": "^0.27.0",
     "micromatch": "^4.0.8",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@pandacss/dev": "^0.53.2",
-    "@types/eslint": "^8.56.2",
-    "@types/node": "^20.11.5",
+    "@eslint/js": "^9.0.0",
+    "@pandacss/dev": "^1.0.0",
+    "@types/eslint": "^9.6.0",
+    "@types/node": "^22.0.0",
     "@typescript-eslint/eslint-plugin": "^8.21.0",
     "@typescript-eslint/parser": "^8.21.0",
-    "eslint": "^8.56.0",
-    "eslint-docgen": "^0.7.1",
-    "eslint-plugin-eslint-plugin": "^5.2.1",
+    "eslint": "^9.0.0",
+    "eslint-plugin-eslint-plugin": "^7.0.0",
+    "globals": "^17.0.0",
     "husky": "^9.0.6",
-    "lint-staged": "^15.2.0",
+    "lint-staged": "^16.0.0",
     "prettier": "^3.2.4",
-    "vitest": "^1.2.1"
+    "typescript-eslint": "^8.21.0",
+    "vitest": "^4.0.0"
   },
   "lint-staged": {
     "*": [
       "pnpm prettier-fix"
     ]
   },
-  "packageManager": "pnpm@8.15.8",
-  "pnpm": {
-    "patchedDependencies": {
-      "eslint-docgen@0.7.1": "patches/eslint-docgen@0.7.1.patch"
-    }
-  }
+  "packageManager": "pnpm@10.28.2"
 }

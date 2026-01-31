@@ -24,6 +24,11 @@
 
 ## Getting Started
 
+### Requirements
+
+- **ESLint v9+** with flat config
+- **Panda CSS v1.0+**
+
 ### Installation
 
 ```bash
@@ -32,78 +37,43 @@ pnpm add -D @pandacss/eslint-plugin
 
 ### Usage
 
-Add `@pandacss/eslint-plugin` to the plugins section of your `.eslintrc` configuration file. You can omit the
-`/eslint-plugin` suffx:
+Add the plugin to your `eslint.config.mjs`:
 
-```json
-{
-  "plugins": ["@pandacss"]
-}
-```
-
-Then configure the rules you want to use under the rules section.
-
-```json
-{
-  "rules": {
-    "@pandacss/no-debug": "error"
-  }
-}
-```
-
-You can also enable the `recommended` rules in extends:
-
-```diff
-{
--   "plugins": ["@pandacss"]
-+   "extends": ["plugin:@pandacss/recommended"]
-}
-```
-
-Or enable all rules in extends:
-
-```diff
-{
--   "plugins": ["@pandacss"]
-+   "extends": ["plugin:@pandacss/all"]
-}
-```
-
-> [!WARNING]  
-> This is not recommended. You should only enable the rules you need.
-
-### Flat Config
-
-If you use [the flat config format](https://eslint.org/docs/latest/use/configure/configuration-files), you can import
-the plugin and rules from `@pandacss/eslint-plugin` and put it into your config.
-
-```js filename="eslint.config.mjs"
-import typescriptParser from '@typescript-eslint/parser'
+```js
+// eslint.config.mjs
+import { defineConfig } from 'eslint/config'
 import panda from '@pandacss/eslint-plugin'
 
-export default [
-  {
-    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
-    ignores: ['**/*.d.ts', 'styled-system'],
-    plugins: {
-      '@pandacss': panda,
-    },
-    languageOptions: {
-      parser: typescriptParser,
-    },
-    rules: {
-      // Configure rules here
-      "@pandacss/no-debug": "error",
-      // You can also use the recommended rules
-      ...panda.configs.recommended.rules,
-      // Or all rules
-      ...panda.configs.all.rules,
-    },
-  },
-]
+export default defineConfig([
+  panda.configs.recommended,
+])
 ```
 
-You can see an example using `typescript-eslint` at [sandbox/v9/eslint.config.mjs](./sandbox/v9/eslint.config.mjs).
+Or with TypeScript and customization:
+
+```js
+// eslint.config.mjs
+import { defineConfig } from 'eslint/config'
+import eslint from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import panda from '@pandacss/eslint-plugin'
+
+export default defineConfig([
+  eslint.configs.recommended,
+  ...tseslint.configs.recommended,
+  panda.configs.recommended,
+  {
+    rules: {
+      '@pandacss/no-hardcoded-color': ['error', { noOpacity: true }],
+    },
+  },
+])
+```
+
+### Available Configs
+
+- `panda.configs.recommended` - Recommended rules for most projects
+- `panda.configs.all` - All available rules (use with caution)
 
 ## Rules
 
@@ -117,35 +87,22 @@ Where rules are included in the configs `recommended`, or `all` it is indicated 
 
 ### `configPath`
 
-You can tell `eslint` to use a custom panda config file by setting the `configPath` option in your `.eslintrc.js` file.
+You can tell ESLint to use a custom Panda config file by setting the `configPath` option in your ESLint config.
 
-By default we find the nearest panda config to the linted file.
+By default, the plugin finds the nearest panda config to the linted file.
 
-```js filename=".eslintrc.(c)js"
-const path = require('path')
-
-module.exports = {
-  plugins: ['@pandacss'],
-  settings: {
-    '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
-  },
-}
-```
-
-#### Flat Config
-
-```js filename="eslint.config.mjs"
+```js
+// eslint.config.mjs
+import { defineConfig } from 'eslint/config'
 import panda from '@pandacss/eslint-plugin'
 import path from 'node:path'
 
-export default [
+export default defineConfig([
+  panda.configs.recommended,
   {
-    plugins: {
-      '@pandacss': panda,
-    },
     settings: {
-      '@pandacss/configPath': path.join('PATH-TO/panda.config.js'),
+      '@pandacss/configPath': path.join(import.meta.dirname, 'panda.config.js'),
     },
   },
-]
+])
 ```

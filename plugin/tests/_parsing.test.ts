@@ -4,7 +4,7 @@ import rule3, { RULE_NAME as RULE_NAME3 } from '../src/rules/no-escape-hatch'
 import rule4, { RULE_NAME as RULE_NAME4 } from '../src/rules/no-unsafe-token-fn-usage'
 import rule5, { RULE_NAME as RULE_NAME5 } from '../src/rules/no-invalid-token-paths'
 import rule6, { RULE_NAME as RULE_NAME6 } from '../src/rules/no-invalid-nesting'
-import { eslintTester } from '../test-utils'
+import { tester } from '../test-utils'
 import { getArbitraryValue } from '@pandacss/shared'
 
 //* This test is just to ensure that the plugin correctly recognises panda in various kinds of code.
@@ -55,7 +55,7 @@ const invalids = [
   },
 ]
 
-eslintTester.run(RULE_NAME, rule as any, {
+tester.run(RULE_NAME, rule as any, {
   valid: valids.map(({ code }) => ({
     code: imports + code,
   })),
@@ -80,7 +80,7 @@ const valids2 = [
 
 const invalids2 = ['const styles = css({ bg: color })', '<Circle debug={bool} />', '<styled.div color={color} />']
 
-eslintTester.run(RULE_NAME2, rule2 as any, {
+tester.run(RULE_NAME2, rule2 as any, {
   valid: valids2.map((code) => ({
     code: imports + code,
   })),
@@ -130,7 +130,7 @@ const invalids3 = [
   },
 ]
 
-eslintTester.run(RULE_NAME3, rule3 as any, {
+tester.run(RULE_NAME3, rule3 as any, {
   valid: valids3.map((code) => ({
     code: imports + code,
   })),
@@ -162,7 +162,7 @@ const invalids4 = [
   { code: '<Circle bg={tk("colors.red.300")} />' },
 ]
 
-eslintTester.run(RULE_NAME4, rule4 as any, {
+tester.run(RULE_NAME4, rule4 as any, {
   valid: valids4.map((code) => ({
     code: imports4 + code,
   })),
@@ -195,7 +195,7 @@ const invalids5 = [
   { code: 'const Comp = styled(Circle)`\n  margin: {sizess.4} {sizes.f4};`', errors: 2 },
 ]
 
-eslintTester.run(RULE_NAME5, rule5 as any, {
+tester.run(RULE_NAME5, rule5 as any, {
   valid: valids5.map((code) => ({
     code: imports5 + code,
   })),
@@ -285,7 +285,7 @@ const invalids6 = [
   },
 ]
 
-eslintTester.run(RULE_NAME6, rule6 as any, {
+tester.run(RULE_NAME6, rule6 as any, {
   valid: valids6.map((code) => ({
     code: imports6 + code,
   })),

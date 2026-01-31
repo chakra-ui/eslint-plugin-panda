@@ -115,13 +115,13 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       return undefined
     }
 
-    const scope = analyze(src.ast, {
+    const scope = analyze(src.ast as any, {
       sourceType: 'module',
     })
     const decl = scope.variables
       .find((v) => v.name === name)
-      ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
-    if (isVariableDeclarator(decl)) return decl
+      ?.defs.find((d) => isIdentifier(d.name as any) && (d.name as any).name === name)?.node
+    if (isVariableDeclarator(decl as any)) return decl as any
   } catch (error) {
     console.error('Error in findDeclaration:', error)
     return undefined

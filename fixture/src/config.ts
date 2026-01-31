@@ -19,6 +19,13 @@ const tokens = {
   ...theme.tokens,
   colors: {
     ...theme.tokens?.colors,
+    red: {
+      ...((theme.tokens?.colors as Record<string, unknown>)?.red as Record<string, unknown>),
+      400: {
+        value: '#f87171',
+        deprecated: 'Use red.500 instead',
+      },
+    },
     deep: {
       test: {
         yam: {
@@ -39,6 +46,12 @@ const tokens = {
 
 const textStyles = {
   headline: {
+    DEFAULT: {
+      value: {
+        fontSize: '1.5rem',
+        fontWeight: 'bold',
+      },
+    },
     h1: {
       value: {
         fontSize: '2rem',
@@ -54,7 +67,10 @@ const textStyles = {
   },
 }
 
-export const fixturePreset: Omit<PresetCore, 'globalCss' | 'staticCss'> = {
+export const fixturePreset: Omit<
+  PresetCore,
+  'globalCss' | 'staticCss' | 'globalVars' | 'globalFontface' | 'globalPositionTry'
+> = {
   ...presetBase,
   conditions,
   theme: {

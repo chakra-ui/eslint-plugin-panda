@@ -1,4 +1,6 @@
-import { afterAll } from 'vitest'
-import { RuleTester } from 'eslint-docgen'
+import { RuleTester } from 'eslint'
+import { afterAll, describe, it } from 'vitest'
 
 RuleTester.afterAll = afterAll
+RuleTester.describe = describe
+RuleTester.it = it

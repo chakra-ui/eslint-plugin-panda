@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(npm view:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm build:*)",
+      "Bash(pnpm test:*)",
+      "Bash(pnpm typecheck:*)",
+      "Bash(pnpm why:*)",
+      "Bash(pnpm lint:*)",
+      "Bash(pnpm outdated:*)",
+      "Bash(node -e:*)",
+      "WebFetch(domain:eslint.org)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:raw.githubusercontent.com)"
+    ]
+  }
+}
