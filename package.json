@@ -9,7 +9,9 @@
     "dev": "pnpm -r --parallel dev",
     "build": "pnpm -r --parallel build",
     "test": "vitest run",
-    "readme": "node tools/build-readme.js && pnpm prettier-fix",
+    "docs": "eslint-doc-generator",
+    "docs:check": "eslint-doc-generator --check",
+    "readme": "cp README.md.template README.md && pnpm docs && pnpm prettier-fix",
     "deps": "pnpm -r --parallel deps",
     "lint": "eslint .",
     "prettier": "prettier --check .",
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",
+    "eslint-doc-generator": "^3.0.0",
     "@pandacss/dev": "^1.0.0",
     "@types/eslint": "^9.6.0",
     "@types/node": "^22.0.0",

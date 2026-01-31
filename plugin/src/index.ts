@@ -48,4 +48,9 @@ plugin.configs.all = {
   rules: allRules,
 }
 
+// Named exports for tools like eslint-doc-generator
+export { rules }
+export const configs = plugin.configs
+export const meta = plugin.meta
+
 export default plugin
