@@ -49,7 +49,9 @@ export async function getContext(opts: Opts) {
 
 async function filterInvalidTokens(ctx: Generator, paths: string[]): Promise<string[]> {
   const invalid = paths.filter((path) => !ctx.utility.tokens.view.get(path))
-  console.error('filterInvalidTokens', { paths, invalid })
+  if (invalid.length > 0) {
+    console.error('filterInvalidTokens', { paths, invalid })
+  }
   return invalid
 }
 
