@@ -1,5 +1,12 @@
 # @pandacss/eslint-plugin
 
+## 0.3.1
+
+### Patch Changes
+
+- bd6c215: Fixed errant console.error statement in filterInvalidTokens that was logging regardless of whether invalid
+  tokens were found. Now only logs when invalid tokens are actually detected.
+
 ## 0.3.0
 
 ### Minor Changes
