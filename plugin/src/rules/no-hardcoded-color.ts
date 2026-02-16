@@ -87,6 +87,22 @@ const rule: Rule = createRule({
       return value.trim().startsWith('var(')
     }
 
+    // List of allowed keywords for color values: https://developer.mozilla.org/en-US/docs/Web/CSS/color_value
+    const isAllowedKeyword = (value: string): boolean => {
+      if (!value) return false
+      const normalized = value.trim()
+      return (
+        normalized === 'transparent' ||
+        normalized === 'none' ||
+        normalized === 'inherit' ||
+        normalized === 'currentColor' ||
+        normalized === 'initial' ||
+        normalized === 'unset' ||
+        normalized === 'revert' ||
+        normalized === 'revert-layer'
+      )
+    }
+
     const isValidColorToken = (value: string): boolean => {
       if (!value) return false
       const [colorToken, opacity] = value.split('/')
@@ -110,6 +126,7 @@ const rule: Rule = createRule({
       if (!isColorAttribute(attributeName)) return
       if (isTokenFunctionUsed(value)) return
       if (isCssVariable(value)) return
+      if (isAllowedKeyword(value)) return
       if (isValidColorToken(value)) return
 
       reportInvalidColor(node, value)
