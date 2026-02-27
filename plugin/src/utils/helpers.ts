@@ -106,6 +106,8 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
+const scopeAnalysisCache = new WeakMap<object, ReturnType<typeof analyze>>()
+
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   try {
     const src = context.sourceCode
@@ -115,9 +117,14 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       return undefined
     }
 
-    const scope = analyze(src.ast, {
-      sourceType: 'module',
-    })
+    let scope = scopeAnalysisCache.get(src)
+    if (!scope) {
+      scope = analyze(src.ast, {
+        sourceType: 'module',
+      })
+      scopeAnalysisCache.set(src, scope)
+    }
+
     const decl = scope.variables
       .find((v) => v.name === name)
       ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
