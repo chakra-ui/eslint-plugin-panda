@@ -98,19 +98,20 @@ async function resolveShorthands(ctx: Generator, name: string): Promise<string[]
   return ctx.utility.getPropShorthandsMap().get(name)
 }
 
+const reverseLonghandCache = new WeakMap<Generator, Map<string, string>>()
+
 async function resolveLongHand(ctx: Generator, name: string): Promise<string | undefined> {
-  const reverseShorthandsMap = new Map()
-
-  const shorthands = ctx.utility.getPropShorthandsMap()
-
-  for (const [key, values] of shorthands) {
-    for (const value of values) {
-      reverseShorthandsMap.set(value, key)
+  let reverseMap = reverseLonghandCache.get(ctx)
+  if (!reverseMap) {
+    reverseMap = new Map()
+    for (const [key, values] of ctx.utility.getPropShorthandsMap()) {
+      for (const value of values) {
+        reverseMap.set(value, key)
+      }
     }
+    reverseLonghandCache.set(ctx, reverseMap)
   }
-
-  const result = reverseShorthandsMap.get(name)
-  return result
+  return reverseMap.get(name)
 }
 
 async function isValidProperty(ctx: Generator, name: string, patternName?: string) {
