@@ -303,6 +303,10 @@ export const getInvalidTokens = (value: string, context: RuleContext<any, any>) 
 const deprecatedTokensCache = new Map<string, DeprecatedToken[]>()
 
 export const getDeprecatedTokens = (prop: string, value: string, context: RuleContext<any, any>) => {
+  if (deprecatedTokensCache.has(value)) {
+    return deprecatedTokensCache.get(value)!
+  }
+
   const propCategory = syncAction('getPropCategory', getSyncOpts(context), prop)
 
   const tokens = extractTokens(value)
@@ -310,10 +314,6 @@ export const getDeprecatedTokens = (prop: string, value: string, context: RuleCo
   if (!propCategory && !tokens.length) return []
 
   const values = tokens.length ? tokens : [{ category: propCategory, value: value.split('/')[0] }]
-
-  if (deprecatedTokensCache.has(value)) {
-    return deprecatedTokensCache.get(value)!
-  }
 
   const deprecatedTokens = syncAction('filterDeprecatedTokens', getSyncOpts(context), values)
   deprecatedTokensCache.set(value, deprecatedTokens)
