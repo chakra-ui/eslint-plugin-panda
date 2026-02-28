@@ -106,6 +106,8 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
+const scopeAnalysisCache = new WeakMap<object, ReturnType<typeof analyze>>()
+
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   try {
     const src = context.sourceCode
@@ -115,9 +117,14 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       return undefined
     }
 
-    const scope = analyze(src.ast, {
-      sourceType: 'module',
-    })
+    let scope = scopeAnalysisCache.get(src)
+    if (!scope) {
+      scope = analyze(src.ast as TSESTree.Node, {
+        sourceType: 'module',
+      })
+      scopeAnalysisCache.set(src, scope)
+    }
+
     const decl = scope.variables
       .find((v) => v.name === name)
       ?.defs.find((d) => isIdentifier(d.name) && d.name.name === name)?.node
@@ -296,6 +303,10 @@ export const getInvalidTokens = (value: string, context: RuleContext<any, any>) 
 const deprecatedTokensCache = new Map<string, DeprecatedToken[]>()
 
 export const getDeprecatedTokens = (prop: string, value: string, context: RuleContext<any, any>) => {
+  if (deprecatedTokensCache.has(value)) {
+    return deprecatedTokensCache.get(value)!
+  }
+
   const propCategory = syncAction('getPropCategory', getSyncOpts(context), prop)
 
   const tokens = extractTokens(value)
@@ -303,10 +314,6 @@ export const getDeprecatedTokens = (prop: string, value: string, context: RuleCo
   if (!propCategory && !tokens.length) return []
 
   const values = tokens.length ? tokens : [{ category: propCategory, value: value.split('/')[0] }]
-
-  if (deprecatedTokensCache.has(value)) {
-    return deprecatedTokensCache.get(value)!
-  }
 
   const deprecatedTokens = syncAction('filterDeprecatedTokens', getSyncOpts(context), values)
   deprecatedTokensCache.set(value, deprecatedTokens)
