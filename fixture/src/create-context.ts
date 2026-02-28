@@ -36,7 +36,11 @@ export const createGeneratorContext = (userConfig?: Config) => {
 }
 
 export const createContext = (userConfig?: Config) => {
-  const resolvedConfig = mergeConfigs([fixtureDefaults.config, v9Config, { importMap: './panda' }]) as UserConfig
+  const resolvedConfig = mergeConfigs([
+    fixtureDefaults.config,
+    v9Config as UserConfig,
+    { importMap: './panda' },
+  ]) as UserConfig
 
   return new PandaContext({
     ...fixtureDefaults,

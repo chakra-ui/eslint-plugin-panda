@@ -32,7 +32,7 @@ export async function getContext(opts: Opts) {
       exclude: ['**/Invalid.tsx', '**/panda.config.ts'],
       importMap: './panda',
       jsxFactory: 'styled',
-    })
+    } as any) as unknown as Generator
     return ctx
   } else {
     const configPath = findConfig({ cwd: opts.configPath ?? opts.currentFile })

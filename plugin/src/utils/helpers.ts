@@ -119,7 +119,7 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
 
     let scope = scopeAnalysisCache.get(src)
     if (!scope) {
-      scope = analyze(src.ast, {
+      scope = analyze(src.ast as TSESTree.Node, {
         sourceType: 'module',
       })
       scopeAnalysisCache.set(src, scope)
