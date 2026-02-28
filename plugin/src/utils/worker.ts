@@ -36,7 +36,6 @@ export async function getContext(opts: Opts) {
     return ctx
   } else {
     const configPath = findConfig({ cwd: opts.configPath ?? opts.currentFile })
-    const cwd = path.dirname(configPath)
 
     // The context cache ensures we don't reload the same config multiple times
     if (!contextCache[configPath]) {
