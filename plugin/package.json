@@ -33,10 +33,11 @@
     "dist"
   ],
   "dependencies": {
-    "@pandacss/config": "^0.53.2",
-    "@pandacss/generator": "^0.53.2",
-    "@pandacss/node": "^0.53.2",
-    "@pandacss/shared": "^0.53.2",
+    "@pandacss/config": "^1.8.2",
+    "@pandacss/generator": "^1.8.2",
+    "@pandacss/node": "^1.8.2",
+    "@pandacss/shared": "^1.8.2",
+    "@typescript-eslint/scope-manager": "^8.24.0",
     "@typescript-eslint/utils": "^8.21.0",
     "hookable": "^5.5.3",
     "micromatch": "^4.0.8",
