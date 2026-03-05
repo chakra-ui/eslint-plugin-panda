@@ -79,15 +79,15 @@ export const isPandaConfigFunction = (context: RuleContext<any, any>, name: stri
  */
 class Cache<Data> {
   // Filename of file for which data is cached
-  currentFilename: string | null
+  private currentFilename: string | null
   // Data for file whose filename is `currentFilename`
-  currentData: Data | null
+  private currentData: Data | null
 
   // Whether a timer for resetting cache has been set
-  resetTimerSet: boolean
+  private resetTimerSet: boolean
 
   // Function to compute data for a file
-  compute: (context: RuleContext<any, any>) => Data
+  private readonly compute: (context: RuleContext<any, any>) => Data
 
   /**
    * Create cache.
