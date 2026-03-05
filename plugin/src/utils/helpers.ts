@@ -178,9 +178,9 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
-const scopeAnalysisCache = new Cache(_analyseScope)
+const scopeAnalysisCache = new Cache(_analyzeScope)
 
-function _analyseScope(context: RuleContext<any, any>): ReturnType<typeof analyze> {
+function _analyzeScope(context: RuleContext<any, any>): ReturnType<typeof analyze> {
   return analyze(context.sourceCode.ast as TSESTree.Node, {
     sourceType: 'module',
   })
