@@ -3,7 +3,7 @@ import { createSyncFn } from 'synckit'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import type { run } from './worker'
-import { ruleStarted, ruleFinished } from './helpers'
+import { ruleStarted, ruleFinished } from './cache'
 
 // Rule creator
 const _createRule = ESLintUtils.RuleCreator(

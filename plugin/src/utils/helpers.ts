@@ -2,6 +2,7 @@ import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 import type { TSESTree } from '@typescript-eslint/utils'
 import { analyze } from '@typescript-eslint/scope-manager'
 import { type ImportResult, syncAction } from '.'
+import { cache } from './cache'
 import {
   isCallExpression,
   isIdentifier,
@@ -19,50 +20,6 @@ import {
   type Node,
 } from './nodes'
 import type { DeprecatedToken } from './worker'
-
-// Tracks how many rules are currently running for the current file.
-//
-// Each rule increments this in `create()` and decrements it in `Program:exit`.
-// When counter reaches 0, all rules have finished for the file, and caches are cleared.
-// See `createRule` in `utils/index.ts` which injects `ruleStarted()` and `ruleFinished()` calls
-// into each rule automatically.
-//
-// As a safety net, a microtask is also queued to reset the caches.
-// This handles the case where a rule throws an error during linting, preventing `Program:exit` from firing
-// and leaving the counter stuck at a non-zero value.
-//
-// This scenario doesn't matter in ESLint CLI, because if an error is thrown during linting, the process exits.
-// But in language server, it does matter - language server catches the error and the process continues.
-// It also matters in tests. You don't want an error thrown in one test to affect the next test.
-// The `queueMicrotask` covers both these eventualities - it ensures the cache is reset before the next lint run.
-let numRulesRunning = 0
-let resetMicrotaskScheduled = false
-
-export function ruleStarted() {
-  numRulesRunning++
-  if (!resetMicrotaskScheduled) {
-    queueMicrotask(resetCachesMicrotask)
-    resetMicrotaskScheduled = true
-  }
-}
-
-export function ruleFinished() {
-  numRulesRunning--
-  if (numRulesRunning === 0) {
-    resetCaches()
-  }
-}
-
-function resetCaches() {
-  cachedImports = null
-  cachedScopeAnalysis = null
-}
-
-function resetCachesMicrotask() {
-  resetCaches()
-  numRulesRunning = 0
-  resetMicrotaskScheduled = false
-}
 
 export const getAncestor = <N extends Node>(ofType: (node: Node) => node is N, for_: Node): N | undefined => {
   let current: Node | undefined = for_.parent
@@ -121,16 +78,13 @@ const _getImports = (context: RuleContext<any, any>) => {
   return imports
 }
 
-// Cached imports for the current file. Cleared after linting each file (see `ruleFinished` above).
-let cachedImports: ImportResult[] | null = null
-
 export const getImports = (context: RuleContext<any, any>) => {
-  if (cachedImports) {
-    return cachedImports
+  if (cache.imports) {
+    return cache.imports
   }
   const imports = _getImports(context)
   const filteredImports = imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
-  cachedImports = filteredImports
+  cache.imports = filteredImports
   return filteredImports
 }
 
@@ -150,9 +104,6 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
-// Cached scope analysis for the current file. Cleared after linting each file (see `ruleFinished` above).
-let cachedScopeAnalysis: ReturnType<typeof analyze> | null = null
-
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   try {
     const src = context.sourceCode
@@ -163,13 +114,13 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
     }
 
     let scope: ReturnType<typeof analyze>
-    if (cachedScopeAnalysis) {
-      scope = cachedScopeAnalysis
+    if (cache.scopeAnalysis) {
+      scope = cache.scopeAnalysis
     } else {
       scope = analyze(src.ast as TSESTree.Node, {
         sourceType: 'module',
       })
-      cachedScopeAnalysis = scope
+      cache.scopeAnalysis = scope
     }
 
     const decl = scope.variables
