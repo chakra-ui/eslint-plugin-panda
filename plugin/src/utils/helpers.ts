@@ -65,6 +65,79 @@ export const isPandaConfigFunction = (context: RuleContext<any, any>, name: stri
   return imports.some(({ alias, mod }) => alias === name && mod === '@pandacss/dev')
 }
 
+/**
+ * Cache for data which is expensive to compute and can be reused while linting a file.
+ * This data can be shared across multiple rules.
+ *
+ * Only 1 file is linted at a time, so there's no need to store data for multiple files at the same time.
+ * This simple cache just holds the data for the current file. If `get` is called with `Context` of a different file,
+ * data for the new file will be computed and cached.
+ *
+ * For situations where the process is long-running (e.g. a language server), the cache will be cleared
+ * on the next micro-tick, to free the cached data and allow it to be garbage collected.
+ * This also ensures if the same file is linted again, it doesn't get stale data from the last run.
+ */
+class Cache<Data> {
+  // Filename of file for which data is cached
+  currentFilename: string | null
+  // Data for file whose filename is `currentFilename`
+  currentData: Data | null
+
+  // Whether a timer for resetting cache has been set
+  resetTimerSet: boolean
+
+  // Function to compute data for a file
+  compute: (context: RuleContext<any, any>) => Data
+
+  /**
+   * Create cache.
+   * @param compute - Function to compute data for a file
+   */
+  constructor(compute: (context: RuleContext<any, any>) => Data) {
+    this.currentFilename = null
+    this.currentData = null
+    this.resetTimerSet = false
+
+    this.compute = compute
+  }
+
+  /**
+   * Get data for the file currently being linted.
+   * If data for this file is already cached, return it.
+   * Otherwise, compute data and cache it.
+   * @param context - ESLint Context object
+   * @returns Data for the file
+   */
+  get(context: RuleContext<any, any>) {
+    if (context.filename === this.currentFilename) {
+      return this.currentData!
+    }
+
+    // Set timer to free data on next micro-tick, after this file has been linted
+    if (!this.resetTimerSet) {
+      queueMicrotask(resetCache.bind(null, this))
+      this.resetTimerSet = true
+    }
+
+    const data = this.compute(context)
+    this.currentFilename = context.filename
+    this.currentData = data
+    return data
+  }
+}
+
+/**
+ * Reset cache.
+ * This function is a pure function, defined outside the Cache class, to avoid it acting as a closure
+ * and hanging on to data which could otherwise be garbage collected.
+ * @param cache - Cache to reset
+ */
+function resetCache<T>(cache: Cache<T>) {
+  cache.currentFilename = null
+  cache.currentData = null
+  cache.resetTimerSet = false
+}
+
 const _getImports = (context: RuleContext<any, any>) => {
   const specifiers = getImportSpecifiers(context)
 
@@ -78,16 +151,15 @@ const _getImports = (context: RuleContext<any, any>) => {
 }
 
 // Caching imports per context to avoid redundant computations
-const importsCache = new WeakMap<RuleContext<any, any>, ImportResult[]>()
+const importsCache = new Cache(_getFilteredImports)
+
+function _getFilteredImports(context: RuleContext<any, any>): ImportResult[] {
+  const imports = _getImports(context)
+  return imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
+}
 
 export const getImports = (context: RuleContext<any, any>) => {
-  if (importsCache.has(context)) {
-    return importsCache.get(context)!
-  }
-  const imports = _getImports(context)
-  const filteredImports = imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
-  importsCache.set(context, filteredImports)
-  return filteredImports
+  return importsCache.get(context)
 }
 
 const isValidStyledProp = <T extends Node>(node: T, context: RuleContext<any, any>) => {
@@ -106,7 +178,13 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
-const scopeAnalysisCache = new WeakMap<object, ReturnType<typeof analyze>>()
+const scopeAnalysisCache = new Cache(_analyseScope)
+
+function _analyseScope(context: RuleContext<any, any>): ReturnType<typeof analyze> {
+  return analyze(context.sourceCode.ast as TSESTree.Node, {
+    sourceType: 'module',
+  })
+}
 
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   try {
@@ -117,13 +195,7 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       return undefined
     }
 
-    let scope = scopeAnalysisCache.get(src)
-    if (!scope) {
-      scope = analyze(src.ast as TSESTree.Node, {
-        sourceType: 'module',
-      })
-      scopeAnalysisCache.set(src, scope)
-    }
+    const scope = scopeAnalysisCache.get(context)
 
     const decl = scope.variables
       .find((v) => v.name === name)
