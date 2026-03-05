@@ -115,7 +115,7 @@ class Cache<Data> {
 
     // Set timer to free data on next micro-tick, after this file has been linted
     if (!this.resetTimerSet) {
-      queueMicrotask(resetCache.bind(null, this))
+      queueMicrotask(this.reset.bind(this))
       this.resetTimerSet = true
     }
 
@@ -124,18 +124,19 @@ class Cache<Data> {
     this.currentData = data
     return data
   }
-}
 
-/**
- * Reset cache.
- * This function is a pure function, defined outside the Cache class, to avoid it acting as a closure
- * and hanging on to data which could otherwise be garbage collected.
- * @param cache - Cache to reset
- */
-function resetCache<T>(cache: Cache<T>) {
-  cache.currentFilename = null
-  cache.currentData = null
-  cache.resetTimerSet = false
+  /**
+   * Reset cache.
+   * The next time `get` is called, data will be recomputed.
+   *
+   * This is a separate method instead of an arrow function inline in `get` method,
+   * to avoid it capturing `context` in its closure, and preventing it being garbage collected.
+   */
+  private reset() {
+    this.currentFilename = null
+    this.currentData = null
+    this.resetTimerSet = false
+  }
 }
 
 const _getImports = (context: RuleContext<any, any>) => {
