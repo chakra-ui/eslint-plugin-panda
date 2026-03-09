@@ -2,6 +2,7 @@ import type { RuleContext } from '@typescript-eslint/utils/ts-eslint'
 import type { TSESTree } from '@typescript-eslint/utils'
 import { analyze } from '@typescript-eslint/scope-manager'
 import { type ImportResult, syncAction } from '.'
+import { cache } from './cache'
 import {
   isCallExpression,
   isIdentifier,
@@ -77,16 +78,13 @@ const _getImports = (context: RuleContext<any, any>) => {
   return imports
 }
 
-// Caching imports per context to avoid redundant computations
-const importsCache = new WeakMap<RuleContext<any, any>, ImportResult[]>()
-
 export const getImports = (context: RuleContext<any, any>) => {
-  if (importsCache.has(context)) {
-    return importsCache.get(context)!
+  if (cache.imports) {
+    return cache.imports
   }
   const imports = _getImports(context)
   const filteredImports = imports.filter((imp) => syncAction('matchImports', getSyncOpts(context), imp))
-  importsCache.set(context, filteredImports)
+  cache.imports = filteredImports
   return filteredImports
 }
 
@@ -106,8 +104,6 @@ export const isPandaIsh = (name: string, context: RuleContext<any, any>) => {
   return syncAction('matchFile', getSyncOpts(context), name, imports)
 }
 
-const scopeAnalysisCache = new WeakMap<object, ReturnType<typeof analyze>>()
-
 const findDeclaration = (name: string, context: RuleContext<any, any>) => {
   try {
     const src = context.sourceCode
@@ -117,12 +113,14 @@ const findDeclaration = (name: string, context: RuleContext<any, any>) => {
       return undefined
     }
 
-    let scope = scopeAnalysisCache.get(src)
-    if (!scope) {
+    let scope: ReturnType<typeof analyze>
+    if (cache.scopeAnalysis) {
+      scope = cache.scopeAnalysis
+    } else {
       scope = analyze(src.ast as TSESTree.Node, {
         sourceType: 'module',
       })
-      scopeAnalysisCache.set(src, scope)
+      cache.scopeAnalysis = scope
     }
 
     const decl = scope.variables
