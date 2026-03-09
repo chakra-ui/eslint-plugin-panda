@@ -1,5 +1,12 @@
 # @pandacss/eslint-plugin
 
+## 0.3.2
+
+### Patch Changes
+
+- bf3bb28: Add missing CSS logical shorthand properties to `compositeProperties` for `prefer-atomic-properties` and
+  `prefer-composite-properties` rules.
+
 ## 0.3.1
 
 ### Patch Changes
