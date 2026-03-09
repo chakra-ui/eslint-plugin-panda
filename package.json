@@ -31,6 +31,7 @@
     "@typescript-eslint/utils": "^8.21.0",
     "esbuild": "0.25.0",
     "micromatch": "^4.0.8",
+    "synckit": "^0.11.12",
     "tsup": "^8.0.1",
     "typescript": "^5.3.3"
   },
