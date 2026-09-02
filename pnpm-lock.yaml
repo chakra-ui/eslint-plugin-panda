@@ -188,8 +188,8 @@ importers:
         specifier: ^4.6.0
         version: 4.6.2(eslint@8.57.1)
       eslint-plugin-react-refresh:
-        specifier: ^0.4.5
-        version: 0.4.19(eslint@8.57.1)
+        specifier: ^0.5.0
+        version: 0.5.6(eslint@8.57.1)
       typescript:
         specifier: ^5.2.2
         version: 5.7.3
@@ -237,8 +237,8 @@ importers:
         specifier: ^4.6.0
         version: 4.6.2(eslint@9.20.1)
       eslint-plugin-react-refresh:
-        specifier: ^0.4.5
-        version: 0.4.19(eslint@9.20.1)
+        specifier: ^0.5.0
+        version: 0.5.6(eslint@9.20.1)
       globals:
         specifier: ^15.6.0
         version: 15.14.0
@@ -4153,18 +4153,18 @@ packages:
       eslint: 9.20.1
     dev: true
 
-  /eslint-plugin-react-refresh@0.4.19(eslint@8.57.1):
-    resolution: {integrity: sha512-eyy8pcr/YxSYjBoqIFSrlbn9i/xvxUFa8CjzAYo9cFjgGXqq1hyjihcpZvxRLalpaWmueWR81xn7vuKmAFijDQ==}
+  /eslint-plugin-react-refresh@0.5.6(eslint@8.57.1):
+    resolution: {integrity: sha512-uZnh24On2bk478AkaDAKcpRiYhS3qFSaSNvpXxV6/Ek/BBDICkWGG7MnBSfjnIlCVBei5vsLlIeQYxbF22+Udg==}
     peerDependencies:
-      eslint: '>=8.40'
+      eslint: ^9 || ^10
     dependencies:
       eslint: 8.57.1
     dev: true
 
-  /eslint-plugin-react-refresh@0.4.19(eslint@9.20.1):
-    resolution: {integrity: sha512-eyy8pcr/YxSYjBoqIFSrlbn9i/xvxUFa8CjzAYo9cFjgGXqq1hyjihcpZvxRLalpaWmueWR81xn7vuKmAFijDQ==}
+  /eslint-plugin-react-refresh@0.5.6(eslint@9.20.1):
+    resolution: {integrity: sha512-uZnh24On2bk478AkaDAKcpRiYhS3qFSaSNvpXxV6/Ek/BBDICkWGG7MnBSfjnIlCVBei5vsLlIeQYxbF22+Udg==}
     peerDependencies:
-      eslint: '>=8.40'
+      eslint: ^9 || ^10
     dependencies:
       eslint: 9.20.1
     dev: true
