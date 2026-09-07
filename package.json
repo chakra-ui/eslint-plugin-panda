@@ -47,7 +47,7 @@
     "husky": "^9.0.6",
     "lint-staged": "^15.2.0",
     "prettier": "^3.2.4",
-    "vitest": "^1.2.1"
+    "vitest": "^3.0.0"
   },
   "lint-staged": {
     "*": [
