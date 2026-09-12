@@ -49,10 +49,37 @@ export const distDir = fileURLToPath(new URL(isBase ? './' : '../../dist', impor
 // Create synchronous function using synckit
 export const _syncAction = createSyncFn(join(distDir, 'utils/worker.mjs'))
 
+// The one action that reads `opts.currentFile` inside the worker instead of taking it as an
+// argument, so a key built from the arguments alone would make every file inherit the first
+// file's verdict.
+const PER_FILE_ACTIONS = new Set(['isValidFile'])
+
+// Memoized worker round-trips, keyed by (config, action, arguments).
+// The worker already caches one panda context per config path for the lifetime of the process
+// (see `contextCache` in ./worker), and every action derives its answer from that context plus
+// either its own arguments or the current file — so the answer cannot change between calls.
+// The scope falls back to the current file when `settings['@pandacss/configPath']` is unset,
+// since the worker then resolves the config by walking up from each file and a monorepo can
+// reach different ones.
+const syncActionCache = new Map<string, unknown>()
+
 // Define syncAction with proper typing and error handling
 export const syncAction = ((...args: Parameters<typeof run>) => {
+  const [action, opts, ...rest] = args
+
+  const scope = opts.configPath ?? opts.currentFile
+  const key = PER_FILE_ACTIONS.has(action)
+    ? `${scope}\0${action}\0${opts.currentFile}`
+    : `${scope}\0${action}\0${JSON.stringify(rest)}`
+
+  if (syncActionCache.has(key)) {
+    return syncActionCache.get(key)
+  }
+
   try {
-    return _syncAction(...args)
+    const result = _syncAction(...args)
+    syncActionCache.set(key, result)
+    return result
   } catch (error) {
     console.error('syncAction error:', error)
     return undefined
