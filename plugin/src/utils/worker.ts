@@ -138,6 +138,12 @@ async function matchFile(ctx: Generator, name: string, imports: ImportResult[]) 
   return file.match(name)
 }
 
+async function matchTagProp(ctx: Generator, tag: string, prop: string, imports: ImportResult[]) {
+  const file = ctx.imports.file(imports)
+
+  return ctx.jsx.isEnabled && file.matchTag(tag) && file.matchTagProp(tag, prop)
+}
+
 type MatchImportResult = {
   name: string
   alias: string
@@ -164,6 +170,13 @@ export function runAsync(action: 'resolveShorthands', opts: Opts, name: string):
 export function runAsync(action: 'resolveLongHand', opts: Opts, name: string): Promise<string | undefined>
 export function runAsync(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): Promise<boolean>
 export function runAsync(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): Promise<boolean>
+export function runAsync(
+  action: 'matchTagProp',
+  opts: Opts,
+  tag: string,
+  prop: string,
+  imports: ImportResult[],
+): Promise<boolean>
 export function runAsync(action: 'matchImports', opts: Opts, result: MatchImportResult): Promise<boolean>
 export function runAsync(action: 'getPropCategory', opts: Opts, prop: string): Promise<string>
 export function runAsync(action: 'getJsxFactory', opts: Opts): Promise<string | undefined>
@@ -182,6 +195,9 @@ export async function runAsync(action: string, opts: Opts, ...args: any): Promis
     case 'matchFile':
       // @ts-expect-error cast
       return matchFile(ctx, ...args)
+    case 'matchTagProp':
+      // @ts-expect-error cast
+      return matchTagProp(ctx, ...args)
     case 'isValidProperty':
       // @ts-expect-error cast
       return isValidProperty(ctx, ...args)
@@ -221,6 +237,7 @@ export function run(action: 'resolveShorthands', opts: Opts, name: string): stri
 export function run(action: 'resolveLongHand', opts: Opts, name: string): string | undefined
 export function run(action: 'isValidProperty', opts: Opts, name: string, patternName?: string): boolean
 export function run(action: 'matchFile', opts: Opts, name: string, imports: ImportResult[]): boolean
+export function run(action: 'matchTagProp', opts: Opts, tag: string, prop: string, imports: ImportResult[]): boolean
 export function run(action: 'matchImports', opts: Opts, result: MatchImportResult): boolean
 export function run(action: 'getPropCategory', opts: Opts, prop: string): string
 export function run(action: 'getJsxFactory', opts: Opts): string | undefined

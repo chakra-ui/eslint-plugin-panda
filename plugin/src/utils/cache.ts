@@ -9,9 +9,12 @@ export const cache: {
   imports: ImportResult[] | null
   // Cached scope analysis for the current file
   scopeAnalysis: ReturnType<typeof analyze> | null
+  // Cached `matchTagProp` results for the current file, keyed by tag and prop
+  tagProps: Map<string, boolean>
 } = {
   imports: null,
   scopeAnalysis: null,
+  tagProps: new Map(),
 }
 
 // Tracks how many rules are currently running for the current file.
@@ -51,6 +54,7 @@ export function ruleFinished() {
 function resetCache() {
   cache.imports = null
   cache.scopeAnalysis = null
+  cache.tagProps.clear()
 }
 
 function resetCacheMicrotask() {
