@@ -158,7 +158,28 @@ export const isPandaImport = (node: TSESTree.ImportDeclaration, context: RuleCon
   return imports.some((imp) => imp.mod === node.source.value)
 }
 
+const isCssPropOnComponent = (node: TSESTree.JSXAttribute, context: RuleContext<any, any>) => {
+  if (context.settings?.['@pandacss/customComponents'] !== true) return
+  if (!isJSXIdentifier(node.name)) return
+
+  // Style object props: `css`, and `*Css` in Panda 1.9+
+  const prop = node.name.name
+  if (prop !== 'css' && !prop.endsWith('Css')) return
+
+  const jsxAncestor = getAncestor(isJSXOpeningElement, node)
+  const tag = jsxAncestor && context.sourceCode?.getText(jsxAncestor.name)
+  if (!tag) return
+
+  const key = `${tag} ${prop}`
+  if (!cache.tagProps.has(key)) {
+    cache.tagProps.set(key, syncAction('matchTagProp', getSyncOpts(context), tag, prop, getImports(context)))
+  }
+  return cache.tagProps.get(key)
+}
+
 export const isPandaProp = (node: TSESTree.JSXAttribute, context: RuleContext<any, any>) => {
+  if (isCssPropOnComponent(node, context)) return true
+
   const jsxAncestor = getAncestor(isJSXOpeningElement, node)
 
   if (!jsxAncestor) return
@@ -223,6 +244,7 @@ export const isInJSXProp = (node: TSESTree.Property, context: RuleContext<any, a
   const jsxAttrAncestor = getAncestor(isJSXAttribute, node)
 
   if (!jsxExprAncestor || !jsxAttrAncestor) return
+  if (isCssPropOnComponent(jsxAttrAncestor, context)) return true
   if (!isPandaProp(jsxAttrAncestor, context)) return
   if (typeof jsxAttrAncestor.name === 'string') return
   if (!isValidStyledProp(jsxAttrAncestor.name, context)) return

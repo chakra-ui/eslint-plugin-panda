@@ -149,3 +149,36 @@ export default [
   },
 ]
 ```
+
+### `customComponents`
+
+You can lint the `css` props of your own components, like `<Button css={{ ... }} />`, by setting `customComponents` to
+`true`. Like Panda, it follows your config's `jsxStyleProps`, and includes `*Css` props on Panda 1.9+.
+
+By default only Panda's own components are linted.
+
+```js filename=".eslintrc.(c)js"
+module.exports = {
+  plugins: ['@pandacss'],
+  settings: {
+    '@pandacss/customComponents': true,
+  },
+}
+```
+
+#### Flat Config
+
+```js filename="eslint.config.mjs"
+import panda from '@pandacss/eslint-plugin'
+
+export default [
+  {
+    plugins: {
+      '@pandacss': panda,
+    },
+    settings: {
+      '@pandacss/customComponents': true,
+    },
+  },
+]
+```

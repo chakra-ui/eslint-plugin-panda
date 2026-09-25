@@ -294,3 +294,37 @@ eslintTester.run(RULE_NAME6, rule6 as any, {
     errors: 2,
   })),
 })
+
+//? Testing the opt-in `@pandacss/customComponents` setting
+
+const settings = { '@pandacss/customComponents': true }
+
+const valids7 = [
+  { code: '<Card css={{ debug: true }} />' },
+  { code: '<div css={{ debug: true }} />', settings },
+  { code: '<motion.div css={{ debug: true }} />', settings },
+  { code: '<Card debug />', settings },
+]
+
+const invalids7 = [
+  { code: '<Card css={{ debug: true }} />', settings },
+  { code: '<Card.Root css={{ debug: true }} />', settings },
+  { code: '<Circle css={{ debug: true }} />', settings },
+]
+
+eslintTester.run(RULE_NAME, rule as any, {
+  valid: valids7.map(({ code, ...rest }) => ({
+    ...rest,
+    code: imports + code,
+  })),
+  invalid: invalids7.map(({ code, ...rest }) => ({
+    ...rest,
+    code: imports + code,
+    errors: 1,
+  })),
+})
+
+eslintTester.run(RULE_NAME2, rule2 as any, {
+  valid: [{ code: imports + '<Card css={styles} />' }],
+  invalid: [{ code: imports + '<Card css={styles} />', settings, errors: 1 }],
+})
